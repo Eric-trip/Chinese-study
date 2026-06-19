@@ -143,7 +143,7 @@ function extractQuestionData() {
         if (title.includes('重点成语')) {
           const content = sub.content || '';
           // 解析格式：成语（释义）、成语（释义）
-          const regex = /([^\s、，（()]+)（([^）]+)）/g;
+          const regex = /([^\s、，（()：。；！？]+)（([^）]+)）/g;
           let m;
           while ((m = regex.exec(content)) !== null) {
             const idiom = m[1].trim();
@@ -154,7 +154,12 @@ function extractQuestionData() {
           }
           // 也有些成语没有释义，按顿号分隔
           const noParenPart = content.replace(regex, '');
-          const tokens = noParenPart.split(/[、，,]/).map(s => s.trim()).filter(s => s.length >= 2 && s.length <= 8);
+          const tokens = noParenPart.split(/[、，,]/).map(s => s.trim()).filter(s => {
+            if (s.length < 2 || s.length > 8) return false;
+            // 排除包含标点或非成语内容的片段
+            if (/[：。；！？排列包括等]/.test(s)) return false;
+            return true;
+          });
           for (const t of tokens) {
             if (!bank.idioms.some(i => i.idiom === t)) {
               bank.idioms.push({ idiom: t, meaning: '' });
