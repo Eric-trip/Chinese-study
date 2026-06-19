@@ -296,7 +296,14 @@ function renderSubItem(item) {
   // items 字段
   if (item.items && Array.isArray(item.items)) {
     const first = item.items[0];
-    if (first && typeof first === 'object' &&
+    if (typeof first === 'string') {
+      // 字符串数组（如作文技法列表）→ 渲染为列表
+      html += '<ul class="content-list">';
+      for (const it of item.items) {
+        if (it) html += `<li>${formatText(it)}</li>`;
+      }
+      html += '</ul>';
+    } else if (first && typeof first === 'object' &&
         !first.title && !first.content && !first.source && !first.quotes && !first.letter && !first.id) {
       // 键值对结构（如 {类别:"姓氏", 说明:"..."}）→ 转为表格渲染
       const headers = Object.keys(first);
