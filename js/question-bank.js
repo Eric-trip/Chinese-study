@@ -751,42 +751,71 @@ const GENERATORS = {
 
     // 从修辞表中提取例句
     const examples = bank.rhetoricExamples.filter(e => e.example && e.example.length > 5);
-    const useExample = examples.length >= 4 && Math.random() > 0.3;
-
-    if (useExample) {
-      // 用真实例句出题
-      const correct = examples[Math.floor(Math.random() * examples.length)];
-      // 干扰项：其他修辞类型
-      const distractorTypes = pickUniqueDistractors(correct.type, allTypes, 3);
-      return {
-        type: 'rhetoric', difficulty,
-        question: `请判断以下句子主要使用的修辞手法：\n\n"${correct.example}"`,
-        options: buildOptions(correct.type, distractorTypes),
-        answer: correct.type,
-        explanation: `这句话使用了"${correct.type}"的修辞手法。`
-      };
-    }
-
-    // 用内置例句
+    // 细分类型 → 大类映射
+    const typeMap = {
+      '明喻': '比喻', '暗喻': '比喻', '借喻': '比喻',
+      '拟人': '比拟', '拟物': '比拟',
+      '扩大夸张': '夸张', '缩小夸张': '夸张', '超前夸张': '夸张',
+    };
+    // 归一化例句类型
+    const normalizedExamples = examples.map(e => ({
+      ...e,
+      type: typeMap[e.type] || e.type,
+    }));
+    // 合并内置例句，扩大题库
     const builtinExamples = [
       { type: '比喻', example: '春天像小姑娘，花枝招展的，笑着，走着。' },
       { type: '比喻', example: '理想是石，敲出星星之火。' },
+      { type: '比喻', example: '那萌发的叶子，简直就像起伏着一层绿茵茵的波浪。' },
+      { type: '比喻', example: '月亮像一轮玉盘，挂在深蓝的天空中。' },
+      { type: '比喻', example: '弯弯的月亮像小船一样挂在天边。' },
+      { type: '比喻', example: '母亲啊！你是荷叶，我是红莲。' },
       { type: '比拟', example: '鸟儿将窠巢安在繁花嫩叶当中，高兴起来了，呼朋引伴地卖弄清脆的喉咙。' },
+      { type: '比拟', example: '桃树、杏树、梨树，你不让我，我不让你，都开满了花赶趟儿。' },
+      { type: '比拟', example: '波浪一边歌唱，一边冲向天空去迎接那雷声。' },
+      { type: '比拟', example: '花儿在微风中点着头，微笑着向行人致意。' },
       { type: '夸张', example: '白发三千丈，缘愁似个长。' },
       { type: '夸张', example: '飞流直下三千尺，疑是银河落九天。' },
+      { type: '夸张', example: '五岭逶迤腾细浪，乌蒙磅礴走泥丸。' },
+      { type: '夸张', example: '他酒没沾唇，心早就热了。' },
+      { type: '夸张', example: '这橘子酸得我的牙都快掉了。' },
+      { type: '夸张', example: '教室里安静得连一根针掉在地上都听得见。' },
       { type: '排比', example: '红的像火，粉的像霞，白的像雪。' },
       { type: '排比', example: '山朗润起来了，水涨起来了，太阳的脸红起来了。' },
+      { type: '排比', example: '燕子去了，有再来的时候；杨柳枯了，有再青的时候；桃花谢了，有再开的时候。' },
+      { type: '排比', example: '盼望着，盼望着，东风来了，春天的脚步近了。' },
       { type: '对偶', example: '两个黄鹂鸣翠柳，一行白鹭上青天。' },
       { type: '对偶', example: '海内存知己，天涯若比邻。' },
+      { type: '对偶', example: '无边落木萧萧下，不尽长江滚滚来。' },
+      { type: '对偶', example: '日出江花红胜火，春来江水绿如蓝。' },
       { type: '反复', example: '盼望着，盼望着，东风来了，春天的脚步近了。' },
+      { type: '反复', example: '沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。' },
       { type: '设问', example: '什么是路？就是从没路的地方践踏出来的。' },
+      { type: '设问', example: '谁是我们最可爱的人呢？我们的部队，我们的战士。' },
+      { type: '设问', example: '春天在哪里？春天在小朋友的眼睛里。' },
       { type: '反问', example: '难道我们不应该努力学习吗？' },
+      { type: '反问', example: '这不正是对那班轻视体育的人们一个有力的回击吗？' },
+      { type: '反问', example: '射箭要看靶子，弹琴要看听众，写文章做演说倒可以不看读者不看听众吗？' },
       { type: '借代', example: '巾帼不让须眉。' },
       { type: '借代', example: '将军百战死，壮士十年归。' },
+      { type: '借代', example: '帆翅初张处，云鹏怒翼同。' },
+      { type: '借代', example: '孤帆远影碧空尽，唯见长江天际流。' },
       { type: '对比', example: '朱门酒肉臭，路有冻死骨。' },
-      { type: '双关', example: '东边日出西边雨，道是无晴却有晴。' }
+      { type: '对比', example: '有缺点的战士终竟是战士，完美的苍蝇也终竟不过是苍蝇。' },
+      { type: '双关', example: '东边日出西边雨，道是无晴却有晴。' },
+      { type: '双关', example: '春蚕到死丝方尽，蜡炬成灰泪始干。' },
     ];
-    const correct = builtinExamples[Math.floor(Math.random() * builtinExamples.length)];
+    // 合并：内置 + 数据源（去重）
+    const seenEx = new Set(builtinExamples.map(e => e.example));
+    for (const e of normalizedExamples) {
+      if (!seenEx.has(e.example)) {
+        seenEx.add(e.example);
+        builtinExamples.push(e);
+      }
+    }
+    const allExamples = builtinExamples;
+
+    const correct = allExamples[Math.floor(Math.random() * allExamples.length)];
     const distractorTypes = pickUniqueDistractors(correct.type, allTypes, 3);
     return {
       type: 'rhetoric', difficulty,
