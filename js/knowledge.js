@@ -237,6 +237,32 @@ function renderSectionContent(section) {
         html += renderWordGroups(sub.word_groups);
       }
 
+      // subsection 自身的 items 字段
+      // 结构1：{letter, list} — 按字母分组的词语列表（如容易读错的成语）
+      // 结构2：{letter, table} — 按字母分组的表格（如多音字）
+      // 结构3：{id, content} — 编号句子列表（如巧记多音多义字）
+      // 结构4：古诗词/文言文名句卡片（由 renderItemsList 处理）
+      if (sub.items && Array.isArray(sub.items)) {
+        // 判断 items 类型
+        const first = sub.items[0];
+        if (first && first.letter !== undefined && first.list !== undefined) {
+          // 结构1：按字母分组的词语列表
+          html += renderLetterList(sub.items);
+        } else if (first && first.letter !== undefined && first.table !== undefined) {
+          // 结构2：按字母分组的表格
+          for (const it of sub.items) {
+            if (it.letter) html += `<div class="letter-group__label">${it.letter}</div>`;
+            if (it.table) html += renderTable(it.table);
+          }
+        } else if (first && first.id !== undefined && first.content !== undefined) {
+          // 结构3：编号句子列表
+          html += renderNumberedSentences(sub.items);
+        } else {
+          // 结构4：古诗词/名句卡片
+          html += renderItemsList(sub.items);
+        }
+      }
+
       // 直接挂在subsection上的table
       if (sub.table) html += renderTable(sub.table);
       html += `</div>`;
@@ -290,6 +316,45 @@ function renderItemsList(items) {
       html += `</ul>`;
       html += `</div>`;
     }
+  }
+  html += '</div>';
+  return html;
+}
+
+/**
+ * 渲染按字母分组的词语列表（如：容易读错的成语）
+ * items: [{letter:"A", list:["爱憎(zēng)分明", ...]}, ...]
+ */
+function renderLetterList(items) {
+  if (!items || !Array.isArray(items)) return '';
+  let html = '<div class="letter-list">';
+  for (const group of items) {
+    if (!group || !group.list) continue;
+    html += `<div class="letter-group">`;
+    html += `<div class="letter-group__label">${group.letter}</div>`;
+    html += `<div class="letter-group__items">`;
+    for (const word of group.list) {
+      html += `<span class="letter-group__item">${word}</span>`;
+    }
+    html += `</div></div>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+/**
+ * 渲染编号句子列表（如：巧记多音多义字）
+ * items: [{id:1, content:"艾：他在耆艾 ài 之年..."}, ...]
+ */
+function renderNumberedSentences(items) {
+  if (!items || !Array.isArray(items)) return '';
+  let html = '<div class="numbered-list">';
+  for (const item of items) {
+    if (!item || !item.content) continue;
+    html += `<div class="numbered-list__item">`;
+    html += `<span class="numbered-list__num">${item.id}</span>`;
+    html += `<span class="numbered-list__content">${formatText(item.content)}</span>`;
+    html += `</div>`;
   }
   html += '</div>';
   return html;
