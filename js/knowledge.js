@@ -154,7 +154,7 @@ function renderSectionContent(section) {
   let html = '';
 
   // 简单文本内容
-  if (section.content) {
+  if (section.content && typeof section.content === 'string') {
     html += `<div class="content-text">${formatText(section.content)}</div>`;
   }
 
@@ -163,13 +163,46 @@ function renderSectionContent(section) {
     for (const sub of section.subsections) {
       html += `<div class="subsection">`;
       if (sub.title) html += `<h3 class="subsection__title">${sub.title}</h3>`;
-      if (sub.content) html += `<div class="content-text">${formatText(sub.content)}</div>`;
 
-      // content数组（可能是表格）
+      // content: 字符串
+      if (sub.content && typeof sub.content === 'string' && sub.content.trim()) {
+        html += `<div class="content-text">${formatText(sub.content)}</div>`;
+      }
+
+      // content: 单个表格对象 {type:"table", headers, rows}
+      if (sub.content && typeof sub.content === 'object' && !Array.isArray(sub.content) && sub.content.headers) {
+        html += renderTable(sub.content);
+      }
+
+      // content: 数组（可能包含子条目或表格）
       if (sub.content && Array.isArray(sub.content)) {
         for (const item of sub.content) {
-          if (item && typeof item === 'object' && item.headers && item.rows) {
+          if (!item || typeof item !== 'object') continue;
+          // 表格对象
+          if (item.headers && item.rows) {
             html += renderTable(item);
+          }
+          // 子条目 {title, content, table}
+          else if (item.title || item.content || item.table) {
+            html += `<div class="sub-item">`;
+            if (item.title) html += `<div class="sub-item__title">${item.title}</div>`;
+            if (item.content && typeof item.content === 'string') {
+              html += `<div class="content-text">${formatText(item.content)}</div>`;
+            }
+            if (item.content && typeof item.content === 'object' && !Array.isArray(item.content) && item.content.headers) {
+              html += renderTable(item.content);
+            }
+            if (item.table) html += renderTable(item.table);
+            html += `</div>`;
+          }
+        }
+      }
+
+      // tables（复数）：多个表格
+      if (sub.tables && Array.isArray(sub.tables)) {
+        for (const tbl of sub.tables) {
+          if (tbl && tbl.headers && tbl.rows) {
+            html += renderTable(tbl);
           }
         }
       }
@@ -179,16 +212,24 @@ function renderSectionContent(section) {
         for (const item of sub.sub_items) {
           html += `<div class="sub-item">`;
           if (item.title) html += `<div class="sub-item__title">${item.title}</div>`;
-          if (item.content) html += `<div class="content-text">${formatText(item.content)}</div>`;
+          if (item.content && typeof item.content === 'string') {
+            html += `<div class="content-text">${formatText(item.content)}</div>`;
+          }
+          if (item.content && typeof item.content === 'object' && !Array.isArray(item.content) && item.content.headers) {
+            html += renderTable(item.content);
+          }
           if (item.table) html += renderTable(item.table);
+          if (item.tables && Array.isArray(item.tables)) {
+            for (const tbl of item.tables) {
+              if (tbl && tbl.headers && tbl.rows) html += renderTable(tbl);
+            }
+          }
           html += `</div>`;
         }
       }
 
       // 直接挂在subsection上的table
-      if (sub.table) {
-        html += renderTable(sub.table);
-      }
+      if (sub.table) html += renderTable(sub.table);
       html += `</div>`;
     }
   }
