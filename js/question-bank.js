@@ -705,26 +705,31 @@ const GENERATORS = {
       };
     }
 
-    // hard: 判断题 — 成语使用是否正确
+    // hard: 判断题 — 成语释义是否匹配
     const idiomItem = idiomPool[Math.floor(Math.random() * idiomPool.length)];
-    const pair = bank.charPairs.find(p => p.correct === idiomItem.idiom);
     const showCorrect = Math.random() > 0.5;
-    if (pair) {
-      const idiom = showCorrect ? pair.correct : pair.wrong;
-      const sentence = `他在学习中${idiom}，成绩一直很好。`;
+    if (showCorrect) {
       return {
         type: 'idiom', difficulty,
-        question: `判断下列句子中成语使用是否正确：\n\n"${sentence}"`,
-        options: buildTrueFalseOptions(showCorrect),
-        answer: showCorrect ? '正确' : '错误',
-        explanation: showCorrect
-          ? `成语使用正确。"${pair.correct}"是正确的写法。`
-          : `成语使用错误。"${pair.wrong}"应为"${pair.correct}"。`
+        question: `判断：成语"${idiomItem.idiom}"的意思是"${idiomItem.meaning}"。`,
+        options: buildTrueFalseOptions(true),
+        answer: '正确',
+        explanation: `"${idiomItem.idiom}"的意思确实是：${idiomItem.meaning}`
       };
     }
-    // 如果没有匹配的pair，用成语释义判断
-    const showCorrect2 = Math.random() > 0.5;
-    const sentence2 = `他在学习上${showCorrect2 ? idiomItem.idiom : '（使用错误）'}，因此成绩优异。`;
+    // 从其他成语中取一个错误释义
+    const others = idiomPool.filter(i => i.idiom !== idiomItem.idiom && i.meaning);
+    if (others.length > 0) {
+      const wrongItem = others[Math.floor(Math.random() * others.length)];
+      return {
+        type: 'idiom', difficulty,
+        question: `判断：成语"${idiomItem.idiom}"的意思是"${wrongItem.meaning}"。`,
+        options: buildTrueFalseOptions(false),
+        answer: '错误',
+        explanation: `"${idiomItem.idiom}"的意思是：${idiomItem.meaning}，而非"${wrongItem.meaning}"。`
+      };
+    }
+    // 兜底：释义判断正确
     return {
       type: 'idiom', difficulty,
       question: `判断：成语"${idiomItem.idiom}"的意思是"${idiomItem.meaning}"。`,
