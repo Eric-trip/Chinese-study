@@ -210,25 +210,7 @@ function renderSectionContent(section) {
       // 子项
       if (sub.sub_items) {
         for (const item of sub.sub_items) {
-          html += `<div class="sub-item">`;
-          if (item.title) html += `<div class="sub-item__title">${item.title}</div>`;
-          if (item.content && typeof item.content === 'string') {
-            html += `<div class="content-text">${formatText(item.content)}</div>`;
-          }
-          if (item.content && typeof item.content === 'object' && !Array.isArray(item.content) && item.content.headers) {
-            html += renderTable(item.content);
-          }
-          if (item.table) html += renderTable(item.table);
-          if (item.tables && Array.isArray(item.tables)) {
-            for (const tbl of item.tables) {
-              if (tbl && tbl.headers && tbl.rows) html += renderTable(tbl);
-            }
-          }
-          // items 字段（名句名段等：古诗词/文言文/现代文名句列表）
-          if (item.items && Array.isArray(item.items)) {
-            html += renderItemsList(item.items);
-          }
-          html += `</div>`;
+          html += renderSubItem(item);
         }
       }
 
@@ -270,6 +252,63 @@ function renderSectionContent(section) {
   }
 
   return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
+}
+
+/**
+ * 渲染单个 sub_item，支持递归嵌套
+ * 处理以下数据结构：
+ * - {title, content(str)} — 文本内容
+ * - {title, content({headers,rows})} — content 中的表格
+ * - {title, table} — 直接表格
+ * - {title, tables[]} — 多表格
+ * - {title, headers, rows} — headers/rows 直接挂在 item 上（文化常识等）
+ * - {title, sub_items[]} — 嵌套子项（递归）
+ * - {title, items[]} — 键值对列表转表格，或名句卡片列表
+ */
+function renderSubItem(item) {
+  if (!item || typeof item !== 'object') return '';
+  let html = `<div class="sub-item">`;
+  if (item.title) html += `<div class="sub-item__title">${item.title}</div>`;
+  // content: 字符串
+  if (item.content && typeof item.content === 'string') {
+    html += `<div class="content-text">${formatText(item.content)}</div>`;
+  }
+  // content: 表格对象 {headers, rows}
+  if (item.content && typeof item.content === 'object' && !Array.isArray(item.content) && item.content.headers) {
+    html += renderTable(item.content);
+  }
+  // 直接挂在 item 上的表格
+  if (item.table) html += renderTable(item.table);
+  // headers/rows 直接挂在 item 上（如文化常识表格子项）
+  if (item.headers && item.rows) html += renderTable(item);
+  // 多表格
+  if (item.tables && Array.isArray(item.tables)) {
+    for (const tbl of item.tables) {
+      if (tbl && tbl.headers && tbl.rows) html += renderTable(tbl);
+    }
+  }
+  // 嵌套 sub_items（如谦称/敬称表）
+  if (item.sub_items && Array.isArray(item.sub_items)) {
+    for (const nested of item.sub_items) {
+      html += renderSubItem(nested);
+    }
+  }
+  // items 字段
+  if (item.items && Array.isArray(item.items)) {
+    const first = item.items[0];
+    if (first && typeof first === 'object' &&
+        !first.title && !first.content && !first.source && !first.quotes && !first.letter && !first.id) {
+      // 键值对结构（如 {类别:"姓氏", 说明:"..."}）→ 转为表格渲染
+      const headers = Object.keys(first);
+      const rows = item.items.map(it => headers.map(h => it[h] || ''));
+      html += renderTable({ headers, rows });
+    } else {
+      // 名句/古诗词卡片
+      html += renderItemsList(item.items);
+    }
+  }
+  html += `</div>`;
+  return html;
 }
 
 function renderWordGroups(wordGroups) {
