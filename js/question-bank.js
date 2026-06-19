@@ -441,7 +441,6 @@ function extractQuestionData() {
     { quote: '春潮带雨晚来急，野渡无人舟自横', author: '韦应物', source: '《滁州西涧》' },
     { quote: '独怜幽草涧边生，上有黄鹂深树鸣', author: '韦应物', source: '《滁州西涧》' },
     { quote: '细雨鱼儿出，微风燕子斜', author: '杜甫', source: '《水槛遣心》' },
-    { quote: '会当凌绝顶，一览众山小', author: '杜甫', source: '《望岳》' },
     { quote: '问君能有几多愁，恰似一江春水向东流', author: '李煜', source: '《虞美人》' },
     { quote: '剪不断，理还乱，是离愁', author: '李煜', source: '《相见欢》' },
     { quote: '无可奈何花落去，似曾相识燕归来', author: '晏殊', source: '《浣溪沙》' },
@@ -453,32 +452,41 @@ function extractQuestionData() {
     { quote: '壮志饥餐胡虏肉，笑谈渴饮匈奴血', author: '岳飞', source: '《满江红》' },
     { quote: '山不在高，有仙则名', author: '刘禹锡', source: '《陋室铭》' },
     { quote: '水不在深，有龙则灵', author: '刘禹锡', source: '《陋室铭》' },
-    { quote: '予独爱莲之出淤泥而不染，濯清涟而不妖', author: '周敦颐', source: '《爱莲说》' },
     { quote: '中通外直，不蔓不枝', author: '周敦颐', source: '《爱莲说》' },
     { quote: '香远益清，亭亭净植', author: '周敦颐', source: '《爱莲说》' },
     { quote: '可远观而不可亵玩焉', author: '周敦颐', source: '《爱莲说》' },
-    { quote: '出淤泥而不染，濯清涟而不妖', author: '周敦颐', source: '《爱莲说》' },
-    { quote: '大雪无痕，落无声', author: '陆游', source: '《卜算子·咏梅》' },
     { quote: '驿外断桥边，寂寞开无主', author: '陆游', source: '《卜算子·咏梅》' },
-    { quote: '无意苦争春，一任群芳妒', author: '陆游', source: '《卜算子·咏梅》' },
-    { quote: '零落成泥碾作尘，只有香如故', author: '陆游', source: '《卜算子·咏梅》' }
+    { quote: '无意苦争春，一任群芳妒', author: '陆游', source: '《卜算子·咏梅》' }
   ];
+
+  // --- 名句去重（内置题库可能有重复条目） ---
+  const _seenQuotes = new Set();
+  bank.quotes = bank.quotes.filter(q => {
+    if (_seenQuotes.has(q.quote)) return false;
+    _seenQuotes.add(q.quote);
+    return true;
+  });
 
   // --- 病句（内置题库，补充手册数据） ---
   bank.sentenceErrors = [
-    { type: '成分残缺', desc: '通过...使...', examples: [
+    { type: '成分残缺', desc: '通过...使...（缺主语）', examples: [
       '通过这次语文学习，使我收获很大。',
-      '经过大家的共同努力，使任务完成了。'
+      '经过大家的共同努力，使任务完成了。',
+      '通过这次活动，让我们增长了见识。'
     ]},
     { type: '成分残缺', desc: '缺主语', examples: [
       '看了这部电视剧，对我教育很大。',
       '在老师的帮助下，使我进步了。'
     ]},
-    { type: '搭配不当', desc: '主谓搭配', examples: [
-      '他的嗓音很好，歌声清脆。',
-      '春天的杭州是一年中最美的季节。'
+    { type: '成分残缺', desc: '缺宾语', examples: [
+      '我们要从小培养高尚的品格。',
+      '他认真听取了同学们的意见和。'
     ]},
-    { type: '搭配不当', desc: '动宾搭配', examples: [
+    { type: '搭配不当', desc: '主谓搭配不当', examples: [
+      '春天的杭州是一年中最美的季节。',
+      '他的嗓音很好，歌声清脆如百灵。'
+    ]},
+    { type: '搭配不当', desc: '动宾搭配不当', examples: [
       '我们要发挥优点，克服缺点。',
       '我们要继承和发扬老一辈的革命传统。'
     ]},
@@ -488,7 +496,7 @@ function extractQuestionData() {
     ]},
     { type: '语序不当', desc: '关联词位置不当', examples: [
       '不但他学习好，而且思想好。',
-      '因为他学习刻苦，所以成绩好。'
+      '只有努力学习，就能取得好成绩。'
     ]},
     { type: '重复啰唆', desc: '成分赘余', examples: [
       '这是由失败的教训中得出的。',
@@ -515,33 +523,51 @@ function extractQuestionData() {
       '他发现老虎正在吃他的牛。'
     ]}
   ];
+  // 正确句子（用于 easy 判断题和 medium/hard 选择题）
+  bank.correctSentences = [
+    '经过努力，他终于完成了任务。',
+    '我们在学习上要不断进步。',
+    '春天的花园里开满了各种各样的花。',
+    '老师耐心地解答了同学们的问题。',
+    '这本书内容丰富，值得一读。',
+    '他每天坚持锻炼身体。',
+    '同学们积极参加课外活动。',
+    '我们应当养成勤俭节约的好习惯。',
+    '他的作文水平有了很大提高。',
+    '这次活动增强了同学们的团结意识。',
+    '因为今天下雨，所以运动会推迟了。',
+    '如果明天天气好，我们就去爬山。',
+    '虽然这道题很难，但我还是做出来了。',
+    '大家都在认真地听老师讲课。',
+    '他的学习成绩一直在稳步提高。'
+  ];
 
   // 构建易错字对（用于字形题）
   // 从成语中生成：取一个成语，用形近字替换
   bank.charPairs = [];
   const charSubstitutes = {
-    '安': '按', '排': '徘', '然': '燃', '恙': '样', '山': '衫',
-    '涉': '步', '跋': '拔', '废': '费', '具': '俱', '心': '新',
-    '材': '才', '独': '毒', '帜': '识', '戴': '带', '赴': '扑',
-    '汤': '烫', '蹈': '滔', '刚': '钢', '正': '政', '阿': '婀',
-    '屋': '乌', '建': '月', '瓴': '领', '各': '个', '得': '德',
-    '所': '锁', '厚': '后', '此': '次', '薄': '簿', '虎': '唬',
-    '视': '市', '眈': '担', '花': '华', '枝': '支', '招': '召',
-    '展': '崭', '画': '划', '龙': '尤', '点': '典', '睛': '晴',
-    '焕': '换', '然': '燃', '一': '壹', '新': '心', '恍': '晃',
-    '大': '达', '悟': '误', '诲': '悔', '人': '认', '倦': '卷',
-    '豁': '活', '开': '门', '朗': '浪', '鸡': '鸭', '犬': '大',
-    '相': '香', '闻': '问', '集': '极', '广': '光', '益': '易',
-    '家': '加', '户': '互', '见': '件', '异': '导', '迁': '千',
-    '剑': '箭', '拔': '拨', '弩': '努', '张': '胀', '交': '骄',
-    '头': '投', '接': '结', '耳': '尔', '娇': '骄', '生': '身',
-    '惯': '贯', '兢': '竞', '业': '叶', '迥': '回', '津': '精',
-    '筋': '斤', '疲': '皮', '惊': '精', '心': '新', '魄': '破',
-    '精': '经', '益': '一', '求': '球', '井': '金', '然': '燃',
-    '居': '局', '高': '告', '临': '令', '下': '吓', '鞠': '拘',
-    '躬': '弓', '尽': '进', '瘁': '碎', '非': '飞', '淡': '旦',
-    '泊': '朴', '宁': '泞', '静': '净', '俭': '捡', '以': '已',
-    '养': '氧', '德': '得'
+    '安': '按', '排': '徘', '恙': '样', '涉': '步', '跋': '拔',
+    '废': '费', '具': '俱', '材': '才', '独': '毒', '帜': '识',
+    '戴': '带', '赴': '扑', '汤': '烫', '蹈': '滔', '刚': '钢',
+    '正': '政', '阿': '婀', '屋': '乌', '瓴': '领', '各': '个',
+    '得': '德', '所': '锁', '厚': '后', '此': '次', '薄': '簿',
+    '虎': '唬', '视': '市', '眈': '担', '花': '华', '枝': '支',
+    '招': '召', '展': '崭', '画': '划', '龙': '尤', '点': '典',
+    '睛': '晴', '焕': '换', '恍': '晃', '悟': '误', '诲': '悔',
+    '倦': '卷', '豁': '活', '朗': '浪', '鸡': '鸭', '相': '香',
+    '闻': '问', '集': '极', '广': '光', '家': '加', '户': '互',
+    '见': '件', '异': '导', '迁': '千', '剑': '箭', '弩': '努',
+    '张': '胀', '交': '骄', '头': '投', '接': '结', '耳': '尔',
+    '娇': '骄', '生': '身', '惯': '贯', '兢': '竞', '业': '叶',
+    '迥': '回', '津': '精', '筋': '斤', '疲': '皮', '惊': '精',
+    '魄': '破', '精': '经', '求': '球', '井': '金', '居': '局',
+    '临': '令', '鞠': '拘', '躬': '弓', '尽': '进', '瘁': '碎',
+    '非': '飞', '淡': '旦', '泊': '朴', '宁': '泞', '静': '净',
+    '俭': '捡', '以': '已', '养': '氧', '德': '得',
+    '筹': '愁', '茅': '矛', '庐': '芦', '恭': '公', '慕': '幕',
+    '庸': '佣', '置': '制', '蜂': '峰', '拥': '涌', '躁': '燥',
+    '赘': '坠', '尤': '由', '堪': '湛', '瑕': '暇', '宵': '霄',
+    '象': '像', '概': '慨', '踪': '综', '讫': '乞', '陨': '损'
   };
   for (const { idiom } of bank.idioms) {
     if (idiom.length >= 3) {
@@ -788,14 +814,14 @@ const GENERATORS = {
       { type: '对偶', example: '海内存知己，天涯若比邻。' },
       { type: '对偶', example: '无边落木萧萧下，不尽长江滚滚来。' },
       { type: '对偶', example: '日出江花红胜火，春来江水绿如蓝。' },
-      { type: '反复', example: '盼望着，盼望着，东风来了，春天的脚步近了。' },
       { type: '反复', example: '沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。' },
+      { type: '反复', example: '盼望着，盼望着，东风来了。' },
       { type: '设问', example: '什么是路？就是从没路的地方践踏出来的。' },
       { type: '设问', example: '谁是我们最可爱的人呢？我们的部队，我们的战士。' },
       { type: '设问', example: '春天在哪里？春天在小朋友的眼睛里。' },
       { type: '反问', example: '难道我们不应该努力学习吗？' },
       { type: '反问', example: '这不正是对那班轻视体育的人们一个有力的回击吗？' },
-      { type: '反问', example: '射箭要看靶子，弹琴要看听众，写文章做演说倒可以不看读者不看听众吗？' },
+      { type: '反问', example: '人的身躯怎能从狗洞子里爬出？' },
       { type: '借代', example: '巾帼不让须眉。' },
       { type: '借代', example: '将军百战死，壮士十年归。' },
       { type: '借代', example: '帆翅初张处，云鹏怒翼同。' },
@@ -861,15 +887,35 @@ const GENERATORS = {
 
       // hard: 判断题
       const correct = bank.authors[Math.floor(Math.random() * bank.authors.length)];
-      const other = bank.authors[Math.floor(Math.random() * bank.authors.length)];
       const showCorrect = Math.random() > 0.5;
-      const dynasty = showCorrect ? correct.dynasty : other.dynasty;
+      let dynasty;
+      if (showCorrect) {
+        dynasty = correct.dynasty;
+      } else {
+        // 选一个朝代不同的作者取其朝代作为错误选项
+        const others = bank.authors.filter(a => a.dynasty !== correct.dynasty);
+        if (others.length === 0) {
+          // 没有不同朝代的作者，退化为正确判断
+          dynasty = correct.dynasty;
+          return {
+            type: 'literature', difficulty,
+            question: `判断正误：${correct.name}是${dynasty}时期的作家。`,
+            options: buildTrueFalseOptions(true),
+            answer: '正确',
+            explanation: `${correct.name}是${correct.dynasty}时期的作家。`
+          };
+        }
+        const other = others[Math.floor(Math.random() * others.length)];
+        dynasty = other.dynasty;
+      }
       return {
         type: 'literature', difficulty,
         question: `判断正误：${correct.name}是${dynasty}时期的作家。`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
-        explanation: `${correct.name}是${correct.dynasty}时期的作家，不是${dynasty}。`
+        explanation: showCorrect
+          ? `${correct.name}是${correct.dynasty}时期的作家。`
+          : `${correct.name}是${correct.dynasty}时期的作家，不是${dynasty}。`
       };
     }
     return null;
@@ -945,16 +991,33 @@ const GENERATORS = {
   sentence(bank, difficulty) {
     const errors = bank.sentenceErrors;
     if (errors.length === 0) return null;
+    const correctSentences = bank.correctSentences || [
+      '经过努力，他终于完成了任务。',
+      '我们在学习上要不断进步。',
+      '春天的花园里开满了各种各样的花。',
+      '老师耐心地解答了同学们的问题。',
+      '这本书内容丰富，值得一读。'
+    ];
 
     if (difficulty === 'easy') {
-      // 判断题：句子是否有语病
+      // 判断题：随机出病句或正确句子，避免用户猜规律
+      const showCorrect = Math.random() > 0.5;
+      if (showCorrect && correctSentences.length > 0) {
+        const sentence = correctSentences[Math.floor(Math.random() * correctSentences.length)];
+        return {
+          type: 'sentence', difficulty,
+          question: `判断下列句子是否有语病：\n\n"${sentence}"`,
+          options: buildTrueFalseOptions(true),
+          answer: '正确',
+          explanation: `此句无语病，表达通顺。`
+        };
+      }
       const err = errors[Math.floor(Math.random() * errors.length)];
       const sentence = err.examples[Math.floor(Math.random() * err.examples.length)];
-      // 这是个病句，所以"正确"答案是"错误"（有语病）
       return {
         type: 'sentence', difficulty,
         question: `判断下列句子是否有语病：\n\n"${sentence}"`,
-        options: buildTrueFalseOptions(false), // false = 有语病 = 选"错误"才对
+        options: buildTrueFalseOptions(false),
         answer: '错误',
         explanation: `此句有语病。病因：${err.type}（${err.desc}）。`
       };
@@ -962,19 +1025,6 @@ const GENERATORS = {
 
     if (difficulty === 'medium') {
       // 选择题：4个句子，选出没有语病的一个
-      // 需要一个正确句子和3个病句
-      const correctSentences = [
-        '经过努力，他终于完成了任务。',
-        '我们在学习上要不断进步。',
-        '春天的花园里开满了各种各样的花。',
-        '老师耐心地解答了同学们的问题。',
-        '这本书内容丰富，值得一读。',
-        '他每天坚持锻炼身体。',
-        '同学们积极参加课外活动。',
-        '我们应当养成勤俭节约的好习惯。',
-        '他的作文水平有了很大提高。',
-        '这次活动增强了同学们的团结意识。'
-      ];
       const correctSentence = correctSentences[Math.floor(Math.random() * correctSentences.length)];
       const errorSamples = [];
       const usedTypes = new Set();
@@ -995,16 +1045,6 @@ const GENERATORS = {
     }
 
     // hard: 选择题 — 选出有语病的一项
-    const correctSentences = [
-      '经过努力，他终于完成了任务。',
-      '我们在学习上要不断进步。',
-      '春天的花园里开满了各种各样的花。',
-      '老师耐心地解答了同学们的问题。',
-      '这本书内容丰富，值得一读。',
-      '他每天坚持锻炼身体。',
-      '同学们积极参加课外活动。',
-      '我们应当养成勤俭节约的好习惯。'
-    ];
     const err = errors[Math.floor(Math.random() * errors.length)];
     const errorSentence = err.examples[Math.floor(Math.random() * err.examples.length)];
     const correctPool = correctSentences.filter(s => s !== errorSentence);
