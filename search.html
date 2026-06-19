@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全文搜索 - 初中语文基础知识</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar__brand">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:0.5rem;color:inherit;">
+        <div class="navbar__logo">语</div><span>语文基础知识</span>
+      </a>
+    </div>
+    <div class="navbar__nav" id="navbar-nav">
+      <a class="navbar__link" href="index.html">首页</a>
+      <a class="navbar__link" href="knowledge.html">知识学习</a>
+      <a class="navbar__link" href="practice.html">刷题练习</a>
+      <a class="navbar__link navbar__link--active" href="search.html">搜索</a>
+      <a class="navbar__link" href="errorbook.html">错题本</a>
+    </div>
+    <button class="navbar__menu-toggle" id="menu-toggle">☰</button>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-content">
+
+      <div class="section-header">
+        <div class="section-title"><span class="section-title__icon"></span><span>全文搜索</span></div>
+      </div>
+
+      <div class="search-page">
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="输入关键词搜索知识点，如：多音字、成语、修辞..." autofocus>
+          <button class="btn-primary" onclick="doSearch()">🔍 搜索</button>
+        </div>
+
+        <div id="hot-searches-wrap" style="margin-top:var(--space-md);">
+          <div style="font-size:0.85rem;color:var(--color-text-tertiary);margin-bottom:var(--space-sm);">热门搜索：</div>
+          <div id="hot-searches" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+        </div>
+
+        <div id="search-count" style="margin-top:var(--space-md);font-size:0.9rem;color:var(--color-text-secondary);"></div>
+
+        <div id="search-results" style="margin-top:var(--space-md);"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/search.js"></script>
+</body>
+</html>

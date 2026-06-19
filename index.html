@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初中语文基础知识学习平台</title>
+  <meta name="description" content="系统学习初中语文基础知识，涵盖语音、汉字、词语、修辞、文学常识等">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar__brand">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:0.5rem;color:inherit;">
+        <div class="navbar__logo">语</div><span>语文基础知识</span>
+      </a>
+    </div>
+    <div class="navbar__nav" id="navbar-nav">
+      <a class="navbar__link navbar__link--active" href="index.html">首页</a>
+      <a class="navbar__link" href="knowledge.html">知识学习</a>
+      <a class="navbar__link" href="practice.html">刷题练习</a>
+      <a class="navbar__link" href="search.html">搜索</a>
+      <a class="navbar__link" href="errorbook.html">错题本</a>
+    </div>
+    <button class="navbar__menu-toggle" id="menu-toggle">☰</button>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-content">
+
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero__badge">📚 初中语文 · 系统学习平台</div>
+        <h1>夯实语文基础，从每一个字音开始</h1>
+        <p>涵盖语音、汉字、词语、句子、修辞、文学常识等12大知识模块<br>配合专项练习与智能错题本，让你的语文基础稳如磐石</p>
+        <div class="hero__stats">
+          <div class="hero__stat"><span class="hero__stat-num" id="stat-parts">0</span><span class="hero__stat-label">知识模块</span></div>
+          <div class="hero__stat"><span class="hero__stat-num" id="stat-sections">0</span><span class="hero__stat-label">学习章节</span></div>
+          <div class="hero__stat"><span class="hero__stat-num" id="stat-items">0</span><span class="hero__stat-label">知识条目</span></div>
+        </div>
+      </section>
+
+      <!-- 学习概览 -->
+      <section>
+        <div class="section-header">
+          <div class="section-title"><span class="section-title__icon"></span><span>学习概览</span></div>
+        </div>
+        <div class="dashboard">
+          <div class="dashboard__card fade-in">
+            <div class="dashboard__icon">📖</div>
+            <div class="dashboard__value" id="dash-progress">0%</div>
+            <div class="dashboard__label" id="dash-progress-label">学习进度</div>
+          </div>
+          <div class="dashboard__card fade-in">
+            <div class="dashboard__icon">✏️</div>
+            <div class="dashboard__value" id="dash-score">—</div>
+            <div class="dashboard__label" id="dash-score-label">练习平均分</div>
+          </div>
+          <div class="dashboard__card fade-in">
+            <div class="dashboard__icon">⭐</div>
+            <div class="dashboard__value" id="dash-bookmark">0</div>
+            <div class="dashboard__label" id="dash-bookmark-label">收藏知识点</div>
+          </div>
+          <div class="dashboard__card fade-in">
+            <div class="dashboard__icon">📝</div>
+            <div class="dashboard__value" id="dash-error">0</div>
+            <div class="dashboard__label" id="dash-error-label">错题待复习</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 快速入口 -->
+      <section>
+        <div class="section-header">
+          <div class="section-title"><span class="section-title__icon"></span><span>快速开始</span></div>
+        </div>
+        <div class="quick-entries" id="quick-entries"></div>
+      </section>
+
+      <!-- 知识地图 -->
+      <section>
+        <div class="section-header">
+          <div class="section-title"><span class="section-title__icon"></span><span>知识地图</span></div>
+          <span style="font-size:0.85rem;color:var(--color-text-tertiary);">点击任意模块开始学习</span>
+        </div>
+        <div class="knowledge-map">
+          <div class="knowledge-map__grid" id="knowledge-map-grid"></div>
+        </div>
+      </section>
+
+      <footer style="text-align:center;padding:var(--space-xl) 0;color:var(--color-text-tertiary);font-size:0.85rem;">
+        <p>初中语文基础知识学习平台 · 基于薛金星《初中语文基础知识手册》</p>
+        <p style="margin-top:4px;">数据版本 v6.0 · 预留高中扩展接口</p>
+      </footer>
+
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/question-bank.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

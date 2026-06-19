@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>刷题练习 - 初中语文基础知识</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar__brand">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:0.5rem;color:inherit;">
+        <div class="navbar__logo">语</div><span>语文基础知识</span>
+      </a>
+    </div>
+    <div class="navbar__nav" id="navbar-nav">
+      <a class="navbar__link" href="index.html">首页</a>
+      <a class="navbar__link" href="knowledge.html">知识学习</a>
+      <a class="navbar__link navbar__link--active" href="practice.html">刷题练习</a>
+      <a class="navbar__link" href="search.html">搜索</a>
+      <a class="navbar__link" href="errorbook.html">错题本</a>
+    </div>
+    <button class="navbar__menu-toggle" id="menu-toggle">☰</button>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-content">
+
+      <!-- 模拟测试计时器 -->
+      <div class="mock-timer" id="mock-timer" style="display:none;">⏱️ 0:00</div>
+
+      <!-- 配置界面 -->
+      <div id="config-view">
+        <div class="section-header">
+          <div class="section-title"><span class="section-title__icon"></span><span>刷题练习</span></div>
+        </div>
+
+        <!-- 模式选择 -->
+        <div class="mode-grid" id="mode-cards"></div>
+
+        <!-- 配置面板 -->
+        <div class="config-panel" id="config-panel"></div>
+
+        <!-- 开始按钮 -->
+        <div style="text-align:center;padding:var(--space-lg) 0;">
+          <button class="btn-primary btn-lg" id="btn-start">🚀 开始练习</button>
+        </div>
+
+        <!-- 题型说明 -->
+        <div class="info-panel">
+          <div class="info-panel__title">📌 题型说明</div>
+          <div class="info-panel__grid">
+            <div class="info-panel__item"><span>🔊</span><span><strong>字音题</strong> — 给词语选正确读音</span></div>
+            <div class="info-panel__item"><span>✏️</span><span><strong>字形题</strong> — 找出错别字并改正</span></div>
+            <div class="info-panel__item"><span>📖</span><span><strong>成语题</strong> — 成语释义与用法判断</span></div>
+            <div class="info-panel__item"><span>🎨</span><span><strong>修辞题</strong> — 辨析修辞手法</span></div>
+            <div class="info-panel__item"><span>📚</span><span><strong>文学常识</strong> — 作者作品配对</span></div>
+            <div class="info-panel__item"><span>📝</span><span><strong>名句默写</strong> — 古诗文上下句填空</span></div>
+            <div class="info-panel__item"><span>🔧</span><span><strong>病句题</strong> — 找出并修改语病</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 答题界面 -->
+      <div id="quiz-view" style="display:none;">
+        <div class="quiz-header">
+          <div class="quiz-info">
+            <span id="quiz-info-current">第 1 题</span>
+            <span id="quiz-info-total">共 10 题</span>
+          </div>
+          <button class="btn-secondary" onclick="quitPractice()">退出</button>
+        </div>
+        <div class="quiz-progress">
+          <div class="quiz-progress__fill" id="quiz-progress-fill"></div>
+        </div>
+        <div id="quiz-container"></div>
+      </div>
+
+      <!-- 结果界面 -->
+      <div id="results-view" style="display:none;">
+        <div class="results-card fade-in">
+          <div class="results-title">练习完成！</div>
+          <div class="results-score" id="results-score">0分</div>
+          <div class="results-stats">
+            <div class="results-stat">
+              <div class="results-stat__value results-stat__value--correct" id="results-correct">0</div>
+              <div class="results-stat__label">答对</div>
+            </div>
+            <div class="results-stat">
+              <div class="results-stat__value results-stat__value--wrong" id="results-wrong">0</div>
+              <div class="results-stat__label">答错</div>
+            </div>
+            <div class="results-stat">
+              <div class="results-stat__value" id="results-time">0分0秒</div>
+              <div class="results-stat__label">用时</div>
+            </div>
+          </div>
+          <div class="results-actions">
+            <button class="btn-primary" onclick="restartPractice()">🔄 再练一组</button>
+            <a class="btn-secondary" href="errorbook.html">📝 查看错题本</a>
+            <a class="btn-secondary" href="index.html">🏠 返回首页</a>
+          </div>
+        </div>
+        <div class="section-header" style="margin-top:var(--space-xl);">
+          <div class="section-title"><span class="section-title__icon"></span><span>错题回顾</span></div>
+        </div>
+        <div id="results-review"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/question-bank.js"></script>
+  <script src="js/practice.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识学习 - 初中语文基础知识</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar__brand">
+      <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:0.5rem;color:inherit;">
+        <div class="navbar__logo">语</div><span>语文基础知识</span>
+      </a>
+    </div>
+    <div class="navbar__nav" id="navbar-nav">
+      <a class="navbar__link" href="index.html">首页</a>
+      <a class="navbar__link navbar__link--active" href="knowledge.html">知识学习</a>
+      <a class="navbar__link" href="practice.html">刷题练习</a>
+      <a class="navbar__link" href="search.html">搜索</a>
+      <a class="navbar__link" href="errorbook.html">错题本</a>
+    </div>
+    <button class="navbar__menu-toggle" id="menu-toggle">☰</button>
+  </nav>
+
+  <div class="knowledge-page">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__header">
+        <span>📖 目录导航</span>
+      </div>
+      <div class="sidebar__search">
+        <input type="text" placeholder="🔍 搜索知识点..." oninput="filterSidebar(this.value)">
+      </div>
+      <nav class="sidebar__tree" id="sidebar-tree"></nav>
+    </aside>
+    <div class="sidebar__overlay"></div>
+
+    <!-- 内容区 -->
+    <main class="content-area">
+      <div class="content-wrapper">
+        <!-- 面包屑 -->
+        <nav class="breadcrumb" id="breadcrumb"></nav>
+
+        <!-- 标题 -->
+        <div class="content-header">
+          <h1 id="content-title">加载中...</h1>
+          <span class="content-header__section" id="content-section-name"></span>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+          <button class="toolbar__btn" id="btn-bookmark" onclick="toggleBookmark()">
+            <span>☆</span> 收藏
+          </button>
+          <button class="toolbar__btn" id="btn-read" onclick="toggleReadAloud()">
+            <span>🔊</span> 朗读
+          </button>
+          <button class="toolbar__btn" onclick="window.print()">
+            <span>🖨️</span> 打印
+          </button>
+          <button class="toolbar__btn" onclick="copySectionLink()">
+            <span>🔗</span> 分享
+          </button>
+        </div>
+
+        <!-- 内容 -->
+        <div class="content-section">
+          <div id="section-content">
+            <div class="loading"><div class="loading__spinner"></div>正在加载内容...</div>
+          </div>
+        </div>
+
+        <!-- 前后导航 -->
+        <div class="nav-buttons" id="nav-buttons"></div>
+
+        <!-- 笔记区 -->
+        <div class="note-area" id="note-area"></div>
+
+      </div>
+    </main>
+  </div>
+
+  <button class="sidebar-toggle">☰ 目录</button>
+  <button class="back-to-top" id="back-to-top">↑</button>
+
+  <script src="js/data.js"></script>
+  <script src="js/knowledge.js"></script>
+</body>
+</html>
