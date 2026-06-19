@@ -61,6 +61,34 @@ function toggleTree(id, event) {
   const el = document.getElementById(id);
   if (!el) return;
   const isHidden = el.style.display === 'none';
+
+  // 手风琴：关闭同级其他展开项
+  const level = id.startsWith('bian-') ? 'bian' : 'part';
+  if (isHidden) {
+    if (level === 'bian') {
+      // 关闭其他编
+      document.querySelectorAll('.tree-children[id^="bian-"]').forEach(sib => {
+        if (sib.id !== id) {
+          sib.style.display = 'none';
+          const arrow = sib.previousElementSibling?.querySelector('.tree-arrow');
+          if (arrow) arrow.classList.remove('tree-arrow--expanded');
+        }
+      });
+    } else if (level === 'part') {
+      // 关闭同编下的其他部
+      const parentBian = el.closest('.tree-children[id^="bian-"]');
+      if (parentBian) {
+        parentBian.querySelectorAll(':scope > .tree-item > .tree-children[id^="part-"]').forEach(sib => {
+          if (sib.id !== id) {
+            sib.style.display = 'none';
+            const arrow = sib.previousElementSibling?.querySelector('.tree-arrow');
+            if (arrow) arrow.classList.remove('tree-arrow--expanded');
+          }
+        });
+      }
+    }
+  }
+
   el.style.display = isHidden ? '' : 'none';
   const arrow = el.previousElementSibling?.querySelector('.tree-arrow');
   if (arrow) arrow.classList.toggle('tree-arrow--expanded', isHidden);
