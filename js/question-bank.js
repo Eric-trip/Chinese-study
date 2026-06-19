@@ -532,7 +532,7 @@ function extractQuestionData() {
     ]},
     { type: '歧义', desc: '表意不明', examples: [
       '两个学校的老师来参加了会议。',
-      '他发现老虎正在吃他的牛。'
+      '咬死了农民的牛。'
     ]}
   ];
   bank.correctSentences = [
