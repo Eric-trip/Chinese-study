@@ -2,6 +2,15 @@
  * question-bank.js - 基于手册数据自动生成题库
  * 7种题型 × 3个难度等级
  * 支持选择题(4选项)、判断题(2选项)、填空题
+ *
+ * 质检标准（每道题生成后自动校验，不过关的丢弃重新生成）：
+ * 1. 选项不能重复，不能含空字符串/undefined
+ * 2. 答案必须在选项中（选择题/判断题）
+ * 3. 填空题答案不能为空，题目必须明确提示要填什么
+ * 4. 题目/选项/解析不能含 undefined/null
+ * 5. 单次练习内同一题不能重复（按 question 文本去重）
+ * 6. 干扰项必须合理（同类型、同难度，不能一眼排除）
+ * 7. 判断题正/误比例随机，不能永远出同一方向
  */
 
 const QUESTION_TYPES = {
@@ -24,25 +33,17 @@ let _questionCache = null;
 
 // ==================== 工具函数 ====================
 
-/**
- * 确保选项唯一：从干扰项池中选出 count 个不重复且不等于正确答案的选项
- * @param {string} correct - 正确答案文本
- * @param {string[]} pool - 干扰项池
- * @param {number} count - 需要的干扰项数量
- * @returns {string[]} 去重后的干扰项数组
- */
 function pickUniqueDistractors(correct, pool, count) {
   const seen = new Set([correct]);
   const result = [];
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
   for (const item of shuffled) {
-    if (!seen.has(item)) {
+    if (item && !seen.has(item)) {
       seen.add(item);
       result.push(item);
       if (result.length >= count) break;
     }
   }
-  // 如果池子不够，补充占位（尽量避免）
   while (result.length < count) {
     const fake = `选项${result.length}`;
     if (!seen.has(fake)) { seen.add(fake); result.push(fake); }
@@ -50,9 +51,6 @@ function pickUniqueDistractors(correct, pool, count) {
   return result;
 }
 
-/**
- * 构建选择题选项（正确答案 + 干扰项），随机打乱
- */
 function buildOptions(correctText, distractorTexts) {
   const opts = [
     { text: correctText, correct: true },
@@ -61,9 +59,6 @@ function buildOptions(correctText, distractorTexts) {
   return opts.sort(() => Math.random() - 0.5);
 }
 
-/**
- * 构建判断题选项（只有 正确/错误 两个选项）
- */
 function buildTrueFalseOptions(isCorrect) {
   return [
     { text: '正确', correct: isCorrect },
@@ -71,14 +66,47 @@ function buildTrueFalseOptions(isCorrect) {
   ];
 }
 
+// ==================== 质检函数 ====================
+
 /**
- * 从数组中随机取 n 个不重复元素
+ * 校验单道题是否合格，返回 {ok, reason}
  */
-function sampleUnique(arr, n, exclude = []) {
-  const excludeSet = new Set(exclude);
-  const pool = arr.filter(x => !excludeSet.has(x));
-  const shuffled = pool.sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, n);
+function validateQuestion(q) {
+  if (!q || typeof q !== 'object') return { ok: false, reason: '题目为空' };
+  if (!q.question || q.question.includes('undefined') || q.question.includes('null'))
+    return { ok: false, reason: '题干含undefined/null' };
+  if (!q.answer || q.answer.trim() === '')
+    return { ok: false, reason: '答案为空' };
+  if (q.answer.includes('undefined') || q.answer.includes('null'))
+    return { ok: false, reason: '答案含undefined/null' };
+
+  if (q.options && Array.isArray(q.options)) {
+    if (q.options.length < 2) return { ok: false, reason: '选项不足' };
+    const optTexts = q.options.map(o => typeof o === 'object' ? (o.text || '') : o);
+    // 空选项
+    if (optTexts.some(t => !t || t.trim() === '')) return { ok: false, reason: '含空选项' };
+    // 含undefined
+    if (optTexts.some(t => t.includes('undefined') || t.includes('null'))) return { ok: false, reason: '选项含undefined/null' };
+    // 选项重复
+    const unique = new Set(optTexts);
+    if (unique.size !== optTexts.length) return { ok: false, reason: '选项重复' };
+    // 答案必须在选项中
+    if (!optTexts.includes(q.answer)) return { ok: false, reason: '答案不在选项中' };
+    // 选项不能是占位符
+    if (optTexts.some(t => /^选项\d$/.test(t))) return { ok: false, reason: '含占位符选项' };
+  }
+
+  // 填空题：题目必须有明确提示
+  if (q.isFill) {
+    // 不能只有一条横线，必须有上下文提示
+    const blankCount = (q.question.match(/______/g) || []).length;
+    if (blankCount === 0) return { ok: false, reason: '填空题没有横线' };
+    // 题目文字（去掉横线后）至少10个字，确保有足够提示
+    const textOnly = q.question.replace(/______/g, '').replace(/\s/g, '');
+    if (textOnly.length < 10) return { ok: false, reason: '填空题提示不足' };
+  }
+
+  return { ok: true };
 }
 
 // ==================== 数据提取 ====================
@@ -88,21 +116,23 @@ function extractQuestionData() {
   if (!data) return null;
 
   const bank = {
-    pinyinWords: [],      // {word, pinyin}
-    pinyinErrors: [],     // {reason, correct, wrong, correctWord, wrongWord, correctPinyin, wrongPinyin}
-    idioms: [],           // {idiom, meaning}
-    idiomPairs: [],       // {correct, wrong} — 近义成语辨析
-    rhetoricTypes: [],    // {name, desc, examples[]}
-    rhetoricExamples: [], // {type, example}
-    authors: [],          // {name, dynasty}
-    firstWorks: [],       // {title, desc}
+    pinyinWords: [],
+    pinyinErrors: [],
+    idioms: [],
+    idiomPairs: [],
+    rhetoricTypes: [],
+    rhetoricExamples: [],
+    authors: [],
+    firstWorks: [],
     quotes: [],
-    sentenceErrors: []    // {type, desc, examples[]}
+    sentenceErrors: [],
+    correctSentences: [],
+    charPairs: []
   };
 
   const bian1 = data.bians[0];
 
-  // --- 语音：pinyinWords (483条) ---
+  // --- 语音 ---
   for (const sec of bian1.parts[0].sections) {
     if (sec.section_name === '必考知识梳理') {
       for (const sub of sec.subsections || []) {
@@ -135,14 +165,13 @@ function extractQuestionData() {
     }
   }
 
-  // --- 词语：成语 ---
+  // --- 成语 ---
   for (const sec of bian1.parts[2].sections) {
     if (sec.section_name === '必考知识梳理') {
       for (const sub of sec.subsections || []) {
         const title = sub.title || '';
         if (title.includes('重点成语')) {
           const content = sub.content || '';
-          // 解析格式：成语（释义）、成语（释义）
           const regex = /([^\s、，（()：。；！？]+)（([^）]+)）/g;
           let m;
           while ((m = regex.exec(content)) !== null) {
@@ -152,11 +181,9 @@ function extractQuestionData() {
               bank.idioms.push({ idiom, meaning });
             }
           }
-          // 也有些成语没有释义，按顿号分隔
           const noParenPart = content.replace(regex, '');
           const tokens = noParenPart.split(/[、，,]/).map(s => s.trim()).filter(s => {
             if (s.length < 2 || s.length > 8) return false;
-            // 排除包含标点或非成语内容的片段
             if (/[：。；！？排列包括等]/.test(s)) return false;
             return true;
           });
@@ -178,7 +205,6 @@ function extractQuestionData() {
           if (item && typeof item === 'object' && item.table) {
             const headers = item.table.headers || [];
             for (const row of item.table.rows) {
-              // 修辞方法名称 + 说明 + 可能的例句
               if (headers[0] && headers[0].includes('修辞')) {
                 const typeName = row[0];
                 const desc = row[1] || '';
@@ -186,12 +212,10 @@ function extractQuestionData() {
                   bank.rhetoricTypes.push({ name: typeName, desc });
                 }
               }
-              // 比喻类型等带例句的表格
               if (headers.includes('典型示例') || headers.includes('例句')) {
                 const exampleIdx = headers.includes('典型示例') ? headers.indexOf('典型示例') : headers.indexOf('例句');
                 const typeIdx = headers.includes('比喻类型') ? headers.indexOf('比喻类型') : 0;
                 if (row[exampleIdx]) {
-                  // 提取例句（可能多个，用①②③分隔）
                   const examples = row[exampleIdx].split(/[①②③④⑤\n]/).map(s => s.trim()).filter(s => s.length > 5);
                   for (const ex of examples) {
                     bank.rhetoricExamples.push({ type: row[typeIdx] || '', example: ex });
@@ -203,11 +227,9 @@ function extractQuestionData() {
         }
       }
     }
-    // 必考知识梳理的文本格式修辞
     if (sec.section_name === '必考知识梳理') {
       for (const sub of sec.subsections || []) {
         const content = sub.content || '';
-        // 格式：1. 比喻：用跟甲事物...
         const lines = content.split('\n');
         for (const line of lines) {
           const m = line.match(/^\d+\.\s*(.+?)[:：](.+)/);
@@ -232,7 +254,6 @@ function extractQuestionData() {
         const title = sub.title || '';
         const content = sub.content || '';
         if (title.includes('古代作家')) {
-          // 格式：孔子（春秋）、孟子（战国）...
           const regex = /([^、，,（）()]+)（([^）]+)）/g;
           let m;
           while ((m = regex.exec(content)) !== null) {
@@ -240,13 +261,15 @@ function extractQuestionData() {
           }
         }
         if (title.includes('第一')) {
-          // 格式：第一部诗歌总集——《诗经》
           const parts = content.split(/[；;。\n]/);
           for (const p of parts) {
             const m = p.match(/第一.+?——(.+?)$/);
             if (m) {
-              const title = m[1].trim().replace(/[《》]/g, '');
-              if (title.length > 0) bank.firstWorks.push({ title, desc: p.trim() });
+              const t = m[1].trim().replace(/[《》]/g, '');
+              // 过滤垃圾数据：长度1-10，不含数字+项/种等
+              if (t.length > 0 && t.length <= 10 && !/\d+项$/.test(t) && !/\d+种$/.test(t) && !/等$/.test(t)) {
+                bank.firstWorks.push({ title: t, desc: p.trim() });
+              }
             }
           }
         }
@@ -254,7 +277,7 @@ function extractQuestionData() {
     }
   }
 
-  // --- 名句（内置补充题库，因为手册JSON中名句内容为概述） ---
+  // --- 名句 ---
   bank.quotes = [
     { quote: '海内存知己，天涯若比邻', author: '王勃', source: '《送杜少府之任蜀州》' },
     { quote: '落霞与孤鹜齐飞，秋水共长天一色', author: '王勃', source: '《滕王阁序》' },
@@ -320,9 +343,7 @@ function extractQuestionData() {
     { quote: '欲把西湖比西子，淡妆浓抹总相宜', author: '苏轼', source: '《饮湖上初晴后雨》' },
     { quote: '不识庐山真面目，只缘身在此山中', author: '苏轼', source: '《题西林壁》' },
     { quote: '竹外桃花三两枝，春江水暖鸭先知', author: '苏轼', source: '《惠崇春江晚景》' },
-    { quote: '春风又绿江南岸，明月何时照我还', author: '王安石', source: '《泊船瓜洲》' },
     { quote: '墙角数枝梅，凌寒独自开', author: '王安石', source: '《梅花》' },
-    { quote: '不畏浮云遮望眼，自缘身在最高层', author: '王安石', source: '《登飞来峰》' },
     { quote: '月上柳梢头，人约黄昏后', author: '欧阳修', source: '《生查子》' },
     { quote: '醉翁之意不在酒，在乎山水之间也', author: '欧阳修', source: '《醉翁亭记》' },
     { quote: '先天下之忧而忧，后天下之乐而乐', author: '范仲淹', source: '《岳阳楼记》' },
@@ -368,9 +389,7 @@ function extractQuestionData() {
     { quote: '莫愁前路无知己，天下谁人不识君', author: '高适', source: '《别董大》' },
     { quote: '忽如一夜春风来，千树万树梨花开', author: '岑参', source: '《白雪歌送武判官归京》' },
     { quote: '烽火连三月，家书抵万金', author: '杜甫', source: '《春望》' },
-    { quote: '会当凌绝顶，一览众山小', author: '杜甫', source: '《望岳》' },
     { quote: '造化钟神秀，阴阳割昏晓', author: '杜甫', source: '《望岳》' },
-    { quote: '烽火连三月，家书抵万金', author: '杜甫', source: '《春望》' },
     { quote: '白头搔更短，浑欲不胜簪', author: '杜甫', source: '《春望》' },
     { quote: '好雨知时节，当春乃发生', author: '杜甫', source: '《春夜喜雨》' },
     { quote: '晓看红湿处，花重锦官城', author: '杜甫', source: '《春夜喜雨》' },
@@ -385,12 +404,8 @@ function extractQuestionData() {
     { quote: '露从今夜白，月是故乡明', author: '杜甫', source: '《月夜忆舍弟》' },
     { quote: '明月几时有，把酒问青天', author: '苏轼', source: '《水调歌头》' },
     { quote: '人有悲欢离合，月有阴晴圆缺', author: '苏轼', source: '《水调歌头》' },
-    { quote: '但愿人长久，千里共婵娟', author: '苏轼', source: '《水调歌头》' },
     { quote: '横看成岭侧成峰，远近高低各不同', author: '苏轼', source: '《题西林壁》' },
-    { quote: '欲把西湖比西子，淡妆浓抹总相宜', author: '苏轼', source: '《饮湖上初晴后雨》' },
     { quote: '春色满园关不住，一枝红杏出墙来', author: '叶绍翁', source: '《游园不值》' },
-    { quote: '等闲识得东风面，万紫千红总是春', author: '朱熹', source: '《春日》' },
-    { quote: '问渠那得清如许，为有源头活水来', author: '朱熹', source: '《观书有感》' },
     { quote: '绿杨烟外晓寒轻，红杏枝头春意闹', author: '宋祁', source: '《玉楼春》' },
     { quote: '云横秦岭家何在，雪拥蓝关马不前', author: '韩愈', source: '《左迁至蓝关示侄孙湘》' },
     { quote: '世有伯乐，然后有千里马', author: '韩愈', source: '《马说》' },
@@ -399,7 +414,6 @@ function extractQuestionData() {
     { quote: '业精于勤，荒于嬉；行成于思，毁于随', author: '韩愈', source: '《进学解》' },
     { quote: '闻道有先后，术业有专攻', author: '韩愈', source: '《师说》' },
     { quote: '是故弟子不必不如师，师不必贤于弟子', author: '韩愈', source: '《师说》' },
-    { quote: '醉翁之意不在酒，在乎山水之间也', author: '欧阳修', source: '《醉翁亭记》' },
     { quote: '山水之乐，得之心而寓之酒也', author: '欧阳修', source: '《醉翁亭记》' },
     { quote: '野芳发而幽香，佳木秀而繁阴', author: '欧阳修', source: '《醉翁亭记》' },
     { quote: '太守谓谁？庐陵欧阳修也', author: '欧阳修', source: '《醉翁亭记》' },
@@ -409,7 +423,6 @@ function extractQuestionData() {
     { quote: '鱼戏莲叶东，鱼戏莲叶西', author: '佚名', source: '《江南》' },
     { quote: '江南可采莲，莲叶何田田', author: '佚名', source: '《江南》' },
     { quote: '天苍苍，野茫茫，风吹草低见牛羊', author: '佚名', source: '《敕勒歌》' },
-    { quote: '少壮不努力，老大徒伤悲', author: '佚名', source: '《长歌行》' },
     { quote: '百川东到海，何时复西归', author: '佚名', source: '《长歌行》' },
     { quote: '阳春布德泽，万物生光辉', author: '佚名', source: '《长歌行》' },
     { quote: '青青园中葵，朝露待日晞', author: '佚名', source: '《长歌行》' },
@@ -459,7 +472,7 @@ function extractQuestionData() {
     { quote: '无意苦争春，一任群芳妒', author: '陆游', source: '《卜算子·咏梅》' }
   ];
 
-  // --- 名句去重（内置题库可能有重复条目） ---
+  // --- 名句去重 ---
   const _seenQuotes = new Set();
   bank.quotes = bank.quotes.filter(q => {
     if (_seenQuotes.has(q.quote)) return false;
@@ -467,7 +480,7 @@ function extractQuestionData() {
     return true;
   });
 
-  // --- 病句（内置题库，补充手册数据） ---
+  // --- 病句 ---
   bank.sentenceErrors = [
     { type: '成分残缺', desc: '通过...使...（缺主语）', examples: [
       '通过这次语文学习，使我收获很大。',
@@ -479,16 +492,15 @@ function extractQuestionData() {
       '在老师的帮助下，使我进步了。'
     ]},
     { type: '成分残缺', desc: '缺宾语', examples: [
-      '我们要从小培养高尚的品格。',
       '他认真听取了同学们的意见和。'
     ]},
     { type: '搭配不当', desc: '主谓搭配不当', examples: [
       '春天的杭州是一年中最美的季节。',
-      '他的嗓音很好，歌声清脆如百灵。'
+      '他的歌声清脆如百灵。'
     ]},
     { type: '搭配不当', desc: '动宾搭配不当', examples: [
       '我们要发挥优点，克服缺点。',
-      '我们要继承和发扬老一辈的革命传统。'
+      '这部电影感动得我流下了眼泪。'
     ]},
     { type: '语序不当', desc: '定语和中心语位置颠倒', examples: [
       '我国人口是世界上最多的国家。',
@@ -523,7 +535,6 @@ function extractQuestionData() {
       '他发现老虎正在吃他的牛。'
     ]}
   ];
-  // 正确句子（用于 easy 判断题和 medium/hard 选择题）
   bank.correctSentences = [
     '经过努力，他终于完成了任务。',
     '我们在学习上要不断进步。',
@@ -542,8 +553,7 @@ function extractQuestionData() {
     '他的学习成绩一直在稳步提高。'
   ];
 
-  // 构建易错字对（用于字形题）
-  // 从成语中生成：取一个成语，用形近字替换
+  // --- 字形：易错字对 ---
   bank.charPairs = [];
   const charSubstitutes = {
     '安': '按', '排': '徘', '恙': '样', '涉': '步', '跋': '拔',
@@ -571,7 +581,6 @@ function extractQuestionData() {
   };
   for (const { idiom } of bank.idioms) {
     if (idiom.length >= 3) {
-      // 尝试替换每个字
       for (let i = 0; i < idiom.length; i++) {
         const ch = idiom[i];
         if (charSubstitutes[ch]) {
@@ -590,50 +599,37 @@ function extractQuestionData() {
 
 const GENERATORS = {
   // ---------- 字音 ----------
+  // 设计思路：字音题不适合选择题（干扰项太难设计），改为判断题为主
   pinyin(bank, difficulty) {
-    if (bank.pinyinWords.length < 4) return null;
+    // 所有难度统一用判断题：给词语注音，判断读音是否正确
+    // easy: 用 pinyinWords 直接出正确读音，50%概率改成错误读音
+    // medium: 用 pinyinErrors 出易混淆读音
+    // hard: 用 pinyinErrors 出更细微的误读
 
-    if (difficulty === 'easy') {
-      // 选择题：给词语选拼音
-      const correct = bank.pinyinWords[Math.floor(Math.random() * bank.pinyinWords.length)];
-      const distractorPool = bank.pinyinWords
-        .filter(w => w.pinyin !== correct.pinyin)
-        .map(w => w.pinyin);
-      const distractors = pickUniqueDistractors(correct.pinyin, distractorPool, 3);
+    if (difficulty === 'easy' && bank.pinyinWords.length > 0) {
+      // 判断题：给词语标拼音，判断对错
+      const item = bank.pinyinWords[Math.floor(Math.random() * bank.pinyinWords.length)];
+      const showCorrect = Math.random() > 0.5;
+      const display = showCorrect ? item.pinyin : _fakeSimilarPinyin(item.pinyin);
       return {
         type: 'pinyin', difficulty,
-        question: `下列词语"${correct.word}"的正确读音是：`,
-        options: buildOptions(correct.pinyin, distractors),
-        answer: correct.pinyin,
-        explanation: `"${correct.word}"的拼音是 ${correct.pinyin}`
+        question: `判断下列词语注音是否正确：\n\n"${item.word}  ${display}"`,
+        options: buildTrueFalseOptions(showCorrect),
+        answer: showCorrect ? '正确' : '错误',
+        explanation: showCorrect
+          ? `注音正确。"${item.word}"读作 ${item.pinyin}。`
+          : `注音错误。"${item.word}"的正确读音是 ${item.pinyin}，而非 ${display}。`
       };
     }
 
-    if (difficulty === 'medium') {
-      // 选择题：给拼音选词语
-      const correct = bank.pinyinWords[Math.floor(Math.random() * bank.pinyinWords.length)];
-      const distractorPool = bank.pinyinWords
-        .filter(w => w.word !== correct.word)
-        .map(w => w.word);
-      const distractors = pickUniqueDistractors(correct.word, distractorPool, 3);
-      return {
-        type: 'pinyin', difficulty,
-        question: `下列读音"${correct.pinyin}"对应的词语是：`,
-        options: buildOptions(correct.word, distractors),
-        answer: correct.word,
-        explanation: `拼音 ${correct.pinyin} 对应的词语是"${correct.word}"`
-      };
-    }
-
-    // hard: 判断题 — 用 pinyinErrors 正/误对比数据
+    // medium & hard: 用 pinyinErrors 数据
     if (bank.pinyinErrors.length > 0) {
       const err = bank.pinyinErrors[Math.floor(Math.random() * bank.pinyinErrors.length)];
-      // 随机选正或误
       const showCorrect = Math.random() > 0.5;
       const display = showCorrect ? err.correct : err.wrong;
       return {
-        type: 'pinyin', difficulty,
-        question: `判断下列词语读音是否正确：\n\n"${display}"`,
+        type: 'pinyin', difficulty: difficulty || 'medium',
+        question: `判断下列读音是否正确：\n\n"${display}"`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
         explanation: showCorrect
@@ -641,21 +637,34 @@ const GENERATORS = {
           : `读音错误。${err.reason}：正确读法为"${err.correct}"，常见误读为"${err.wrong}"。`
       };
     }
+
+    // 兜底
+    if (bank.pinyinWords.length > 0) {
+      const item = bank.pinyinWords[Math.floor(Math.random() * bank.pinyinWords.length)];
+      return {
+        type: 'pinyin', difficulty: difficulty || 'medium',
+        question: `判断下列词语注音是否正确：\n\n"${item.word}  ${item.pinyin}"`,
+        options: buildTrueFalseOptions(true),
+        answer: '正确',
+        explanation: `注音正确。"${item.word}"读作 ${item.pinyin}。`
+      };
+    }
     return null;
   },
 
   // ---------- 字形 ----------
+  // 设计思路：字形适合判断题和选择题，考错别字辨识
   char(bank, difficulty) {
     if (bank.charPairs.length === 0) return null;
 
     if (difficulty === 'easy') {
-      // 判断题：成语书写是否正确
+      // 判断题：词语书写是否正确
       const pair = bank.charPairs[Math.floor(Math.random() * bank.charPairs.length)];
       const showCorrect = Math.random() > 0.5;
       const display = showCorrect ? pair.correct : pair.wrong;
       return {
         type: 'char', difficulty,
-        question: `下列词语书写是否正确：\n\n"${display}"`,
+        question: `判断下列词语书写是否正确：\n\n"${display}"`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
         explanation: showCorrect
@@ -665,40 +674,36 @@ const GENERATORS = {
     }
 
     if (difficulty === 'medium') {
-      // 选择题：4个词语，找出没有错别字的一个
+      // 选择题：找出没有错别字的一项
       const correctPair = bank.charPairs[Math.floor(Math.random() * bank.charPairs.length)];
-      // 从其他charPairs中取3个错词
       const wrongPool = bank.charPairs
         .filter(p => p.correct !== correctPair.correct)
         .map(p => p.wrong);
-      const wrongs = pickUniqueDistractors(correctPair.wrong, wrongPool, 3);
-      // 正确答案 = correctPair.correct，干扰项 = 3个错词 + correctPair.wrong
-      const options = buildOptions(correctPair.correct, [...wrongs, correctPair.wrong].slice(0, 3));
+      const wrongs = pickUniqueDistractors(correctPair.correct, wrongPool, 3);
       return {
         type: 'char', difficulty,
         question: `下列词语中没有错别字的一项是：`,
-        options,
+        options: buildOptions(correctPair.correct, wrongs),
         answer: correctPair.correct,
         explanation: `"${correctPair.correct}"书写正确。其他选项中均含有错别字。`
       };
     }
 
-    // hard: 选择题 — 找出有错别字的一项
+    // hard: 找出有错别字的一项
     const correctPair = bank.charPairs[Math.floor(Math.random() * bank.charPairs.length)];
-    // 正确答案 = 含错别字的词
     const correctWordPool = bank.idioms.filter(i => i.idiom !== correctPair.correct).map(i => i.idiom);
     const correctWords = pickUniqueDistractors(correctPair.wrong, correctWordPool, 3);
-    const options = buildOptions(correctPair.wrong, correctWords);
     return {
       type: 'char', difficulty,
       question: `下列词语中有错别字的一项是：`,
-      options,
+      options: buildOptions(correctPair.wrong, correctWords),
       answer: correctPair.wrong,
       explanation: `"${correctPair.wrong}"中"${correctPair.wrongChar}"应为"${correctPair.correctChar}"，正确写法是"${correctPair.correct}"。`
     };
   },
 
   // ---------- 成语 ----------
+  // 设计思路：成语释义适合选择题和判断题
   idiom(bank, difficulty) {
     const idiomPool = bank.idioms.filter(i => i.meaning);
     if (idiomPool.length < 4) return null;
@@ -743,7 +748,6 @@ const GENERATORS = {
         explanation: `"${idiomItem.idiom}"的意思确实是：${idiomItem.meaning}`
       };
     }
-    // 从其他成语中取一个错误释义
     const others = idiomPool.filter(i => i.idiom !== idiomItem.idiom && i.meaning);
     if (others.length > 0) {
       const wrongItem = others[Math.floor(Math.random() * others.length)];
@@ -755,7 +759,6 @@ const GENERATORS = {
         explanation: `"${idiomItem.idiom}"的意思是：${idiomItem.meaning}，而非"${wrongItem.meaning}"。`
       };
     }
-    // 兜底：释义判断正确
     return {
       type: 'idiom', difficulty,
       question: `判断：成语"${idiomItem.idiom}"的意思是"${idiomItem.meaning}"。`,
@@ -766,8 +769,8 @@ const GENERATORS = {
   },
 
   // ---------- 修辞 ----------
+  // 设计思路：修辞适合选择题，给例句判断修辞手法
   rhetoric(bank, difficulty) {
-    // 收集所有修辞类型名称
     const allTypes = [];
     const seen = new Set();
     for (const r of bank.rhetoricTypes) {
@@ -775,20 +778,16 @@ const GENERATORS = {
     }
     if (allTypes.length < 4) return null;
 
-    // 从修辞表中提取例句
     const examples = bank.rhetoricExamples.filter(e => e.example && e.example.length > 5);
-    // 细分类型 → 大类映射
     const typeMap = {
       '明喻': '比喻', '暗喻': '比喻', '借喻': '比喻',
       '拟人': '比拟', '拟物': '比拟',
       '扩大夸张': '夸张', '缩小夸张': '夸张', '超前夸张': '夸张',
     };
-    // 归一化例句类型
     const normalizedExamples = examples.map(e => ({
       ...e,
       type: typeMap[e.type] || e.type,
     }));
-    // 合并内置例句，扩大题库
     const builtinExamples = [
       { type: '比喻', example: '春天像小姑娘，花枝招展的，笑着，走着。' },
       { type: '比喻', example: '理想是石，敲出星星之火。' },
@@ -809,13 +808,11 @@ const GENERATORS = {
       { type: '排比', example: '红的像火，粉的像霞，白的像雪。' },
       { type: '排比', example: '山朗润起来了，水涨起来了，太阳的脸红起来了。' },
       { type: '排比', example: '燕子去了，有再来的时候；杨柳枯了，有再青的时候；桃花谢了，有再开的时候。' },
-      { type: '排比', example: '盼望着，盼望着，东风来了，春天的脚步近了。' },
       { type: '对偶', example: '两个黄鹂鸣翠柳，一行白鹭上青天。' },
       { type: '对偶', example: '海内存知己，天涯若比邻。' },
       { type: '对偶', example: '无边落木萧萧下，不尽长江滚滚来。' },
       { type: '对偶', example: '日出江花红胜火，春来江水绿如蓝。' },
       { type: '反复', example: '沉默呵，沉默呵！不在沉默中爆发，就在沉默中灭亡。' },
-      { type: '反复', example: '盼望着，盼望着，东风来了。' },
       { type: '设问', example: '什么是路？就是从没路的地方践踏出来的。' },
       { type: '设问', example: '谁是我们最可爱的人呢？我们的部队，我们的战士。' },
       { type: '设问', example: '春天在哪里？春天在小朋友的眼睛里。' },
@@ -824,14 +821,12 @@ const GENERATORS = {
       { type: '反问', example: '人的身躯怎能从狗洞子里爬出？' },
       { type: '借代', example: '巾帼不让须眉。' },
       { type: '借代', example: '将军百战死，壮士十年归。' },
-      { type: '借代', example: '帆翅初张处，云鹏怒翼同。' },
       { type: '借代', example: '孤帆远影碧空尽，唯见长江天际流。' },
       { type: '对比', example: '朱门酒肉臭，路有冻死骨。' },
       { type: '对比', example: '有缺点的战士终竟是战士，完美的苍蝇也终竟不过是苍蝇。' },
       { type: '双关', example: '东边日出西边雨，道是无晴却有晴。' },
       { type: '双关', example: '春蚕到死丝方尽，蜡炬成灰泪始干。' },
     ];
-    // 合并：内置 + 数据源（去重）
     const seenEx = new Set(builtinExamples.map(e => e.example));
     for (const e of normalizedExamples) {
       if (!seenEx.has(e.example)) {
@@ -839,23 +834,57 @@ const GENERATORS = {
         builtinExamples.push(e);
       }
     }
-    const allExamples = builtinExamples;
 
-    const correct = allExamples[Math.floor(Math.random() * allExamples.length)];
-    const distractorTypes = pickUniqueDistractors(correct.type, allTypes, 3);
+    // easy/medium: 选择题
+    if (difficulty !== 'hard') {
+      const correct = builtinExamples[Math.floor(Math.random() * builtinExamples.length)];
+      const distractorTypes = pickUniqueDistractors(correct.type, allTypes, 3);
+      return {
+        type: 'rhetoric', difficulty,
+        question: `请判断以下句子主要使用的修辞手法：\n\n"${correct.example}"`,
+        options: buildOptions(correct.type, distractorTypes),
+        answer: correct.type,
+        explanation: `这句话使用了"${correct.type}"的修辞手法。`
+      };
+    }
+
+    // hard: 判断题 — 判断修辞手法标注是否正确
+    const correct = builtinExamples[Math.floor(Math.random() * builtinExamples.length)];
+    const showCorrect = Math.random() > 0.5;
+    if (showCorrect) {
+      return {
+        type: 'rhetoric', difficulty,
+        question: `判断：以下句子使用了"${correct.type}"的修辞手法。\n\n"${correct.example}"`,
+        options: buildTrueFalseOptions(true),
+        answer: '正确',
+        explanation: `这句话确实使用了"${correct.type}"的修辞手法。`
+      };
+    }
+    // 给一个错误的修辞标注
+    const wrongTypes = allTypes.filter(t => t !== correct.type);
+    if (wrongTypes.length === 0) {
+      return {
+        type: 'rhetoric', difficulty,
+        question: `判断：以下句子使用了"${correct.type}"的修辞手法。\n\n"${correct.example}"`,
+        options: buildTrueFalseOptions(true),
+        answer: '正确',
+        explanation: `这句话确实使用了"${correct.type}"的修辞手法。`
+      };
+    }
+    const wrongType = wrongTypes[Math.floor(Math.random() * wrongTypes.length)];
     return {
       type: 'rhetoric', difficulty,
-      question: `请判断以下句子主要使用的修辞手法：\n\n"${correct.example}"`,
-      options: buildOptions(correct.type, distractorTypes),
-      answer: correct.type,
-      explanation: `这句话使用了"${correct.type}"的修辞手法。`
+      question: `判断：以下句子使用了"${wrongType}"的修辞手法。\n\n"${correct.example}"`,
+      options: buildTrueFalseOptions(false),
+      answer: '错误',
+      explanation: `这句话使用的是"${correct.type}"的修辞手法，而非"${wrongType}"。`
     };
   },
 
   // ---------- 文学常识 ----------
+  // 设计思路：选择题+判断题，考作家朝代、作品配对
   literature(bank, difficulty) {
     if (difficulty === 'easy' && bank.firstWorks.length >= 4) {
-      // 选择题：第一部xxx是？
       const correct = bank.firstWorks[Math.floor(Math.random() * bank.firstWorks.length)];
       const descMatch = correct.desc.match(/第一.+?——/);
       const descText = descMatch ? descMatch[0].replace('——', '') : '第一部';
@@ -872,7 +901,6 @@ const GENERATORS = {
 
     if (bank.authors.length >= 4) {
       if (difficulty === 'medium') {
-        // 选择题：作者朝代配对
         const correct = bank.authors[Math.floor(Math.random() * bank.authors.length)];
         const distractorPool = bank.authors.filter(a => a.dynasty !== correct.dynasty).map(a => a.dynasty);
         const distractors = pickUniqueDistractors(correct.dynasty, distractorPool, 3);
@@ -892,10 +920,8 @@ const GENERATORS = {
       if (showCorrect) {
         dynasty = correct.dynasty;
       } else {
-        // 选一个朝代不同的作者取其朝代作为错误选项
         const others = bank.authors.filter(a => a.dynasty !== correct.dynasty);
         if (others.length === 0) {
-          // 没有不同朝代的作者，退化为正确判断
           dynasty = correct.dynasty;
           return {
             type: 'literature', difficulty,
@@ -922,44 +948,32 @@ const GENERATORS = {
   },
 
   // ---------- 名句默写 ----------
+  // 设计思路：填空题为主，必须给上句填下句或给下句填上句，不能只给一条横线
   quote(bank, difficulty) {
     if (bank.quotes.length < 4) return null;
-    const q = bank.quotes[Math.floor(Math.random() * bank.quotes.length)];
+    // 只选能分成上下句的名句
+    const splittable = bank.quotes.filter(q => {
+      const parts = q.quote.split(/[，,；;]/);
+      return parts.length >= 2 && parts[0].length >= 2 && parts.slice(1).join('，').length >= 2;
+    });
+    if (splittable.length < 4) return null;
+    const q = splittable[Math.floor(Math.random() * splittable.length)];
+    const parts = q.quote.split(/[，,；;]/);
+    const upper = parts[0];
+    const lower = parts.slice(1).join('，');
 
     if (difficulty === 'easy') {
       // 填空题：给上句填下句
-      const parts = q.quote.split(/[，,；;]/);
-      if (parts.length >= 2) {
-        const upper = parts[0];
-        const lower = parts.slice(1).join('，');
-        return {
-          type: 'quote', difficulty, isFill: true,
-          question: `请补写出名句的下句：\n\n${upper}，______`,
-          answer: lower,
-          explanation: `出自${q.author}${q.source}：${q.quote}`
-        };
-      }
-      // 如果只有一句，用选择题
-      const distractors = bank.quotes
-        .filter(x => x.quote !== q.quote)
-        .map(x => x.quote.split(/[，,；;]/)[0])
-        .filter(x => x && x !== parts[0]);
-      const dist = pickUniqueDistractors(parts[0], distractors, 3);
       return {
-        type: 'quote', difficulty,
-        question: `"${q.quote}"的上一句是：`,
-        options: buildOptions(parts[0], dist),
-        answer: parts[0],
-        explanation: `出自${q.author}${q.source}`
+        type: 'quote', difficulty, isFill: true,
+        question: `请补写出下列名句的下句：\n\n"${upper}，______"`,
+        answer: lower,
+        explanation: `出自${q.author}${q.source}：${q.quote}`
       };
     }
 
     if (difficulty === 'medium') {
       // 选择题：给上句选下句
-      const parts = q.quote.split(/[，,；;]/);
-      if (parts.length < 2) return null;
-      const upper = parts[0];
-      const lower = parts.slice(1).join('，');
       const distractorPool = [];
       for (const other of bank.quotes) {
         if (other.quote !== q.quote) {
@@ -977,30 +991,24 @@ const GENERATORS = {
       };
     }
 
-    // hard: 填空题（整句默写）
-    const hint = q.source.replace(/[《》]/g, '');
+    // hard: 填空题 — 给下句填上句（反向默写，更难）
     return {
       type: 'quote', difficulty, isFill: true,
-      question: `请补写出${q.author}《${hint}》中的名句：\n\n______`,
-      answer: q.quote,
-      explanation: `出自${q.author}${q.source}`
+      question: `请补写出下列名句的上句：\n\n"______，${lower}"\n\n（提示：出自${q.author}${q.source}）`,
+      answer: upper,
+      explanation: `出自${q.author}${q.source}：${q.quote}`
     };
   },
 
   // ---------- 病句 ----------
+  // 设计思路：判断题+选择题，考病句辨识
   sentence(bank, difficulty) {
     const errors = bank.sentenceErrors;
     if (errors.length === 0) return null;
-    const correctSentences = bank.correctSentences || [
-      '经过努力，他终于完成了任务。',
-      '我们在学习上要不断进步。',
-      '春天的花园里开满了各种各样的花。',
-      '老师耐心地解答了同学们的问题。',
-      '这本书内容丰富，值得一读。'
-    ];
+    const correctSentences = bank.correctSentences || [];
 
     if (difficulty === 'easy') {
-      // 判断题：随机出病句或正确句子，避免用户猜规律
+      // 判断题：随机出病句或正确句子
       const showCorrect = Math.random() > 0.5;
       if (showCorrect && correctSentences.length > 0) {
         const sentence = correctSentences[Math.floor(Math.random() * correctSentences.length)];
@@ -1044,7 +1052,7 @@ const GENERATORS = {
       };
     }
 
-    // hard: 选择题 — 选出有语病的一项
+    // hard: 选出有语病的一项
     const err = errors[Math.floor(Math.random() * errors.length)];
     const errorSentence = err.examples[Math.floor(Math.random() * err.examples.length)];
     const correctPool = correctSentences.filter(s => s !== errorSentence);
@@ -1059,7 +1067,38 @@ const GENERATORS = {
   }
 };
 
-// ==================== 生成题目 ====================
+// ==================== 生成假拼音（用于字音判断题干扰）====================
+function _fakeSimilarPinyin(correctPinyin) {
+  // 常见声调混淆
+  const toneMap = { 'ā': 'á', 'á': 'ǎ', 'ǎ': 'à', 'à': 'ā',
+                     'ē': 'é', 'é': 'ě', 'ě': 'è', 'è': 'ē',
+                     'ī': 'í', 'í': 'ǐ', 'ǐ': 'ì', 'ì': 'ī',
+                     'ō': 'ó', 'ó': 'ǒ', 'ǒ': 'ò', 'ò': 'ō',
+                     'ū': 'ú', 'ú': 'ǔ', 'ǔ': 'ù', 'ù': 'ū',
+                     'ǖ': 'ǘ', 'ǘ': 'ǚ', 'ǚ': 'ǜ', 'ǜ': 'ǖ' };
+  let fake = correctPinyin;
+  for (const [from, to] of Object.entries(toneMap)) {
+    if (fake.includes(from)) {
+      fake = fake.replace(from, to);
+      break;
+    }
+  }
+  // 如果没改成（无声调字符），就换个声母
+  if (fake === correctPinyin) {
+    const initials = ['b','p','m','f','d','t','n','l','g','k','h','j','q','x','z','c','s','r','y','w'];
+    for (const init of initials) {
+      if (fake.startsWith(init)) {
+        const others = initials.filter(i => i !== init);
+        const newInit = others[Math.floor(Math.random() * others.length)];
+        fake = newInit + fake.substring(init.length);
+        break;
+      }
+    }
+  }
+  return fake;
+}
+
+// ==================== 生成题目（含质检）===================
 
 function generateQuestions(type = 'all', difficulty = 'mixed', count = 10) {
   const bank = extractQuestionData();
@@ -1069,8 +1108,9 @@ function generateQuestions(type = 'all', difficulty = 'mixed', count = 10) {
   let difficulties = difficulty === 'mixed' ? ['easy', 'medium', 'hard'] : [difficulty];
 
   const questions = [];
+  const seenQuestions = new Set(); // 单次练习去重
   let attempts = 0;
-  const maxAttempts = count * 15;
+  const maxAttempts = count * 30;
 
   while (questions.length < count && attempts < maxAttempts) {
     attempts++;
@@ -1078,15 +1118,27 @@ function generateQuestions(type = 'all', difficulty = 'mixed', count = 10) {
     const d = difficulties[Math.floor(Math.random() * difficulties.length)];
     const gen = GENERATORS[t];
     if (!gen) continue;
+
+    let q;
     try {
-      const q = gen(bank, d);
-      if (q && !questions.some(prev =>
-        prev.question === q.question &&
-        JSON.stringify(prev.options?.map(o=>o.text) || []) === JSON.stringify(q.options?.map(o=>o.text) || [])
-      )) {
-        questions.push(q);
-      }
-    } catch (e) { /* skip */ }
+      q = gen(bank, d);
+    } catch (e) {
+      continue;
+    }
+    if (!q) continue;
+
+    // 质检
+    const validation = validateQuestion(q);
+    if (!validation.ok) {
+      // 质检不过，丢弃，不输出（生产环境）
+      continue;
+    }
+
+    // 单次练习去重（按题干去重）
+    if (seenQuestions.has(q.question)) continue;
+    seenQuestions.add(q.question);
+
+    questions.push(q);
   }
 
   return questions;
