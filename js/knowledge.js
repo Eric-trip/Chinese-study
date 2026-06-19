@@ -224,8 +224,17 @@ function renderSectionContent(section) {
               if (tbl && tbl.headers && tbl.rows) html += renderTable(tbl);
             }
           }
+          // items 字段（名句名段等：古诗词/文言文/现代文名句列表）
+          if (item.items && Array.isArray(item.items)) {
+            html += renderItemsList(item.items);
+          }
           html += `</div>`;
         }
+      }
+
+      // 词组辨析列表（实词/虚词/成语/重点词语）
+      if (sub.word_groups && Array.isArray(sub.word_groups)) {
+        html += renderWordGroups(sub.word_groups);
       }
 
       // 直接挂在subsection上的table
@@ -235,6 +244,55 @@ function renderSectionContent(section) {
   }
 
   return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
+}
+
+function renderWordGroups(wordGroups) {
+  if (!wordGroups || !Array.isArray(wordGroups) || wordGroups.length === 0) return '';
+  let html = '<div class="word-groups">';
+  for (const section of wordGroups) {
+    if (section.letter) {
+      html += `<div class="word-groups__letter">${section.letter}</div>`;
+    }
+    if (section.groups && Array.isArray(section.groups)) {
+      html += '<ul class="word-groups__list">';
+      for (const group of section.groups) {
+        html += `<li class="word-groups__item"><div class="content-text">${formatText(group)}</div></li>`;
+      }
+      html += '</ul>';
+    }
+  }
+  html += '</div>';
+  return html;
+}
+
+// ==================== 名句/诗词列表渲染 ====================
+function renderItemsList(items) {
+  if (!items || !Array.isArray(items) || items.length === 0) return '';
+  let html = '<div class="items-list">';
+  for (const it of items) {
+    if (!it || typeof it !== 'object') continue;
+    // 结构1：古诗词 {title, author, dynasty, content}
+    if (it.content && typeof it.content === 'string') {
+      html += `<div class="poem-card">`;
+      const meta = [it.author, it.dynasty].filter(Boolean).join(' · ');
+      html += `<div class="poem-card__head"><span class="poem-card__title">${it.title || ''}</span>${meta ? `<span class="poem-card__meta">${meta}</span>` : ''}</div>`;
+      html += `<div class="poem-card__content">${formatText(it.content)}</div>`;
+      html += `</div>`;
+    }
+    // 结构2：文言文/现代文 {source, quotes}
+    else if (it.quotes && Array.isArray(it.quotes) && it.quotes.length > 0) {
+      html += `<div class="poem-card">`;
+      if (it.source) html += `<div class="poem-card__head"><span class="poem-card__title">${it.source}</span></div>`;
+      html += `<ul class="poem-card__quotes">`;
+      for (const q of it.quotes) {
+        if (q) html += `<li>${formatText(q)}</li>`;
+      }
+      html += `</ul>`;
+      html += `</div>`;
+    }
+  }
+  html += '</div>';
+  return html;
 }
 
 function formatText(text) {
@@ -251,15 +309,28 @@ function formatText(text) {
 
 function renderTable(table) {
   if (!table || !table.headers || !table.rows || table.rows.length === 0) return '';
-  const PAGE_SIZE = 15;
+
+  // 判断是否使用紧凑网格模式：2列、第二列为短文本（如拼音/读音）、且数据量大
+  const col2MaxLen = table.rows.length > 0
+    ? Math.max(...table.rows.map(r => (r[1] || '').length))
+    : 0;
+  const isCompact = table.headers.length === 2 && table.rows.length > 30 && col2MaxLen <= 20;
+  const PAGE_SIZE = isCompact ? 60 : 15;
   const totalPages = Math.ceil(table.rows.length / PAGE_SIZE);
   const tableId = 'table-' + Math.random().toString(36).substr(2, 9);
 
   let html = `<div id="${tableId}">`;
-  html += `<table class="data-table"><thead><tr>`;
-  for (const h of table.headers) html += `<th>${h}</th>`;
-  html += `</tr></thead><tbody id="${tableId}-body">`;
-  html += `</tbody></table>`;
+
+  if (isCompact) {
+    // 紧凑网格模式：响应式自适应列数，适合词语+拼音类大表
+    html += `<div class="compact-grid" id="${tableId}-body"></div>`;
+  } else {
+    // 传统表格模式
+    html += `<table class="data-table"><thead><tr>`;
+    for (const h of table.headers) html += `<th>${h}</th>`;
+    html += `</tr></thead><tbody id="${tableId}-body">`;
+    html += `</tbody></table>`;
+  }
 
   if (totalPages > 1) {
     html += `<div class="table-pagination">
@@ -281,6 +352,7 @@ function renderTable(table) {
     window[tableId + '_data'] = table.rows;
     window[tableId + '_pageSize'] = PAGE_SIZE;
     window[tableId + '_totalPages'] = totalPages;
+    window[tableId + '_compact'] = isCompact;
     renderTablePage(tableId, 1);
   }, 0);
 
@@ -290,18 +362,30 @@ function renderTable(table) {
 function renderTablePage(tableId, page) {
   const rows = window[tableId + '_data'];
   const pageSize = window[tableId + '_pageSize'];
+  const isCompact = window[tableId + '_compact'];
   if (!rows) return;
   const start = (page - 1) * pageSize;
   const end = Math.min(start + pageSize, rows.length);
   const body = document.getElementById(tableId + '-body');
   if (!body) return;
   let html = '';
-  for (let i = start; i < end; i++) {
-    html += '<tr>';
-    for (const cell of rows[i]) {
-      html += `<td>${cell || ''}</td>`;
+  if (isCompact) {
+    // 紧凑网格：每个单元格展示 词语（主）+ 拼音（辅）
+    for (let i = start; i < end; i++) {
+      const row = rows[i];
+      html += `<div class="compact-grid__cell">`;
+      html += `<span class="compact-grid__main">${row[0] || ''}</span>`;
+      if (row[1]) html += `<span class="compact-grid__sub">${row[1]}</span>`;
+      html += `</div>`;
     }
-    html += '</tr>';
+  } else {
+    for (let i = start; i < end; i++) {
+      html += '<tr>';
+      for (const cell of rows[i]) {
+        html += `<td>${cell || ''}</td>`;
+      }
+      html += '</tr>';
+    }
   }
   body.innerHTML = html;
 }

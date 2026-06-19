@@ -220,6 +220,38 @@ img { max-width: 100%; }
 .sub-item { margin-bottom: var(--space-md); padding: var(--space-md); background: var(--color-surface-alt); border-radius: var(--radius-sm); }
 .sub-item__title { font-weight: 600; color: var(--color-text); margin-bottom: 6px; }
 
+/* Poem / Quote cards (名句名段) */
+.items-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md); }
+.poem-card {
+  background: var(--color-surface); border: 1px solid var(--color-border-light); border-radius: var(--radius-md);
+  padding: var(--space-md); transition: box-shadow 0.2s, border-color 0.2s;
+}
+.poem-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-primary-light); }
+.poem-card__head { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-bottom: var(--space-sm); padding-bottom: 6px; border-bottom: 1px dashed var(--color-border); }
+.poem-card__title { font-family: 'Noto Serif SC', serif; font-size: 1rem; font-weight: 600; color: var(--color-primary); }
+.poem-card__meta { font-size: 0.78rem; color: var(--color-text-tertiary); margin-left: auto; }
+.poem-card__content { font-family: 'Noto Serif SC', serif; font-size: 0.92rem; line-height: 1.85; color: var(--color-text); white-space: pre-wrap; }
+.poem-card__quotes { list-style: none; margin: 0; padding: 0; }
+.poem-card__quotes li { font-size: 0.88rem; line-height: 1.75; color: var(--color-text); padding: 6px 0; border-bottom: 1px dashed var(--color-border-light); }
+.poem-card__quotes li:last-child { border-bottom: none; }
+.poem-card__quotes li::before { content: '“'; color: var(--color-gold); font-family: 'Noto Serif SC', serif; margin-right: 2px; }
+
+/* Word groups (实词/虚词/成语辨析) */
+.word-groups { margin-top: var(--space-md); }
+.word-groups__letter {
+  display: inline-block; font-weight: 700; font-size: 0.95rem; color: var(--color-primary);
+  background: var(--color-primary-lighter); padding: 2px 12px; border-radius: var(--radius-sm);
+  margin: var(--space-md) 0 var(--space-sm);
+}
+.word-groups__letter:first-child { margin-top: 0; }
+.word-groups__list { list-style: none; margin: 0; padding: 0; }
+.word-groups__item {
+  padding: var(--space-sm) var(--space-md); margin-bottom: var(--space-xs);
+  background: var(--color-surface-alt); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-primary-light);
+}
+.word-groups__item .content-text { font-size: 0.9rem; line-height: 1.75; }
+
 /* Pinyin */
 .pinyin { font-size: 0.7em; color: var(--color-text-tertiary); display: block; line-height: 1.4; margin-bottom: 2px; }
 
@@ -238,6 +270,46 @@ img { max-width: 100%; }
 .table-pagination button:disabled { opacity: 0.4; cursor: not-allowed; }
 .table-pagination button.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
 .table-pagination__info { font-size: 0.82rem; color: var(--color-text-tertiary); margin: 0 var(--space-sm); }
+
+/* Compact Grid (词语+拼音类大表紧凑排版) */
+.compact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+  margin: var(--space-md) 0;
+}
+.compact-grid__cell {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s;
+}
+.compact-grid__cell:hover {
+  background: var(--color-primary-lightest);
+  border-color: var(--color-primary-light);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+.compact-grid__main {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1rem; font-weight: 600;
+  color: var(--color-text);
+}
+.compact-grid__sub {
+  font-size: 0.78rem;
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+}
+@media (max-width: 768px) {
+  .compact-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+}
+@media (max-width: 480px) {
+  .compact-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .compact-grid__cell { padding: 8px 10px; }
+  .compact-grid__main { font-size: 0.92rem; }
+}
 
 /* Highlight */
 .highlight { background: #FFF3B0; padding: 1px 3px; border-radius: 2px; }
