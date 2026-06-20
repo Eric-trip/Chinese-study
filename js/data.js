@@ -409,14 +409,16 @@ function initSelectionLookup(scopeSelector) {
       const action = item.dataset.action;
       const word = _selectionPopup.dataset.word;
       if (!word) return;
-      let url = '';
       if (action === 'dict') {
-        url = `https://dict.baidu.com/s?wd=${encodeURIComponent(word)}`;
+        // 在当前页面弹出 iframe 面板
+        const url = `https://dict.baidu.com/s?wd=${encodeURIComponent(word)}`;
+        showDictPanel(word, url);
+        hideSelectionPopup();
       } else if (action === 'baike') {
-        url = `https://baike.baidu.com/item/${encodeURIComponent(word)}`;
+        const url = `https://baike.baidu.com/item/${encodeURIComponent(word)}`;
+        window.open(url, '_blank');
+        hideSelectionPopup();
       }
-      if (url) window.open(url, '_blank');
-      hideSelectionPopup();
     });
   }
 
@@ -483,4 +485,75 @@ function hideSelectionPopup() {
   setTimeout(() => {
     if (_selectionPopup) _selectionPopup.style.display = 'none';
   }, 200);
+}
+
+// ==================== 词典面板（iframe） ====================
+let _dictPanel = null;
+let _dictOverlay = null;
+
+function showDictPanel(word, url) {
+  // 如果已有面板，先移除
+  closeDictPanel();
+
+  // 创建遮罩
+  _dictOverlay = document.createElement('div');
+  _dictOverlay.className = 'dict-overlay';
+
+  // 创建面板
+  _dictPanel = document.createElement('div');
+  _dictPanel.className = 'dict-panel';
+  _dictPanel.innerHTML = `
+    <div class="dict-panel__header">
+      <span class="dict-panel__title">📖 ${word}</span>
+      <div class="dict-panel__actions">
+        <a class="dict-panel__link" href="${url}" target="_blank" rel="noopener">在新标签页打开 ↗</a>
+        <button class="dict-panel__close" title="关闭">✕</button>
+      </div>
+    </div>
+    <div class="dict-panel__body">
+      <div class="dict-panel__loading"><div class="loading__spinner"></div>正在加载词典...</div>
+      <iframe class="dict-panel__iframe" src="${url}" style="display:none;"></iframe>
+    </div>
+  `;
+
+  document.body.appendChild(_dictOverlay);
+  document.body.appendChild(_dictPanel);
+
+  // 添加动画
+  requestAnimationFrame(() => {
+    _dictPanel.classList.add('dict-panel--visible');
+    _dictOverlay.classList.add('dict-overlay--visible');
+  });
+
+  // iframe 加载完成后隐藏 loading
+  const iframe = _dictPanel.querySelector('.dict-panel__iframe');
+  iframe.addEventListener('load', () => {
+    _dictPanel.querySelector('.dict-panel__loading').style.display = 'none';
+    iframe.style.display = 'block';
+  });
+
+  // 关闭事件
+  _dictPanel.querySelector('.dict-panel__close').addEventListener('click', closeDictPanel);
+  _dictOverlay.addEventListener('click', closeDictPanel);
+  document.addEventListener('keydown', _dictEscHandler);
+}
+
+function _dictEscHandler(e) {
+  if (e.key === 'Escape') closeDictPanel();
+}
+
+function closeDictPanel() {
+  document.removeEventListener('keydown', _dictEscHandler);
+  if (_dictPanel) {
+    _dictPanel.classList.remove('dict-panel--visible');
+    const panel = _dictPanel;
+    setTimeout(() => panel.remove(), 250);
+    _dictPanel = null;
+  }
+  if (_dictOverlay) {
+    _dictOverlay.classList.remove('dict-overlay--visible');
+    const overlay = _dictOverlay;
+    setTimeout(() => overlay.remove(), 250);
+    _dictOverlay = null;
+  }
 }
