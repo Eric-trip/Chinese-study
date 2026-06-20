@@ -10,10 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('section-content').innerHTML = '<div class="loading"><div class="loading__spinner"></div>数据加载失败</div>';
     return;
   }
-  // 异步加载词库（不阻塞页面渲染）
-  loadDictionary().then(() => {
-    initTooltipSystem();
-  });
   const params = new URLSearchParams(window.location.search);
   const bianId = parseInt(params.get('bian')) || 1;
   const partId = parseInt(params.get('part')) || 1;
