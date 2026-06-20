@@ -354,6 +354,25 @@ function toggleReadAloud(text) {
   return true;
 }
 
+/**
+ * 清理选中文本中的拼音注释
+ * 例如："爱憎(zēng)分明" → "爱憎分明"
+ *       "一丘之貉(hé)" → "一丘之貉"
+ *       " 差(chā)强(qiáng)人(rén)意(yì) " → "差强人意"
+ * @param {string} text - 原始选中文本
+ * @returns {string} - 清理后的文本
+ */
+function cleanPinyinAnnotations(text) {
+  if (!text) return text;
+  // 匹配全角/半角括号内的拼音注释：
+  // 拼音特征为拉丁字母+声调符号，括号内可能包含空格、标点分隔的多个拼音
+  // 例如: (zēng), （hé）, (chā qiáng rén yì), (wéi jí)
+  let result = text.replace(/[（(][a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÂôÔîÎûÛäÄëËïÏöÖ\s,.·;:]+[）)]/g, '');
+  // 清理可能产生的多余空格
+  result = result.replace(/\s{2,}/g, '').trim();
+  return result;
+}
+
 // ==================== 选词查词典 ====================
 let _selectionPopup = null;
 let _selectionTimer = null;
@@ -420,12 +439,16 @@ function initSelectionLookup(scopeSelector) {
       if (text.length < 2 || text.length > 20) return;
       if (/^[\d\s\p{P}]+$/u.test(text)) return;
 
+      // 清理选中文本中的拼音注释（如"爱憎(zēng)分明" → "爱憎分明"）
+      const cleanText = cleanPinyinAnnotations(text);
+      if (cleanText.length < 2 || cleanText.length > 20) return;
+
       // 获取选区的位置
       const range = sel.getRangeAt(0);
       const rect = range.getBoundingClientRect();
       if (rect.width === 0 && rect.height === 0) return;
 
-      showSelectionPopup(text, rect);
+      showSelectionPopup(cleanText, rect);
     }, 300);
   });
 }
