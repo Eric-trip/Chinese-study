@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupNavbar();
   setupSidebarToggle();
   setupBackToTop();
+  initSelectionLookup('#section-content');
 });
 
 // ==================== 侧边栏目录树 ====================

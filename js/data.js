@@ -353,3 +353,111 @@ function toggleReadAloud(text) {
   speechSynthesis.speak(currentUtterance);
   return true;
 }
+
+// ==================== 选词查词典 ====================
+let _selectionPopup = null;
+let _selectionTimer = null;
+
+/**
+ * 初始化选词弹窗系统
+ * @param {string} scopeSelector - 限定在哪个容器内生效
+ */
+function initSelectionLookup(scopeSelector) {
+  // 创建弹窗元素
+  if (!_selectionPopup) {
+    _selectionPopup = document.createElement('div');
+    _selectionPopup.className = 'selection-popup';
+    _selectionPopup.innerHTML = `
+      <a class="selection-popup__item" data-action="dict">📖 查百度汉语</a>
+      <a class="selection-popup__item" data-action="baike">🔍 查百度百科</a>
+    `;
+    document.body.appendChild(_selectionPopup);
+
+    // 点击弹窗外或按 Esc 关闭
+    document.addEventListener('mousedown', (e) => {
+      if (_selectionPopup && !_selectionPopup.contains(e.target)) {
+        hideSelectionPopup();
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideSelectionPopup();
+    });
+
+    // 点击弹窗项
+    _selectionPopup.addEventListener('click', (e) => {
+      const item = e.target.closest('.selection-popup__item');
+      if (!item) return;
+      const action = item.dataset.action;
+      const word = _selectionPopup.dataset.word;
+      if (!word) return;
+      let url = '';
+      if (action === 'dict') {
+        url = `https://dict.baidu.com/s?wd=${encodeURIComponent(word)}`;
+      } else if (action === 'baike') {
+        url = `https://baike.baidu.com/item/${encodeURIComponent(word)}`;
+      }
+      if (url) window.open(url, '_blank');
+      hideSelectionPopup();
+    });
+  }
+
+  // 监听 mouseup（检测选中文本）
+  document.addEventListener('mouseup', (e) => {
+    // 只在指定区域内生效
+    if (scopeSelector) {
+      const scope = document.querySelector(scopeSelector);
+      if (!scope || !scope.contains(e.target)) return;
+    }
+
+    clearTimeout(_selectionTimer);
+    _selectionTimer = setTimeout(() => {
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return;
+      const text = sel.toString().trim();
+      if (!text) { hideSelectionPopup(); return; }
+
+      // 限制：2-20字，不含纯标点/数字
+      if (text.length < 2 || text.length > 20) return;
+      if (/^[\d\s\p{P}]+$/u.test(text)) return;
+
+      // 获取选区的位置
+      const range = sel.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      if (rect.width === 0 && rect.height === 0) return;
+
+      showSelectionPopup(text, rect);
+    }, 300);
+  });
+}
+
+function showSelectionPopup(word, rect) {
+  if (!_selectionPopup) return;
+  _selectionPopup.dataset.word = word;
+  _selectionPopup.style.visibility = 'hidden';
+  _selectionPopup.style.display = 'flex';
+
+  // 定位：选区正上方居中
+  const popupRect = _selectionPopup.getBoundingClientRect();
+  let left = rect.left + rect.width / 2 - popupRect.width / 2;
+  let top = rect.top - popupRect.height - 8;
+
+  // 边界检查
+  if (left < 8) left = 8;
+  if (left + popupRect.width > window.innerWidth - 8) {
+    left = window.innerWidth - popupRect.width - 8;
+  }
+  if (top < 8) top = rect.bottom + 8; // 放下方
+
+  _selectionPopup.style.left = left + 'px';
+  _selectionPopup.style.top = top + 'px'; // fixed 定位，不需要加 scrollY
+  _selectionPopup.style.visibility = 'visible';
+  _selectionPopup.classList.add('selection-popup--visible');
+}
+
+function hideSelectionPopup() {
+  if (!_selectionPopup) return;
+  _selectionPopup.classList.remove('selection-popup--visible');
+  setTimeout(() => {
+    if (_selectionPopup) _selectionPopup.style.display = 'none';
+  }, 200);
+}
