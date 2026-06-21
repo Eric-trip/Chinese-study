@@ -219,7 +219,7 @@ img { max-width: 100%; }
   padding-left: 12px; border-left: 3px solid var(--color-primary);
 }
 .sub-item { margin-bottom: var(--space-md); padding: var(--space-md); background: var(--color-surface-alt); border-radius: var(--radius-sm); }
-.sub-item__title { font-weight: 600; color: var(--color-text); margin-bottom: 6px; }
+.sub-item__title { font-weight: 600; color: var(--color-text); margin-bottom: 6px; scroll-margin-top: var(--nav-height); }
 
 /* Poem / Quote cards (名句名段) */
 .items-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md); }

@@ -404,8 +404,10 @@ function renderCleanVoiceSection(sectionKey, heading) {
     setTimeout(() => switchVoiceLetter(sectionKey, availableLetters[0] || ''), 0);
 
   } else if (sec.items) {
-    // 段落类型渲染为紧凑卡片
+    // 段落类型（多音字/巧记）：包裹在 voice-section-wrapper 中，让 scroll-margin-top 生效
+    html += `<div class="voice-section-wrapper">`;
     html += renderVoiceItems(sectionKey, sec.items, sec.totalCount);
+    html += `</div>`;
   }
 
   return html;
@@ -518,10 +520,13 @@ function switchVoicePage(sectionKey, page) {
   const panel = document.getElementById(`${uniqueId}-panel`);
   if (panel) {
     panel.innerHTML = panelHtml;
-    // 延迟一帧，待浏览器完成重排后再滚动
     requestAnimationFrame(() => {
-      const top = panel.getBoundingClientRect().top + window.scrollY - 64;
-      window.scrollTo({ top, behavior: 'smooth' });
+      const wrapper = panel.closest('.voice-section-wrapper');
+      if (wrapper) {
+        const heading = wrapper.previousElementSibling;
+        const target = (heading && heading.tagName === 'H4') ? heading : wrapper;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   }
 
@@ -575,7 +580,11 @@ function switchMnemonicPage(sectionKey, page) {
     panel.innerHTML = panelHtml;
     requestAnimationFrame(() => {
       const wrapper = panel.closest('.voice-section-wrapper');
-      if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (wrapper) {
+        const heading = wrapper.previousElementSibling;
+        const target = (heading && heading.tagName === 'H4') ? heading : wrapper;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   }
 
@@ -656,7 +665,11 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
     panel.innerHTML = panelHtml;
     requestAnimationFrame(() => {
       const wrapper = panel.closest('.voice-section-wrapper');
-      if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (wrapper) {
+        const heading = wrapper.previousElementSibling;
+        const target = (heading && heading.tagName === 'H4') ? heading : wrapper;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   }
 
