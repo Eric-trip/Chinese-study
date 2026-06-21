@@ -21,7 +21,7 @@ const STAGES = {
 async function loadHandbookData() {
   if (HANDBOOK_DATA) return HANDBOOK_DATA;
   try {
-    const response = await fetch('data/handbook.json');
+    const response = await fetch('data/handbook.json?v=20260621');
     HANDBOOK_DATA = await response.json();
     buildIndex();
     return HANDBOOK_DATA;
