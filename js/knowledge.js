@@ -476,8 +476,9 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   const panel = document.getElementById(`${uniqueId}-panel`);
   if (panel) {
     panel.innerHTML = panelHtml;
-    // 翻页后滚动到该组词语最上方
-    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // 翻页后滚动到该组词语最上方（避开导航栏）
+    const top = panel.getBoundingClientRect().top + window.scrollY - 64;
+    window.scrollTo({ top, behavior: 'smooth' });
   }
 
   // 更新统计信息
