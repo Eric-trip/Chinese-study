@@ -474,7 +474,11 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   }
 
   const panel = document.getElementById(`${uniqueId}-panel`);
-  if (panel) panel.innerHTML = panelHtml;
+  if (panel) {
+    panel.innerHTML = panelHtml;
+    // 翻页后滚动到该组词语最上方
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   // 更新统计信息
   const info = document.getElementById(`${uniqueId}-info`);
