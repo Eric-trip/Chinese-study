@@ -495,14 +495,14 @@ function paintPage(id, page) {
       if (row.length === 2 && headerText && headerText.length <= 3) {
         html += `<div class="compact-grid__cell--header">${headerText}</div>`;
       } else if (row.length >= 1 && String(row[0]).startsWith('__NOTE__')) {
-        // 段落注释行 → 全宽显示
-        const noteText = String(row[0]).replace('__NOTE__', '');
-        html += `<div class="compact-grid__note">${formatInline(noteText)}</div>`;
+        // 段落注释行 → 去掉释义后显示
+        const noteText = stripDefinition(String(row[0]).replace('__NOTE__', ''));
+        if (noteText) html += `<div class="compact-grid__note">${formatInline(escHtml(noteText))}</div>`;
       } else {
         // 每行的每一列都是独立的词语，轻量标签流式排列
         for (const cell of row) {
           if (!cell) continue;
-          html += `<span class="compact-tag">${escHtml(cell)}</span>`;
+          html += `<span class="compact-tag">${escHtml(stripDefinition(cell))}</span>`;
         }
       }
     }
@@ -567,6 +567,25 @@ function goPage(id, page) {
 function isPinyinWord(text) {
   if (!text || text.length > 30) return false;
   return /\([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÔôîÎûÛäÄëËïÏöÖ\s,.·;:]+\)/.test(text);
+}
+
+/** 从词语文本中去掉释义，只保留词语+拼音 */
+function stripDefinition(text) {
+  if (!text) return '';
+  const parts = text.split(/(\([^)]*\))/g);
+  let result = '';
+  for (const part of parts) {
+    if (part.startsWith('(') && part.endsWith(')')) {
+      const inner = part.slice(1, -1);
+      if (/^[a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÔôîÎûÛäÄëËïÏöÖ\s,.·;:]+$/.test(inner)) {
+        result += part; // 是拼音，保留
+      }
+      // 是中文释义，跳过
+    } else {
+      result += part;
+    }
+  }
+  return result.trim();
 }
 
 /** HTML 转义 */
