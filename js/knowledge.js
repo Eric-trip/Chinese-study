@@ -155,7 +155,11 @@ function loadSection(bianId, partId, sectionIndex) {
   if (sidebar) sidebar.classList.remove('sidebar--open');
   if (overlay) overlay.classList.remove('sidebar__overlay--visible');
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 滚动到内容标题
+  requestAnimationFrame(() => {
+    const target = document.getElementById('content-title') || document.getElementById('section-content');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 // ==================== 内容渲染核心 ====================

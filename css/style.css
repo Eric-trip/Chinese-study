@@ -190,6 +190,7 @@ img { max-width: 100%; }
   display: flex; align-items: center; justify-content: space-between;
   margin-bottom: var(--space-md); padding-bottom: var(--space-md);
   border-bottom: 2px solid var(--color-primary-lighter);
+  scroll-margin-top: var(--nav-height);
 }
 .content-header h1 { font-family: 'Noto Serif SC', serif; font-size: 1.6rem; color: var(--color-text); }
 .content-header__tag { font-size: 0.8rem; color: var(--color-primary); background: var(--color-primary-lighter); padding: 2px 12px; border-radius: 12px; }
