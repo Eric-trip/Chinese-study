@@ -9,6 +9,19 @@
  *   - image: 跳过
  */
 let currentState = { bianId: 1, partId: 1, sectionIndex: 0 };
+let CLEAN_VOICE_WORDS = null; // 清洗后的"容易读错的词语"数据
+
+async function loadCleanVoiceWords() {
+  if (CLEAN_VOICE_WORDS) return CLEAN_VOICE_WORDS;
+  try {
+    const r = await fetch('data/handbook-voice-words.json?v=20260623');
+    CLEAN_VOICE_WORDS = await r.json();
+    return CLEAN_VOICE_WORDS;
+  } catch (e) {
+    console.warn('加载清洗数据失败，回退原始渲染:', e);
+    return null;
+  }
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const data = await loadHandbookData();
@@ -16,17 +29,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('section-content').innerHTML = '<div class="loading"><div class="loading__spinner"></div>数据加载失败</div>';
     return;
   }
+  // 预加载清洗数据（不阻塞主流程）
+  loadCleanVoiceWords();
   const params = new URLSearchParams(window.location.search);
   const bianId = parseInt(params.get('bian')) || 1;
   const partId = parseInt(params.get('part')) || 1;
   const sectionIndex = parseInt(params.get('sec')) || 0;
   currentState = { bianId, partId, sectionIndex };
   renderSidebar();
+  // 确保清洗数据加载完毕再渲染内容（首次加载可能是"容易读错的词语"）
+  await loadCleanVoiceWords();
   loadSection(bianId, partId, sectionIndex);
   setupNavbar();
   setupSidebarToggle();
   setupBackToTop();
   initSelectionLookup('#section-content');
+  // 移动端：点击带释义词语显示 tooltip
+  setupWordTooltipToggle();
 });
 
 // ==================== 侧边栏目录树 ====================
@@ -142,164 +161,327 @@ function loadSection(bianId, partId, sectionIndex) {
 // ==================== 内容渲染核心 ====================
 /**
  * 遍历 section 区间内的扁平节点，按 type 分发渲染
- * 渲染规则：
- *   - heading level 4: 子标题（如"一、容易读错的词语"）
- *   - heading level 5-6: 小标题
- *   - heading level 3: 区分标题（如"示例："），作为子标题
- *   - paragraph: 段落文本，支持 ①②③ 高亮、数字编号高亮
- *   - table: 解析 HTML 表格，判断布局后渲染
- *   - image: 跳过
  */
 function renderContent(nodes) {
   if (!nodes || nodes.length === 0) {
     return '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
   }
 
-  // 预处理：合并同一词语列表的所有节点（table + 字母标题 + 段落注释）
-  // 原始数据中一个字母分组的词语被拆成多个 table，中间夹着 heading 和 paragraph
+  // "必考知识梳理" section 可能包含多个 level 4 子章节（一/二/三/四）
+  // 按 level 4 标题拆分成区块，逐块渲染
+  const blocks = splitByLevel4Headings(nodes);
+
+  let html = '';
+  let tableSeq = 0;
+  for (const block of blocks) {
+    // 检查区块第一个标题是否命中清洗数据
+    const blockHeading = block.find(n => n && n.type === 'heading');
+    if (blockHeading) {
+      const sectionKey = detectVoiceSection(blockHeading.text);
+      if (sectionKey) {
+        const cleanHtml = renderCleanVoiceSection(sectionKey, blockHeading);
+        if (cleanHtml) { html += cleanHtml; continue; }
+      }
+      // 标题不属于清洗章节 → 走原始渲染，但把标题级别≤3的单独处理
+      if (blockHeading.level <= 3) {
+        html += `<h4 class="sub-item__title">${formatInline(escHtml(blockHeading.text))}</h4>`;
+        // 去掉标题后渲染剩余节点
+        const rest = block.slice(1);
+        if (rest.length > 0) html += renderContentBlock(rest, () => tableSeq++);
+        continue;
+      }
+    }
+    // 普通区块 → 走原始渲染流水线
+    html += renderContentBlock(block, () => tableSeq++);
+  }
+
+  return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
+}
+
+/** 按 level ≤4 的标题拆分成区块（每个区块以标题开头） */
+function splitByLevel4Headings(nodes) {
+  const blocks = [];
+  let current = [];
+  for (const node of nodes) {
+    if (!node) continue;
+    if (node.type === 'heading' && (node.level || 9) <= 4 && current.length > 0) {
+      blocks.push(current);
+      current = [];
+    }
+    current.push(node);
+  }
+  if (current.length > 0) blocks.push(current);
+  return blocks;
+}
+
+/**
+ * 原始渲染流水线（处理一个区块内的节点）
+ */
+function renderContentBlock(nodes, nextTableSeqFn) {
+  // 预处理：合并同一词语列表的所有节点
   const merged = [];
   let i = 0;
   while (i < nodes.length) {
     const node = nodes[i];
     if (!node || !node.type) { i++; continue; }
-
     if (node.type === 'table') {
-      // 1) 收集前置的散装词语 paragraph（如"哀悼(dào)"），合并进表格
-      let preWords = [];
-      for (let k = merged.length - 1; k >= 0; k--) {
-        const prevMerged = merged[k];
-        if (prevMerged.type === 'paragraph' && isPinyinWord(prevMerged.text)) {
-          preWords.unshift(prevMerged.text.trim());
-        } else {
-          break;
-        }
-      }
-      // 从 merged 中移除这些段落
-      if (preWords.length > 0) {
-        merged.splice(merged.length - preWords.length, preWords.length);
-      }
-
-      // 2) 收集连续的 table + 字母标题(A/B/C) + 短段落注释
       const group = [];
       let j = i;
       while (j < nodes.length) {
         const n = nodes[j];
         if (!n) break;
-        if (n.type === 'table') {
-          group.push({ kind: 'table', html: n.html });
-          j++;
-        } else if (n.type === 'heading' && /^[A-Z]$/.test((n.text || '').trim())) {
-          group.push({ kind: 'header', text: n.text.trim() });
-          j++;
-        } else if (n.type === 'paragraph' && (n.text || '').length < 60) {
-          // 短段落注释（如"巉(chán)峻(jùn)(形容山势高而险)"）纳入合并
-          group.push({ kind: 'note', text: n.text.trim() });
-          j++;
-        } else {
-          break; // 长段落或其他类型，停止合并
-        }
+        if (n.type === 'table') { group.push({ kind: 'table', html: n.html }); j++; }
+        else if (n.type === 'heading' && /^[A-Z]$/.test((n.text || '').trim())) { break; }
+        else if (n.type === 'paragraph' && (n.text || '').length < 60 && /[\u4e00-\u9fff]\([^)]*[\u4e00-\u9fff]/.test(n.text)) {
+          group.push({ kind: 'note', text: n.text.trim() }); j++;
+        } else { break; }
       }
-
-      // 构建合并后的 HTML（每个片段都必须是完整的 <table>，裸 <tr> 会被浏览器丢弃）
       let mergedHtml = '';
-      // 前置散装词语 → 包装为完整 table
-      if (preWords.length > 0) {
-        mergedHtml += '<table>';
-        for (const w of preWords) {
-          mergedHtml += `<tr><td>${escHtml(w)}</td><td></td></tr>`;
-        }
-        mergedHtml += '</table>';
-      }
       for (const item of group) {
-        if (item.kind === 'table') {
-          mergedHtml += item.html || '';
-        } else if (item.kind === 'header') {
-          // 字母标题包装为独立 table，避免裸 <tr> 被丢弃
-          mergedHtml += `<table><tr><td></td><td>${escHtml(item.text)}</td></tr></table>`;
-        } else if (item.kind === 'note') {
-          // 段落注释包装为独立 table，__NOTE__ 标记在 paintPage 中识别为全宽注释
-          mergedHtml += `<table><tr><td colspan="2">__NOTE__${escHtml(item.text)}</td></tr></table>`;
-        }
+        if (item.kind === 'table') mergedHtml += item.html || '';
+        else if (item.kind === 'header') mergedHtml += `<table><tr><td></td><td>${escHtml(item.text)}</td></tr></table>`;
+        else if (item.kind === 'note') mergedHtml += `<table><tr><td colspan="2">__NOTE__${escHtml(item.text)}</td></tr></table>`;
       }
       merged.push({ type: 'table', html: mergedHtml });
       i = j;
-    } else {
-      merged.push(node);
-      i++;
-    }
+    } else { merged.push(node); i++; }
   }
 
-  // 3) 后处理：将 merged 中残留的散装拼音词 paragraph 转为合成表格
+  // 后处理：散装拼音词/字母标题+表格
   const mergedFinal = [];
   for (let m = 0; m < merged.length; m++) {
     const node = merged[m];
-    if (node.type === 'paragraph' && isPinyinWord(node.text)) {
-      let words = [node.text.trim()];
-      let n = m + 1;
-      while (n < merged.length && merged[n].type === 'paragraph' && isPinyinWord(merged[n].text)) {
-        words.push(merged[n].text.trim());
-        n++;
-      }
-      let syntheticHtml = '<table>';
-      for (const w of words) {
-        syntheticHtml += `<tr><td>${escHtml(w)}</td><td></td></tr>`;
-      }
-      syntheticHtml += '</table>';
-      mergedFinal.push({ type: 'table', html: syntheticHtml });
-      m = n - 1;
-    } else {
-      mergedFinal.push(node);
+    if (node.type === 'heading' && /^[A-Z]$/.test((node.text || '').trim()) && m + 1 < merged.length && merged[m + 1].type === 'table') {
+      const hdr = node.text.trim();
+      mergedFinal.push({ type: 'table', html: `<table><tr><td></td><td>${escHtml(hdr)}</td></tr></table>` + (merged[m + 1].html || '') });
+      m++; continue;
     }
+    if (node.type === 'heading' && /^[A-Z]$/.test((node.text || '').trim()) && m + 1 < merged.length && merged[m + 1].type === 'paragraph' && isPinyinWord(merged[m + 1].text)) {
+      const hdr = node.text.trim();
+      let words = [merged[m + 1].text.trim()], n = m + 2;
+      while (n < merged.length && merged[n].type === 'paragraph' && isPinyinWord(merged[n].text)) words.push(merged[n++].text.trim());
+      let sh = `<table><tr><td></td><td>${escHtml(hdr)}</td></tr>`;
+      for (const w of words) sh += `<tr><td>${escHtml(w)}</td><td></td></tr>`;
+      mergedFinal.push({ type: 'table', html: sh + '</table>' });
+      m = n - 1; continue;
+    }
+    if (node.type === 'paragraph' && isPinyinWord(node.text)) {
+      let words = [node.text.trim()], n = m + 1;
+      while (n < merged.length && merged[n].type === 'paragraph' && isPinyinWord(merged[n].text)) words.push(merged[n++].text.trim());
+      let startLetter = '';
+      if (m > 0 && merged[m - 1].type === 'heading' && /^[A-Z]$/.test((merged[m - 1].text || '').trim())) startLetter = merged[m - 1].text.trim();
+      const groups = [];
+      let cg = [], ch = startLetter;
+      for (const w of words) {
+        const fp = (w.match(/\(([a-zA-Zāáǎà])/) || [])[1] || '';
+        const l = fp ? fp.toUpperCase() : '';
+        if (l && ch && l !== ch && cg.length > 0) { groups.push({ header: ch, words: cg }); cg = [w]; ch = l; }
+        else if (l && !ch) { ch = l; cg.push(w); }
+        else { cg.push(w); }
+      }
+      if (cg.length > 0) groups.push({ header: ch, words: cg });
+      for (const g of groups) {
+        const prev = mergedFinal[mergedFinal.length - 1];
+        let skip = false;
+        if (g.header && prev && prev.type === 'table' && prev.html) {
+          const hm = prev.html.match(/<td>\s*([A-Z])\s*<\/td>/);
+          if (hm && hm[1] === g.header) {
+            for (const w of g.words) prev.html += `<tr><td>${escHtml(w)}</td><td></td></tr>`;
+            skip = true;
+          }
+        }
+        if (skip) continue;
+        let sh = '<table>';
+        if (g.header) sh += `<tr><td></td><td>${escHtml(g.header)}</td></tr>`;
+        for (const w of g.words) sh += `<tr><td>${escHtml(w)}</td><td></td></tr>`;
+        mergedFinal.push({ type: 'table', html: sh + '</table>' });
+      }
+      m = n - 1; continue;
+    }
+    if (node.type === 'paragraph' && node.text && node.text.length < 80 && !isPinyinWord(node.text)) {
+      const text = node.text.trim();
+      const stripped = text.replace(/\((?:[\u4e00-\u9fff][^)]*)\)$/, '');
+      if (stripped && stripped !== text && stripped.length <= 30) {
+        const wl = ((stripped.match(/\(([a-zA-Zāáǎà])/) || [])[1] || '').toUpperCase();
+        const prev = mergedFinal[mergedFinal.length - 1];
+        let pl = '';
+        if (prev && prev.type === 'table' && prev.html) { const hm = prev.html.match(/<td>\s*([A-Z])\s*<\/td>/); if (hm) pl = hm[1]; }
+        if (prev && prev.type === 'table' && prev.html && (!pl || pl === wl)) prev.html += `<tr><td>${escHtml(stripped)}</td><td></td></tr>`;
+        else mergedFinal.push({ type: 'table', html: `<table><tr><td>${escHtml(stripped)}</td><td></td></tr></table>` });
+        continue;
+      }
+      mergedFinal.push({ type: 'table', html: '<table><tr><td colspan="2">__NOTE__' + escHtml(text) + '</td></tr></table>' });
+      continue;
+    }
+    mergedFinal.push(node);
   }
 
   let html = '';
-  let tableSeq = 0;
-
   for (const node of mergedFinal) {
     if (!node || !node.type) continue;
-
     if (node.type === 'heading') {
-      const level = node.level || 4;
+      const lv = node.level || 4;
       const text = escHtml(node.text || '');
       if (!text.trim()) continue;
-
-      if (level <= 3) {
-        // section 内部的 level 3 标题（如"示例："），作为子标题
-        html += `<h4 class="sub-item__title">${formatInline(text)}</h4>`;
-      } else if (level === 4) {
-        html += `<h4 class="sub-item__title">${formatInline(text)}</h4>`;
-      } else {
-        html += `<h5 class="content-subtitle">${formatInline(text)}</h5>`;
-      }
+      html += lv <= 4 ? `<h4 class="sub-item__title">${formatInline(text)}</h4>` : `<h5 class="content-subtitle">${formatInline(text)}</h5>`;
       continue;
     }
-
     if (node.type === 'paragraph') {
       const text = (node.text || '').trim();
       if (!text) continue;
       html += `<div class="content-text">${formatInline(escHtml(text))}</div>`;
       continue;
     }
-
     if (node.type === 'table') {
-      tableSeq++;
-      html += renderTable(node.html || '', tableSeq);
+      html += renderTable(node.html || '', nextTableSeqFn());
       continue;
     }
+  }
+  return html;
+}
 
-    // image: 跳过
+// ==================== 清洗数据渲染：第一部分 语音 全部子章节 ====================
+/**
+ * 根据标题文字识别属于哪个子章节
+ */
+function detectVoiceSection(titleText) {
+  if (!titleText) return null;
+  if (titleText.includes('初中生容易读错的词语')) return 'words';
+  if (titleText.includes('初中生容易读错的成语')) return 'idioms';
+  if (titleText.includes('初中生必须掌握的多音字')) return 'polyphones';
+  if (titleText.includes('巧记多音多义字')) return 'mnemonics';
+  return null;
+}
+
+/**
+ * 使用预清洗数据渲染指定子章节
+ * - words/idioms: 按首字母分组的 data-table（每行4列对齐），顶部带字母选择器
+ * - polyphones/mnemonics: 段落格式
+ */
+function renderCleanVoiceSection(sectionKey, heading) {
+  if (!CLEAN_VOICE_WORDS || !CLEAN_VOICE_WORDS.sections) return null;
+  const sec = CLEAN_VOICE_WORDS.sections[sectionKey];
+  if (!sec) return null;
+
+  let html = '';
+  html += `<h4 class="sub-item__title">${formatInline(escHtml(heading.text))}</h4>`;
+
+  const COLS = 4; // 每行固定列数
+
+  if (sec.groups) {
+    // 字母分组类型（words, idioms）：data-table 对齐排版 + 字母选择器
+    const sortedLetters = Object.keys(sec.groups).sort();
+    const availableLetters = sortedLetters.filter(l => sec.groups[l] && sec.groups[l].length > 0);
+    const uniqueId = `voice-${sectionKey}`;
+
+    // 用相对定位容器包裹，限制 sticky 范围
+    html += `<div class="voice-section-wrapper">`;
+
+    // 字母选择器
+    html += `<div class="alpha-selector" id="${uniqueId}-bar">`;
+    for (const ll of 'ABCDEFGHJKLMNOPQRSTWXYZ') {
+      const has = availableLetters.includes(ll);
+      html += `<button class="alpha-selector__btn${has ? '' : ' alpha-selector__btn--empty'}" data-letter="${ll}"${has ? '' : ' disabled'}>${escHtml(ll)}</button>`;
+    }
+    html += `</div>`;
+
+    // 统计信息
+    html += `<div class="alpha-info" id="${uniqueId}-info" style="margin-bottom:12px;font-size:0.82rem;color:var(--color-text-tertiary);"></div>`;
+
+    // 内容区域
+    html += `<div id="${uniqueId}-panel"></div>`;
+
+    // 总数
+    html += `<div class="content-text" style="margin-top:16px; color:var(--color-text-secondary); font-size:0.85rem;">
+      共收录 ${sec.totalCount} 个条目，按拼音首字母分为 ${availableLetters.length} 组
+    </div>`;
+
+    html += `</div>`; // end voice-section-wrapper
+
+    // 把数据挂到全局，供切换使用；延迟执行渲染默认字母
+    const voiceDataKey = `__voiceData_${sectionKey}`;
+    window[voiceDataKey] = { groups: sec.groups, sortedLetters: availableLetters, uniqueId, COLS };
+    setTimeout(() => switchVoiceLetter(sectionKey, availableLetters[0] || ''), 0);
+
+  } else if (sec.items) {
+    // 段落类型（polyphones, mnemonics）：逐段渲染
+    for (const item of sec.items) {
+      html += `<div class="content-text">${formatInline(escHtml(item))}</div>`;
+    }
+    html += `<div class="content-text" style="margin-top:8px; color:var(--color-text-secondary); font-size:0.85rem;">
+      共 ${sec.totalCount} 条
+    </div>`;
   }
 
-  return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
+  return html;
+}
+
+/** 切换到指定字母组的词语，支持分页 */
+function switchVoiceLetter(sectionKey, letter, page = 1) {
+  const voiceDataKey = `__voiceData_${sectionKey}`;
+  const data = window[voiceDataKey];
+  if (!data) return;
+  const { groups, sortedLetters, uniqueId, COLS } = data;
+  if (!letter || !groups[letter]) return;
+
+  // 更新按钮激活态
+  const bar = document.getElementById(`${uniqueId}-bar`);
+  if (bar) {
+    bar.querySelectorAll('.alpha-selector__btn').forEach(b => {
+      b.classList.toggle('alpha-selector__btn--active', b.getAttribute('data-letter') === letter);
+    });
+  }
+
+  const words = groups[letter];
+  const PAGE_SIZE = 48; // 12行×4列
+  const totalPages = Math.ceil(words.length / PAGE_SIZE);
+  const currentPage = Math.max(1, Math.min(page, totalPages));
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, words.length);
+
+  // 渲染当前页
+  let panelHtml = `<table class="data-table" style="margin-bottom:12px;">`;
+  panelHtml += `<thead><tr><th colspan="${COLS}" style="text-align:center;background:var(--color-primary-lighter);color:var(--color-primary);font-weight:700;font-size:1rem;">${escHtml(letter)}</th></tr></thead>`;
+  panelHtml += `<tbody>`;
+  for (let i = start; i < end; i += COLS) {
+    panelHtml += `<tr>`;
+    for (let j = 0; j < COLS; j++) {
+      const entry = words[i + j];
+      if (!entry) {
+        panelHtml += `<td style="width:25%;"></td>`;
+      } else if (typeof entry === 'object' && entry.def) {
+        panelHtml += `<td class="word-has-def" data-tooltip="${escHtml(entry.def)}" style="width:25%;font-family:'Noto Serif SC',serif;">${escHtml(entry.word)}</td>`;
+      } else {
+        const w = typeof entry === 'object' ? entry.word : entry;
+        panelHtml += `<td style="width:25%;font-family:'Noto Serif SC',serif;">${escHtml(w)}</td>`;
+      }
+    }
+    panelHtml += `</tr>`;
+  }
+  panelHtml += `</tbody></table>`;
+
+  // 分页器（超过1页才显示）
+  if (totalPages > 1) {
+    panelHtml += `<div class="voice-pagination">`;
+    panelHtml += `<span class="voice-pagination__info">${currentPage} / ${totalPages}</span>`;
+    panelHtml += `<div class="voice-pagination__btns">`;
+    panelHtml += `<button onclick="switchVoiceLetter('${sectionKey}','${letter}',${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
+    for (let p = 1; p <= totalPages; p++) {
+      panelHtml += `<button class="${p === currentPage ? 'active' : ''}" onclick="switchVoiceLetter('${sectionKey}','${letter}',${p})">${p}</button>`;
+    }
+    panelHtml += `<button onclick="switchVoiceLetter('${sectionKey}','${letter}',${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>`;
+    panelHtml += `</div></div>`;
+  }
+
+  const panel = document.getElementById(`${uniqueId}-panel`);
+  if (panel) panel.innerHTML = panelHtml;
+
+  // 更新统计信息
+  const info = document.getElementById(`${uniqueId}-info`);
+  if (info) info.textContent = `${letter} 组 · ${words.length} 个词语${totalPages > 1 ? ` · 第 ${currentPage}/${totalPages} 页` : ''}`;
 }
 
 // ==================== 表格渲染 ====================
-/**
- * 解析 HTML 表格字符串，判断类型后渲染：
- * 1. 紧凑网格表格（2列、多行、每格短文本）→ 网格布局 + 分页
- * 2. 普通表格（有表头或列数>2）→ 标准表格 + 分页
- * 3. 分类标题行（如"A"、"B"字母分隔）→ 合并到数据中作为分隔
- */
 function renderTable(htmlStr, seq) {
   if (!htmlStr) return '';
 
@@ -307,7 +489,6 @@ function renderTable(htmlStr, seq) {
   try {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlStr, 'text/html');
-    // 支持 HTML 中包含多个 <table>（合并后的节点）
     const tables = doc.querySelectorAll('table');
     if (tables.length === 0) return '';
 
@@ -327,7 +508,6 @@ function renderTable(htmlStr, seq) {
 
   if (rows.length === 0) return '';
 
-  // 判断是否有 th 表头
   let headers = [];
   try {
     const parser = new DOMParser();
@@ -337,34 +517,29 @@ function renderTable(htmlStr, seq) {
       const ths = firstTr.querySelectorAll('th');
       if (ths.length > 0) {
         ths.forEach(th => headers.push(th.textContent.trim()));
-        rows.shift(); // 去掉表头行
+        rows.shift();
       }
     }
   } catch {}
 
-  // 判断表格类型
   const colCount = rows[0] ? rows[0].length : 0;
   const hasHeaders = headers.length > 0;
+  const hasNote = rows.some(r => r[0] && r[0].startsWith('__NOTE__'));
 
-  // 紧凑网格：2列、每格是"词语+拼音"格式（含括号拼音标注）
-  // 行数阈值放宽：被段落注释拆分的小表格也可能只有几行
-  if (!hasHeaders && colCount === 2 && rows.length >= 2) {
-    // 抽样检查是否为词语+拼音格式
+  if (!hasHeaders && (colCount === 2 || hasNote) && rows.length >= 1) {
+    if (hasNote) return renderCompactGrid(rows, seq);
     const sampleCells = rows.flat().slice(0, 6).filter(c => c);
     const pinyinRatio = sampleCells.filter(c => /\([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÂôÔîÎûÛäÄëËïÏöÖ\s]+\)/.test(c)).length;
     if (sampleCells.length > 0 && pinyinRatio / sampleCells.length > 0.5) {
       return renderCompactGrid(rows, seq);
     }
-    // 兜底：短文本 + 较多行数
     const maxCellLen = Math.max(...rows.flat().map(c => (c || '').length));
     if (maxCellLen <= 25 && rows.length >= 4) {
       return renderCompactGrid(rows, seq);
     }
   }
 
-  // 普通表格
   if (!hasHeaders) {
-    // 尝试从第一行推断表头
     if (rows.length > 1 && rows[0].every(c => c.length <= 8 && c.length > 0)) {
       headers = rows[0];
       rows = rows.slice(1);
@@ -377,9 +552,9 @@ function renderTable(htmlStr, seq) {
   return renderDataTable(headers, rows, seq);
 }
 
-/** 紧凑标签渲染（适合易错词、成语等短文本表格） */
+/** 紧凑标签渲染 */
 function renderCompactGrid(rows, seq) {
-  const PAGE_SIZE = 100;
+  const PAGE_SIZE = 9999;
   const totalPages = Math.ceil(rows.length / PAGE_SIZE);
   const id = `tbl${seq}`;
 
@@ -389,14 +564,12 @@ function renderCompactGrid(rows, seq) {
   if (totalPages > 1) {
     html += `<div class="table-pagination">`;
     html += `<button onclick="turnPage('${id}',-1)" id="${id}-prev" disabled>上一页</button>`;
-    // 智能折叠：总页数过多时只显示首尾和当前邻近页码
     html += buildPageButtons(id, 1, totalPages);
     html += `<button onclick="turnPage('${id}',1)" id="${id}-next">下一页</button>`;
     html += `</div>`;
   }
   html += `</div>`;
 
-  // 存数据
   setTimeout(() => {
     window[id + '_data'] = rows;
     window[id + '_pageSize'] = PAGE_SIZE;
@@ -412,14 +585,12 @@ function renderCompactGrid(rows, seq) {
 /** 生成智能折叠的页码按钮 HTML */
 function buildPageButtons(id, current, total) {
   if (total <= 7) {
-    // 少于7页，全部显示
     let btns = '';
     for (let p = 1; p <= total; p++) {
       btns += `<button onclick="goPage('${id}',${p})" class="${p === current ? 'active' : ''}" id="${id}-btn-${p}">${p}</button>`;
     }
     return btns;
   }
-  // 超过7页，折叠显示
   const pages = [];
   pages.push(1);
   if (current > 3) pages.push('...');
@@ -490,19 +661,17 @@ function paintPage(id, page) {
   if (type === 'compact') {
     for (let i = start; i < end; i++) {
       const row = rows[i];
-      // 如果是分类标题行（如"A"、"B"），跨列显示
       const headerText = row[0] || row[1];
       if (row.length === 2 && headerText && headerText.length <= 3) {
         html += `<div class="compact-grid__cell--header">${headerText}</div>`;
       } else if (row.length >= 1 && String(row[0]).startsWith('__NOTE__')) {
-        // 段落注释行 → 去掉释义后显示
-        const noteText = stripDefinition(String(row[0]).replace('__NOTE__', ''));
-        if (noteText) html += `<div class="compact-grid__note">${formatInline(escHtml(noteText))}</div>`;
+        let noteText = String(row[0]).replace('__NOTE__', '');
+        noteText = noteText.replace(/\((?:[\u4e00-\u9fff][^)]*)\)$/, '');
+        html += `<span class="compact-tag">${escHtml(noteText)}</span>`;
       } else {
-        // 每行的每一列都是独立的词语，轻量标签流式排列
         for (const cell of row) {
           if (!cell) continue;
-          html += `<span class="compact-tag">${escHtml(stripDefinition(cell))}</span>`;
+          html += `<span class="compact-tag">${escHtml(cell)}</span>`;
         }
       }
     }
@@ -529,14 +698,11 @@ function goPage(id, page) {
   window[id + '_page'] = page;
   paintPage(id, page);
 
-  // 重新生成智能折叠的页码按钮
   const totalPages = window[id + '_totalPages'];
   const pagination = document.querySelector(`#${id} + .table-pagination, #${id} .table-pagination`);
   if (pagination && totalPages > 7) {
-    // 找到页码按钮区域并替换
     const prevBtn = pagination.querySelector(`#${id}-prev`);
     const nextBtn = pagination.querySelector(`#${id}-next`);
-    // 移除中间所有按钮和省略号
     let el = prevBtn ? prevBtn.nextElementSibling : pagination.firstElementChild;
     while (el && el !== nextBtn) {
       const nextEl = el.nextElementSibling;
@@ -545,12 +711,10 @@ function goPage(id, page) {
       }
       el = nextEl;
     }
-    // 在 prev 后面插入新按钮
     if (prevBtn) {
       prevBtn.insertAdjacentHTML('afterend', buildPageButtons(id, page, totalPages));
     }
   } else {
-    // 少于7页，直接更新选中态
     document.querySelectorAll(`[id^="${id}-btn-"]`).forEach(b => b.classList.remove('active'));
     const btn = document.getElementById(`${id}-btn-${page}`);
     if (btn) btn.classList.add('active');
@@ -563,32 +727,16 @@ function goPage(id, page) {
 }
 
 // ==================== 文本工具 ====================
-/** 判断段落是否为含拼音的短词语（如"哀悼(dào)"） */
 function isPinyinWord(text) {
   if (!text || text.length > 30) return false;
+  const matches = text.match(/\(([^)]+)\)/g);
+  if (!matches) return false;
+  for (const m of matches) {
+    if (/[\u4e00-\u9fff]/.test(m)) return false;
+  }
   return /\([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÔôîÎûÛäÄëËïÏöÖ\s,.·;:]+\)/.test(text);
 }
 
-/** 从词语文本中去掉释义，只保留词语+拼音 */
-function stripDefinition(text) {
-  if (!text) return '';
-  const parts = text.split(/(\([^)]*\))/g);
-  let result = '';
-  for (const part of parts) {
-    if (part.startsWith('(') && part.endsWith(')')) {
-      const inner = part.slice(1, -1);
-      if (/^[a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÔôîÎûÛäÄëËïÏöÖ\s,.·;:]+$/.test(inner)) {
-        result += part; // 是拼音，保留
-      }
-      // 是中文释义，跳过
-    } else {
-      result += part;
-    }
-  }
-  return result.trim();
-}
-
-/** HTML 转义 */
 function escHtml(text) {
   if (!text) return '';
   return String(text)
@@ -597,7 +745,6 @@ function escHtml(text) {
     .replace(/>/g, '&gt;');
 }
 
-/** 行内格式化：圆圈数字高亮、换行 */
 function formatInline(text) {
   if (!text) return '';
   text = text.replace(/\n/g, '<br>');
@@ -760,4 +907,43 @@ function setupBackToTop() {
     btn.classList.toggle('back-to-top--visible', window.scrollY > 300);
   });
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+/** 移动端：点击/触摸带释义词语时切换显示 tooltip + 字母选择器点击 */
+function setupWordTooltipToggle() {
+  document.getElementById('section-content').addEventListener('click', (e) => {
+    // 字母选择器按钮
+    const alphaBtn = e.target.closest('.alpha-selector__btn');
+    if (alphaBtn && !alphaBtn.disabled) {
+      const letter = alphaBtn.getAttribute('data-letter');
+      // 从按钮所在选择器 ID 反推 sectionKey
+      const bar = alphaBtn.closest('.alpha-selector');
+      if (bar && bar.id) {
+        const sectionKey = bar.id.replace('voice-', '').replace('-bar', '');
+        switchVoiceLetter(sectionKey, letter);
+      }
+      return;
+    }
+    // 带释义词语 tooltip
+    const target = e.target.closest('.word-has-def');
+    if (!target) {
+      // 点击其他位置关闭已打开的 tooltip
+      const active = document.querySelector('.word-has-def--active');
+      if (active) active.classList.remove('word-has-def--active');
+      return;
+    }
+    // 切换当前 tooltip
+    const wasActive = target.classList.contains('word-has-def--active');
+    // 先关闭所有
+    document.querySelectorAll('.word-has-def--active').forEach(el => el.classList.remove('word-has-def--active'));
+    if (!wasActive) {
+      target.classList.add('word-has-def--active');
+    }
+    e.stopPropagation();
+  });
+  // 点击页面其他位置关闭 tooltip
+  document.addEventListener('click', () => {
+    const active = document.querySelector('.word-has-def--active');
+    if (active) active.classList.remove('word-has-def--active');
+  });
 }
