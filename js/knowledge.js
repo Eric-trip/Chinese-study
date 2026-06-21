@@ -459,10 +459,6 @@ function renderVoiceItems(sectionKey, items, totalCount) {
     setTimeout(() => switchMnemonicPage(sectionKey, 1), 0);
   }
 
-  html += `<div class="content-text" style="margin-top:12px; color:var(--color-text-secondary); font-size:0.85rem;">
-    共 ${totalCount} 条
-  </div>`;
-
   return html;
 }
 
