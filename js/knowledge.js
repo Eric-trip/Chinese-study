@@ -314,7 +314,8 @@ function renderContentBlock(nodes, nextTableSeqFn) {
         else mergedFinal.push({ type: 'table', html: `<table><tr><td>${escHtml(stripped)}</td><td></td></tr></table>` });
         continue;
       }
-      mergedFinal.push({ type: 'table', html: '<table><tr><td colspan="2">__NOTE__' + escHtml(text) + '</td></tr></table>' });
+      // 普通正文段落（非词语列表），走正常 content-text 渲染
+      mergedFinal.push(node);
       continue;
     }
     mergedFinal.push(node);
