@@ -9619,11 +9619,7 @@
     },
     {
       "type": "table",
-      "html": "<table><tr><td colspan=\"2\">文字</td><td>形成时代</td><td>主要载体</td><td>以“水”为例</td></tr><tr><td colspan=\"2\">甲骨文</td><td>殷商</td><td>龟甲、兽骨</td><td>[1/24]</td></tr><tr><td colspan=\"2\">金文</td><td>商周</td><td>青铜器</td><td>[1748]</td></tr><tr><td>篆书</td><td>大篆</td><td>西周晚期</td><td>石器</td><td></td></tr></table>"
-    },
-    {
-      "type": "table",
-      "html": "<table><tr><td colspan=\"2\">文字</td><td>形成时代</td><td>主要载体</td><td>以“水”为例</td></tr><tr><td>篆书</td><td>小篆</td><td>秦</td><td>石器、竹简</td><td>[2DX5]</td></tr><tr><td colspan=\"2\">隶书</td><td>秦</td><td>竹简、帛</td><td><img src=\"images/30d3b7b249aaa337698ff6dc06ba15592f9ee21da45e62b7483f38b78d53d67a.jpg\"/></td></tr><tr><td colspan=\"2\">草书</td><td>汉初</td><td>帛</td><td><img src=\"images/94f0a1815dbe7b74c4a1d88fb0b090fabf73212406e1bbfdbf7f6ca863f4b17d.jpg\"/></td></tr><tr><td colspan=\"2\">行书</td><td>汉末</td><td>帛、纸</td><td><img src=\"images/299e4fb375dbd38622f498add3e042d3478209b76d9b4ad73e3d96d2c9539688.jpg\"/></td></tr><tr><td colspan=\"2\">楷书</td><td>汉末</td><td>纸</td><td><img src=\"images/1791939b9325ed4ef0b273d121b670b388d3835c68001946bec5311ca12f676a.jpg\"/></td></tr></table>"
+      "html": "<table><tr><td colspan=\"2\">文字</td><td>形成时代</td><td>主要载体</td></tr><tr><td colspan=\"2\">甲骨文</td><td>殷商</td><td>龟甲、兽骨</td></tr><tr><td colspan=\"2\">金文</td><td>商周</td><td>青铜器</td></tr><tr><td>篆书</td><td>大篆</td><td>西周晚期</td><td>石器</td></tr><tr><td>篆书</td><td>小篆</td><td>秦</td><td>石器、竹简</td></tr><tr><td colspan=\"2\">隶书</td><td>秦</td><td>竹简、帛</td></tr><tr><td colspan=\"2\">草书</td><td>汉初</td><td>帛</td></tr><tr><td colspan=\"2\">行书</td><td>汉末</td><td>帛、纸</td></tr><tr><td colspan=\"2\">楷书</td><td>汉末</td><td>纸</td></tr></table>"
     },
     {
       "type": "paragraph",

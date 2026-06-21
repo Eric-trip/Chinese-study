@@ -686,7 +686,10 @@ function renderTable(htmlStr, seq) {
       tableEl.querySelectorAll('tr').forEach(tr => {
         const cells = [];
         tr.querySelectorAll('td,th').forEach(cell => {
-          cells.push(cell.textContent.trim());
+          let text = cell.textContent.trim();
+          // 过滤图片占位符标记 [1/24]、[1748]、[2DX5] 等
+          if (/^\[[\w/]+\]$/.test(text)) text = '';
+          cells.push(text);
         });
         if (cells.length > 0) rows.push(cells);
       });
