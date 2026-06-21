@@ -649,7 +649,7 @@ img { max-width: 100%; }
   color: var(--color-text-tertiary);
   margin-bottom: 12px;
 }
-/* ---------- 多音字紧凑卡片（流式换行） ---------- */
+/* ---------- 多音字紧凑卡片（流式换行，分页） ---------- */
 .polyphone-table {
   margin: 8px 0;
   display: flex;
@@ -662,7 +662,7 @@ img { max-width: 100%; }
   background: var(--color-surface);
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-sm);
-  padding: 6px 10px;
+  padding: 5px 10px;
 }
 .polyphone-row:nth-child(even) {
   background: var(--color-surface-alt);
@@ -671,35 +671,44 @@ img { max-width: 100%; }
   width: 36px;
   min-width: 36px;
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-primary);
   text-align: center;
-  padding-top: 2px;
+  padding-top: 1px;
 }
 .polyphone-row__cols {
   flex: 1;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 24px;
+  gap: 6px 20px;
 }
 .polyphone-item {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   font-size: 0.9rem;
   line-height: 1.5;
   padding: 2px 0;
+  min-width: 200px;
 }
 .polyphone-item__num {
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
   font-weight: 700;
   color: var(--color-accent);
   font-size: 0.78rem;
 }
 .polyphone-item__pinyin {
+  width: 60px;
+  flex-shrink: 0;
   font-style: italic;
   color: var(--color-text-secondary);
   font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .polyphone-item__words {
   color: var(--color-text);

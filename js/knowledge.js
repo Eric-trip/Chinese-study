@@ -438,21 +438,15 @@ function renderVoiceItems(sectionKey, items, totalCount) {
     }
     if (current) merged.push(current);
 
-    html += `<div class="polyphone-table">`;
-    for (const item of merged) {
-      html += `<div class="polyphone-row">`;
-      html += `<div class="polyphone-row__char">${escHtml(item.char)}</div>`;
-      html += `<div class="polyphone-row__cols">`;
-      for (const p of item.pronunciations) {
-        html += `<div class="polyphone-item">`;
-        html += `<span class="polyphone-item__num">${escHtml(p.num)}</span>`;
-        html += `<span class="polyphone-item__pinyin">${escHtml(p.pinyin)}</span>`;
-        html += `<span class="polyphone-item__words">${formatInline(escHtml(p.words))}</span>`;
-        html += `</div>`;
-      }
-      html += `</div></div>`;
-    }
-    html += `</div>`;
+    // 把数据挂到全局，初始渲染第1页
+    const uniqueId = `voice-${sectionKey}`;
+    window[`__voiceData_${sectionKey}`] = { items: merged, totalCount, uniqueId };
+    html += `<div class="polyphone-table" id="${uniqueId}-panel"></div>`;
+    html += `<div class="voice-pagination" id="${uniqueId}-pager"></div>`;
+    html += `<div class="content-text" style="margin-top:8px; color:var(--color-text-secondary); font-size:0.85rem;">
+      共 ${totalCount} 条
+    </div>`;
+    setTimeout(() => switchVoicePage(sectionKey, 1), 0);
   } else {
     // mnemonics: 编号列表
     html += `<div class="numbered-list">`;
@@ -483,6 +477,58 @@ function parsePolyphoneLine(text) {
     return { num: m[1], pinyin: m[2], words: m[3] };
   }
   return { num: '', pinyin: '', words: text };
+}
+
+/** 多音字分页切换 */
+function switchVoicePage(sectionKey, page) {
+  const voiceDataKey = `__voiceData_${sectionKey}`;
+  const data = window[voiceDataKey];
+  if (!data) return;
+  const { items, uniqueId } = data;
+  const PAGE_SIZE = 10;
+  const totalPages = Math.ceil(items.length / PAGE_SIZE);
+  const currentPage = Math.max(1, Math.min(page, totalPages));
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, items.length);
+
+  // 渲染当前页内容
+  let panelHtml = '';
+  for (let i = start; i < end; i++) {
+    const item = items[i];
+    panelHtml += `<div class="polyphone-row">`;
+    panelHtml += `<div class="polyphone-row__char">${escHtml(item.char)}</div>`;
+    panelHtml += `<div class="polyphone-row__cols">`;
+    for (const p of item.pronunciations) {
+      panelHtml += `<div class="polyphone-item">`;
+      panelHtml += `<span class="polyphone-item__num">${escHtml(p.num)}</span>`;
+      panelHtml += `<span class="polyphone-item__pinyin">${escHtml(p.pinyin)}</span>`;
+      panelHtml += `<span class="polyphone-item__words">${formatInline(escHtml(p.words))}</span>`;
+      panelHtml += `</div>`;
+    }
+    panelHtml += `</div></div>`;
+  }
+
+  const panel = document.getElementById(`${uniqueId}-panel`);
+  if (panel) {
+    panel.innerHTML = panelHtml;
+    // 滚动到表格上方
+    const top = panel.getBoundingClientRect().top + window.scrollY - 64;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+
+  // 渲染分页器
+  const pager = document.getElementById(`${uniqueId}-pager`);
+  if (pager && totalPages > 1) {
+    let pagerHtml = `<span class="voice-pagination__info">${currentPage} / ${totalPages}</span>`;
+    pagerHtml += `<div class="voice-pagination__btns">`;
+    pagerHtml += `<button onclick="switchVoicePage('${sectionKey}',${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
+    for (let p = 1; p <= totalPages; p++) {
+      pagerHtml += `<button class="${p === currentPage ? 'active' : ''}" onclick="switchVoicePage('${sectionKey}',${p})">${p}</button>`;
+    }
+    pagerHtml += `<button onclick="switchVoicePage('${sectionKey}',${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>`;
+    pagerHtml += `</div>`;
+    pager.innerHTML = pagerHtml;
+  }
 }
 
 /** 切换到指定字母组的词语，支持分页 */
