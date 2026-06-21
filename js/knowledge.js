@@ -421,7 +421,7 @@ function renderVoiceItems(sectionKey, items, totalCount) {
   let html = '';
 
   if (isPolyphones) {
-    // 合并同一字符的多行
+    // 合并同一字符的多行，解析为结构化数据
     const merged = [];
     let current = null;
     for (const item of items) {
@@ -429,22 +429,28 @@ function renderVoiceItems(sectionKey, items, totalCount) {
       const m = text.match(/^([\u4e00-\u9fff])\s+①/);
       if (m) {
         if (current) merged.push(current);
-        current = { char: m[1], lines: [text] };
+        current = { char: m[1], pronunciations: [parsePolyphoneLine(text)] };
       } else if (current) {
-        current.lines.push(text);
+        current.pronunciations.push(parsePolyphoneLine(text));
       } else {
-        merged.push({ char: '', lines: [text] });
+        merged.push({ char: '', pronunciations: [parsePolyphoneLine(text)] });
       }
     }
     if (current) merged.push(current);
 
-    html += `<div class="polyphone-grid">`;
+    html += `<div class="polyphone-table">`;
     for (const item of merged) {
-      html += `<div class="polyphone-card">`;
-      for (const line of item.lines) {
-        html += `<div class="polyphone-card__line">${formatInline(escHtml(line))}</div>`;
+      html += `<div class="polyphone-row">`;
+      html += `<div class="polyphone-row__char">${escHtml(item.char)}</div>`;
+      html += `<div class="polyphone-row__cols">`;
+      for (const p of item.pronunciations) {
+        html += `<div class="polyphone-item">`;
+        html += `<span class="polyphone-item__num">${escHtml(p.num)}</span>`;
+        html += `<span class="polyphone-item__pinyin">${escHtml(p.pinyin)}</span>`;
+        html += `<span class="polyphone-item__words">${formatInline(escHtml(p.words))}</span>`;
+        html += `</div>`;
       }
-      html += `</div>`;
+      html += `</div></div>`;
     }
     html += `</div>`;
   } else {
@@ -468,6 +474,15 @@ function renderVoiceItems(sectionKey, items, totalCount) {
   </div>`;
 
   return html;
+}
+
+/** 解析多音字行："阿 ①ā 阿长 阿哥" → {num:①, pinyin:ā, words:阿长 阿哥} */
+function parsePolyphoneLine(text) {
+  const m = text.match(/([①②③④⑤⑥⑦⑧⑨⑩]+)([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛ]+)\s+(.+)$/);
+  if (m) {
+    return { num: m[1], pinyin: m[2], words: m[3] };
+  }
+  return { num: '', pinyin: '', words: text };
 }
 
 /** 切换到指定字母组的词语，支持分页 */
