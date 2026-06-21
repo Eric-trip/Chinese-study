@@ -487,7 +487,7 @@ function switchVoicePage(sectionKey, page) {
   const data = window[voiceDataKey];
   if (!data) return;
   const { items, uniqueId } = data;
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 10;
   const totalPages = Math.ceil(items.length / PAGE_SIZE);
   const currentPage = Math.max(1, Math.min(page, totalPages));
   const start = (currentPage - 1) * PAGE_SIZE;
