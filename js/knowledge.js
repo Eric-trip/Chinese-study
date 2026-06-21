@@ -385,9 +385,6 @@ function renderCleanVoiceSection(sectionKey, heading) {
     }
     html += `</div>`;
 
-    // 统计信息
-    html += `<div class="alpha-info" id="${uniqueId}-info" style="margin-bottom:12px;font-size:0.82rem;color:var(--color-text-tertiary);"></div>`;
-
     // 内容区域
     html += `<div id="${uniqueId}-panel"></div>`;
 
@@ -627,8 +624,12 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   const end = Math.min(start + PAGE_SIZE, words.length);
 
   // 渲染当前页
+  const infoText = `${letter} 组 · ${words.length} 个词语${totalPages > 1 ? ` · 第 ${currentPage}/${totalPages} 页` : ''}`;
   let panelHtml = `<table class="data-table" style="margin-bottom:12px;">`;
-  panelHtml += `<thead><tr><th colspan="${COLS}" style="text-align:center;background:var(--color-primary-lighter);color:var(--color-primary);font-weight:700;font-size:1rem;">${escHtml(letter)}</th></tr></thead>`;
+  panelHtml += `<thead><tr><th colspan="${COLS}" style="text-align:center;background:var(--color-primary-lighter);color:var(--color-primary);font-weight:700;font-size:1rem;">
+    <span style="font-weight:400;font-size:0.85rem;color:var(--color-text-secondary);">${escHtml(infoText)}</span> &nbsp;
+    <span style="font-size:1.15rem;">${escHtml(letter)}</span>
+  </th></tr></thead>`;
   panelHtml += `<tbody>`;
   for (let i = start; i < end; i += COLS) {
     panelHtml += `<tr>`;
@@ -672,10 +673,6 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
       }
     });
   }
-
-  // 更新统计信息
-  const info = document.getElementById(`${uniqueId}-info`);
-  if (info) info.textContent = `${letter} 组 · ${words.length} 个词语${totalPages > 1 ? ` · 第 ${currentPage}/${totalPages} 页` : ''}`;
 }
 
 // ==================== 表格渲染 ====================
