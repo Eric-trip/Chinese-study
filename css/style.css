@@ -252,7 +252,7 @@ img { max-width: 100%; }
   background: var(--color-surface-alt); border-radius: var(--radius-sm);
   border-left: 3px solid var(--color-primary-light);
 }
-.content-text { font-family: 'Noto Serif SC', 'Noto Sans SC', serif; font-size: 0.95rem; line-height: 1.85; }
+.content-text { font-family: 'Noto Serif SC', 'Noto Sans SC', serif; font-size: 0.95rem; line-height: 1.85; text-indent: 2em; text-align: justify; }
 .word-groups__item .content-text { font-size: 0.9rem; line-height: 1.75; }
 
 /* Pinyin */
