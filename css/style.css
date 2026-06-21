@@ -291,17 +291,25 @@ img { max-width: 100%; }
   transform: translateY(-1px);
 }
 
-/* Mnemonic List (巧记多音多义字，原样渲染) */
-.mnemonic-list { margin-top: var(--space-md); display: flex; flex-direction: column; gap: 6px; }
+/* Mnemonic List (巧记多音多义字，12条/页，彩色圆圈序号) */
+.mnemonic-list { display: flex; flex-direction: column; gap: 6px; }
 .mnemonic-list__item {
-  padding: 10px 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 8px 12px;
   background: var(--color-surface-alt);
   border-radius: var(--radius-sm);
   border-left: 3px solid var(--color-primary-light);
-  font-size: 0.92rem;
-  line-height: 1.75;
   transition: all 0.15s;
 }
+.mnemonic-list__item:hover { background: var(--color-primary-lightest); border-left-color: var(--color-primary); }
+.mnemonic-num {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  font-size: 0.78rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+.mnemonic-content { font-size: 0.92rem; line-height: 1.7; }
 .mnemonic-list__item:hover { background: var(--color-primary-lightest); border-left-color: var(--color-primary); }
 
 /* Compact Tags (词语+拼音类大表流式排版) */
