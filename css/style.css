@@ -649,7 +649,7 @@ img { max-width: 100%; }
   color: var(--color-text-tertiary);
   margin-bottom: 12px;
 }
-/* ---------- 多音字紧凑卡片（流式换行，分页） ---------- */
+/* ---------- 多音字网格布局（统一列宽，分页） ---------- */
 .polyphone-table {
   margin: 8px 0;
   display: flex;
@@ -658,50 +658,53 @@ img { max-width: 100%; }
 }
 .polyphone-row {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   background: var(--color-surface);
   border: 1px solid var(--color-border-light);
   border-radius: var(--radius-sm);
-  padding: 5px 10px;
+  overflow: hidden;
 }
 .polyphone-row:nth-child(even) {
   background: var(--color-surface-alt);
 }
 .polyphone-row__char {
-  width: 36px;
-  min-width: 36px;
+  width: 40px;
+  min-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Noto Serif SC', serif;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: var(--color-primary);
-  text-align: center;
-  padding-top: 1px;
+  color: #fff;
+  background: var(--color-primary);
+  padding-top: 2px;
 }
 .polyphone-row__cols {
   flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 .polyphone-item {
   display: inline-flex;
   align-items: baseline;
   gap: 6px;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  padding: 2px 0;
-  min-width: 200px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  padding: 5px 12px 5px 10px;
+  border-right: 1px solid var(--color-border-light);
 }
+.polyphone-item:nth-last-child(2) { border-right: none; }
+.polyphone-item:last-child { border-right: none; }
 .polyphone-item__num {
-  width: 28px;
-  text-align: center;
+  width: 24px;
   flex-shrink: 0;
   font-weight: 700;
   color: var(--color-accent);
   font-size: 0.78rem;
 }
 .polyphone-item__pinyin {
-  width: 60px;
+  width: 56px;
   flex-shrink: 0;
   font-style: italic;
   color: var(--color-text-secondary);
