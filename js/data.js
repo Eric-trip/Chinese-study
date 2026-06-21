@@ -1,10 +1,15 @@
 /**
  * data.js - 数据加载、存储与工具函数
+ *
+ * 数据源：扁平结构 handbook.json
+ * 结构：{ book_info, content: [{type, level, text/html/url/alt}] }
+ * content 是扁平数组，通过 buildIndex() 构建章节索引供其他模块使用。
  */
 
 // ==================== 全局状态 ====================
 let HANDBOOK_DATA = null;
 let SEARCH_INDEX = null;
+let _index = null; // 章节索引
 let CURRENT_STAGE = 'junior';
 
 const STAGES = {
@@ -18,6 +23,7 @@ async function loadHandbookData() {
   try {
     const response = await fetch('data/handbook.json');
     HANDBOOK_DATA = await response.json();
+    buildIndex();
     return HANDBOOK_DATA;
   } catch (error) {
     console.error('加载数据失败:', error);
@@ -25,19 +31,150 @@ async function loadHandbookData() {
   }
 }
 
-// ==================== 数据查询 ====================
+// ==================== 章节索引构建 ====================
+/**
+ * 遍历扁平 content 数组，构建层级索引：
+ *   _index = {
+ *     bians: [
+ *       { id, name, parts: [
+ *         { id, name, sections: [
+ *           { index, name, start, end }
+ *         ], start, end }
+ *       ], start, end }
+ *     ]
+ *   }
+ *
+ * 层级映射规则（根据原书结构）：
+ *   level 1 "第X编" → bian
+ *   level 2 "第X部分" → part
+ *   level 3 课标解读/中考热点/知识能力解读/方法技巧归纳/必考知识梳理/... → section
+ *   level 4+ → section 内部内容（不单独索引）
+ */
+function buildIndex() {
+  if (!HANDBOOK_DATA || !HANDBOOK_DATA.content) return;
+  const content = HANDBOOK_DATA.content;
+  _index = { bians: [] };
+
+  let currentBian = null;
+  let currentPart = null;
+  let currentSection = null;
+  let partId = 0, sectionIdx = 0;
+
+  for (let i = 0; i < content.length; i++) {
+    const item = content[i];
+    if (item.type !== 'heading') continue;
+    const text = (item.text || '').trim();
+    const level = item.level;
+
+    // Level 1: "第X编" → bian
+    // 原书目录区会连续出现3个"第X编"标题，内容区可能重复出现
+    // 策略：用"第X部分"的编号推断属于哪个编，不依赖编标题位置
+    if (level === 1 && /第[一二三四五六七八九十]+编/.test(text)) {
+      // 检查是否已有同名 bian
+      const existing = _index.bians.find(b => b.name === text);
+      if (existing) {
+        currentBian = existing;
+        currentBian.start = i;
+        currentBian.end = content.length;
+        currentBian.parts = [];
+        const idx = _index.bians.indexOf(existing);
+        if (idx > 0) {
+          _index.bians[idx - 1].end = i;
+        }
+      } else {
+        currentBian = { id: _index.bians.length + 1, name: text, parts: [], start: i, end: content.length };
+        _index.bians.push(currentBian);
+        if (_index.bians.length > 1) {
+          _index.bians[_index.bians.length - 2].end = i;
+        }
+      }
+      currentPart = null;
+      currentSection = null;
+      partId = 0;
+      sectionIdx = 0;
+      continue;
+    }
+
+    if (!currentBian) continue;
+
+    // Level 2: "第X部分" → part
+    // 特殊处理："第一编"下有12个part(语音~综合性学习)，"第二编"下有7个part(古代诗歌~文学作品鉴赏)+2个part(基本能力~分类指导)
+    // 用"第X部分"出现的上下文判断归属：如果"第二编 阅读理解"已经出现过，第一部分~第十二部分属于第一编
+    if (level === 2 && /第[一二三四五六七八九十百]+部分/.test(text)) {
+      // 推断属于哪个编：
+      // 第一编有12个部分(第一~第十二)，第二编有7个部分(第一~第七)+2个部分(第一~第二)
+      // 第三编有2个部分(第一~第二)
+      // 如果"第二编"已经作为 currentBian 存在，且遇到"第一部分 古代诗歌鉴赏"，应归到第二编
+      // 用名称关键词来辅助判断
+      const isReadingPart = /古代诗歌|文言文|记叙文|说明文|议论文|非连续性|文学作品/.test(text);
+      const isWritingPart = /基本能力|分类指导/.test(text);
+
+      // 如果当前 bian 不对，切换
+      if (isReadingPart && currentBian.name.includes('第一编')) {
+        const readingBian = _index.bians.find(b => b.name.includes('第二编'));
+        if (readingBian) { currentBian = readingBian; partId = currentBian.parts.length; }
+      } else if (isWritingPart && !currentBian.name.includes('第三编')) {
+        const writingBian = _index.bians.find(b => b.name.includes('第三编'));
+        if (writingBian) { currentBian = writingBian; partId = currentBian.parts.length; }
+      } else if (!isReadingPart && !isWritingPart && !currentBian.name.includes('第一编')) {
+        // 回到第一编
+        const basicBian = _index.bians.find(b => b.name.includes('第一编'));
+        if (basicBian) { currentBian = basicBian; partId = currentBian.parts.length; }
+      }
+
+      partId = currentBian.parts.length + 1;
+      sectionIdx = 0;
+      currentPart = { id: partId, name: text, sections: [], start: i, end: currentBian.end };
+      currentBian.parts.push(currentPart);
+      if (currentBian.parts.length > 1) {
+        currentBian.parts[currentBian.parts.length - 2].end = i;
+      }
+      currentSection = null;
+      continue;
+    }
+
+    if (!currentPart) continue;
+
+    // Level 3: section（课标解读、中考热点、知识能力解读、方法技巧归纳、必考知识梳理等）
+    if (level === 3) {
+      // 关闭上一个 section
+      if (currentSection) {
+        currentSection.end = i;
+      }
+      currentSection = { index: sectionIdx, name: text, start: i, end: currentPart.end };
+      sectionIdx++;
+      currentPart.sections.push(currentSection);
+      continue;
+    }
+  }
+
+  // 设置最后一批 end
+  for (const bian of _index.bians) {
+    for (const part of bian.parts) {
+      for (const sec of part.sections) {
+        if (sec.end === undefined || sec.end > part.end) sec.end = part.end;
+      }
+      if (part.end === undefined || part.end > bian.end) part.end = bian.end;
+    }
+    if (bian.end === undefined) bian.end = content.length;
+  }
+}
+
+// ==================== 数据查询（兼容旧接口）====================
+
 function getBians() {
-  return HANDBOOK_DATA ? HANDBOOK_DATA.bians.map(b => ({ id: b.bian_id, name: b.bian_name, parts: b.parts })) : [];
+  if (!_index) return [];
+  return _index.bians.map(b => ({ id: b.id, name: b.name, parts: b.parts }));
 }
 
 function getParts(bianId) {
-  const bian = HANDBOOK_DATA?.bians.find(b => b.bian_id === bianId);
+  const bian = _index?.bians.find(b => b.id === bianId);
   return bian ? bian.parts : [];
 }
 
 function getPart(bianId, partId) {
   const parts = getParts(bianId);
-  return parts.find(p => p.part_id === partId);
+  return parts.find(p => p.id === partId);
 }
 
 function getSections(bianId, partId) {
@@ -51,99 +188,80 @@ function getSection(bianId, partId, sectionIndex) {
 }
 
 function getNavPath(bianId, partId, sectionIndex) {
-  const bian = HANDBOOK_DATA?.bians.find(b => b.bian_id === bianId);
-  const part = bian?.parts.find(p => p.part_id === partId);
+  const bian = _index?.bians.find(b => b.id === bianId);
+  const part = bian?.parts.find(p => p.id === partId);
   const section = part?.sections[sectionIndex];
   return {
-    bianName: bian?.bian_name || '',
-    partName: part?.part_name || '',
-    sectionName: section?.section_name || ''
+    bianName: bian?.name || '',
+    partName: part?.name || '',
+    sectionName: section?.name || ''
   };
 }
 
 function getContentStats() {
-  if (!HANDBOOK_DATA) return { parts: 0, sections: 0, items: 0 };
+  if (!_index) return { parts: 0, sections: 0, items: 0 };
   let parts = 0, sections = 0, items = 0;
-  for (const bian of HANDBOOK_DATA.bians) {
+  for (const bian of _index.bians) {
     parts += bian.parts.length;
     for (const part of bian.parts) {
       sections += part.sections.length;
-      for (const sec of part.sections) {
-        if (sec.subsections) items += sec.subsections.length;
-      }
     }
   }
+  items = sections; // section 数量作为 items
   return { parts, sections, items };
+}
+
+/**
+ * 获取一个 section 对应的扁平内容片段
+ * 返回 content[start+1 .. end]（跳过 section 标题本身）
+ */
+function getSectionContent(bianId, partId, sectionIndex) {
+  const sec = getSection(bianId, partId, sectionIndex);
+  if (!sec || !HANDBOOK_DATA) return [];
+  return HANDBOOK_DATA.content.slice(sec.start + 1, sec.end);
+}
+
+/**
+ * 获取一个 part 下的所有内容（跨 section）
+ */
+function getPartContent(bianId, partId) {
+  const part = getPart(bianId, partId);
+  if (!part || !HANDBOOK_DATA) return [];
+  return HANDBOOK_DATA.content.slice(part.start + 1, part.end);
 }
 
 // 获取所有扁平化的内容节点（用于搜索）
 function getAllContentNodes() {
-  if (!HANDBOOK_DATA) return [];
+  if (!_index || !HANDBOOK_DATA) return [];
   const nodes = [];
-  for (const bian of HANDBOOK_DATA.bians) {
+  const content = HANDBOOK_DATA.content;
+
+  for (const bian of _index.bians) {
     for (const part of bian.parts) {
-      for (let si = 0; si < part.sections.length; si++) {
-        const sec = part.sections[si];
-        // Section level content
-        if (sec.content) {
-          nodes.push({
-            bianId: bian.bian_id, bianName: bian.bian_name,
-            partId: part.part_id, partName: part.part_name,
-            sectionIndex: si, sectionName: sec.section_name,
-            title: sec.section_name, content: sec.content,
-            path: `${bian.bian_name} > ${part.part_name} > ${sec.section_name}`
-          });
-        }
-        // Subsection level
-        if (sec.subsections) {
-          for (const sub of sec.subsections) {
-            const subTitle = sub.title || '';
-            if (sub.content) {
-              nodes.push({
-                bianId: bian.bian_id, bianName: bian.bian_name,
-                partId: part.part_id, partName: part.part_name,
-                sectionIndex: si, sectionName: sec.section_name,
-                title: subTitle || sec.section_name, content: sub.content,
-                path: `${bian.bian_name} > ${part.part_name} > ${sec.section_name}${subTitle ? ' > ' + subTitle : ''}`
-              });
-            }
-            if (sub.sub_items) {
-              for (const item of sub.sub_items) {
-                const itemTitle = item.title || '';
-                if (item.content) {
-                  nodes.push({
-                    bianId: bian.bian_id, bianName: bian.bian_name,
-                    partId: part.part_id, partName: part.part_name,
-                    sectionIndex: si, sectionName: sec.section_name,
-                    title: itemTitle || subTitle, content: item.content,
-                    path: `${bian.bian_name} > ${part.part_name} > ${sec.section_name}${subTitle ? ' > ' + subTitle : ''}${itemTitle ? ' > ' + itemTitle : ''}`
-                  });
-                }
-                if (item.table) {
-                  const tableText = item.table.headers.join(' ') + ' ' +
-                    item.table.rows.map(r => r.join(' ')).join(' ');
-                  nodes.push({
-                    bianId: bian.bian_id, bianName: bian.bian_name,
-                    partId: part.part_id, partName: part.part_name,
-                    sectionIndex: si, sectionName: sec.section_name,
-                    title: itemTitle || subTitle, content: tableText,
-                    path: `${bian.bian_name} > ${part.part_name} > ${sec.section_name}${subTitle ? ' > ' + subTitle : ''}${itemTitle ? ' > ' + itemTitle : ''}`
-                  });
-                }
-              }
-            }
-            if (sub.table) {
-              const tableText = sub.table.headers.join(' ') + ' ' +
-                sub.table.rows.map(r => r.join(' ')).join(' ');
-              nodes.push({
-                bianId: bian.bian_id, bianName: bian.bian_name,
-                partId: part.part_id, partName: part.part_name,
-                sectionIndex: si, sectionName: sec.section_name,
-                title: subTitle || sec.section_name, content: tableText,
-                path: `${bian.bian_name} > ${part.part_name} > ${sec.section_name}${subTitle ? ' > ' + subTitle : ''}`
-              });
-            }
+      for (const sec of part.sections) {
+        // 收集 section 内所有文本内容
+        let textParts = [];
+        for (let i = sec.start + 1; i < sec.end; i++) {
+          const item = content[i];
+          if (!item) continue;
+          if (item.type === 'paragraph' && item.text) {
+            textParts.push(item.text);
+          } else if (item.type === 'table' && item.html) {
+            // 从 HTML 表格中提取文本
+            textParts.push(item.html.replace(/<[^>]+>/g, ' '));
+          } else if (item.type === 'heading' && item.text) {
+            textParts.push(item.text);
           }
+        }
+        const fullText = textParts.join('\n').trim();
+        if (fullText) {
+          nodes.push({
+            bianId: bian.id, bianName: bian.name,
+            partId: part.id, partName: part.name,
+            sectionIndex: sec.index, sectionName: sec.name,
+            title: sec.name, content: fullText,
+            path: `${bian.name} > ${part.name} > ${sec.name}`
+          });
         }
       }
     }
@@ -214,7 +332,6 @@ const Storage = {
 
 // ==================== 进度追踪 ====================
 const ProgressTracker = {
-  // 浏览记录
   recordBrowse(bianId, partId, sectionIndex) {
     const browsed = Storage.get('browsed_sections', []);
     const key = `${bianId}-${partId}-${sectionIndex}`;
@@ -226,9 +343,11 @@ const ProgressTracker = {
   getBrowsedCount() {
     return Storage.get('browsed_sections', []).length;
   },
-  getTotalSections() { return 46; },
+  getTotalSections() {
+    const stats = getContentStats();
+    return stats.sections || 46;
+  },
 
-  // 收藏
   toggleBookmark(bianId, partId, sectionIndex) {
     const bookmarks = Storage.get('bookmarks', []);
     const key = `${bianId}-${partId}-${sectionIndex}`;
@@ -251,7 +370,6 @@ const ProgressTracker = {
   getBookmarks() { return Storage.get('bookmarks', []); },
   getBookmarkCount() { return Storage.get('bookmarks', []).length; },
 
-  // 笔记
   saveNote(bianId, partId, sectionIndex, content) {
     const notes = Storage.get('notes', {});
     const key = `${bianId}-${partId}-${sectionIndex}`;
@@ -275,7 +393,6 @@ const ProgressTracker = {
     }).sort((a, b) => b.time - a.time);
   },
 
-  // 练习成绩
   saveScore(mode, type, difficulty, score, total) {
     const scores = Storage.get('practice_scores', []);
     scores.push({ mode, type, difficulty, score, total, time: Date.now() });
@@ -288,7 +405,6 @@ const ProgressTracker = {
     return { count: scores.length, avg };
   },
 
-  // 错题
   addError(question) {
     const errors = Storage.get('error_book', []);
     const existing = errors.findIndex(e =>
@@ -311,7 +427,6 @@ const ProgressTracker = {
   getErrors() { return Storage.get('error_book', []); },
   getErrorCount() { return Storage.get('error_book', []).length; },
 
-  // 笔记数量
   getNoteCount() {
     const notes = Storage.get('notes', {});
     return Object.keys(notes).length;
@@ -356,19 +471,10 @@ function toggleReadAloud(text) {
 
 /**
  * 清理选中文本中的拼音注释
- * 例如："爱憎(zēng)分明" → "爱憎分明"
- *       "一丘之貉(hé)" → "一丘之貉"
- *       " 差(chā)强(qiáng)人(rén)意(yì) " → "差强人意"
- * @param {string} text - 原始选中文本
- * @returns {string} - 清理后的文本
  */
 function cleanPinyinAnnotations(text) {
   if (!text) return text;
-  // 匹配全角/半角括号内的拼音注释：
-  // 拼音特征为拉丁字母+声调符号，括号内可能包含空格、标点分隔的多个拼音
-  // 例如: (zēng), （hé）, (chā qiáng rén yì), (wéi jí)
   let result = text.replace(/[（(][a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÂôÔîÎûÛäÄëËïÏöÖ\s,.·;:]+[）)]/g, '');
-  // 清理可能产生的多余空格
   result = result.replace(/\s{2,}/g, '').trim();
   return result;
 }
@@ -377,12 +483,7 @@ function cleanPinyinAnnotations(text) {
 let _selectionPopup = null;
 let _selectionTimer = null;
 
-/**
- * 初始化选词弹窗系统
- * @param {string} scopeSelector - 限定在哪个容器内生效
- */
 function initSelectionLookup(scopeSelector) {
-  // 创建弹窗元素
   if (!_selectionPopup) {
     _selectionPopup = document.createElement('div');
     _selectionPopup.className = 'selection-popup';
@@ -392,7 +493,6 @@ function initSelectionLookup(scopeSelector) {
     `;
     document.body.appendChild(_selectionPopup);
 
-    // 点击弹窗外或按 Esc 关闭
     document.addEventListener('mousedown', (e) => {
       if (_selectionPopup && !_selectionPopup.contains(e.target)) {
         hideSelectionPopup();
@@ -402,7 +502,6 @@ function initSelectionLookup(scopeSelector) {
       if (e.key === 'Escape') hideSelectionPopup();
     });
 
-    // 点击弹窗项
     _selectionPopup.addEventListener('click', (e) => {
       const item = e.target.closest('.selection-popup__item');
       if (!item) return;
@@ -410,7 +509,6 @@ function initSelectionLookup(scopeSelector) {
       const word = _selectionPopup.dataset.word;
       if (!word) return;
       if (action === 'dict') {
-        // 在当前页面弹出 iframe 面板
         const url = `https://dict.baidu.com/s?wd=${encodeURIComponent(word)}`;
         showDictPanel(word, url);
         hideSelectionPopup();
@@ -422,9 +520,7 @@ function initSelectionLookup(scopeSelector) {
     });
   }
 
-  // 监听 mouseup（检测选中文本）
   document.addEventListener('mouseup', (e) => {
-    // 只在指定区域内生效
     if (scopeSelector) {
       const scope = document.querySelector(scopeSelector);
       if (!scope || !scope.contains(e.target)) return;
@@ -437,15 +533,12 @@ function initSelectionLookup(scopeSelector) {
       const text = sel.toString().trim();
       if (!text) { hideSelectionPopup(); return; }
 
-      // 限制：2-20字，不含纯标点/数字
       if (text.length < 2 || text.length > 20) return;
       if (/^[\d\s\p{P}]+$/u.test(text)) return;
 
-      // 清理选中文本中的拼音注释（如"爱憎(zēng)分明" → "爱憎分明"）
       const cleanText = cleanPinyinAnnotations(text);
       if (cleanText.length < 2 || cleanText.length > 20) return;
 
-      // 获取选区的位置
       const range = sel.getRangeAt(0);
       const rect = range.getBoundingClientRect();
       if (rect.width === 0 && rect.height === 0) return;
@@ -461,20 +554,18 @@ function showSelectionPopup(word, rect) {
   _selectionPopup.style.visibility = 'hidden';
   _selectionPopup.style.display = 'flex';
 
-  // 定位：选区正上方居中
   const popupRect = _selectionPopup.getBoundingClientRect();
   let left = rect.left + rect.width / 2 - popupRect.width / 2;
   let top = rect.top - popupRect.height - 8;
 
-  // 边界检查
   if (left < 8) left = 8;
   if (left + popupRect.width > window.innerWidth - 8) {
     left = window.innerWidth - popupRect.width - 8;
   }
-  if (top < 8) top = rect.bottom + 8; // 放下方
+  if (top < 8) top = rect.bottom + 8;
 
   _selectionPopup.style.left = left + 'px';
-  _selectionPopup.style.top = top + 'px'; // fixed 定位，不需要加 scrollY
+  _selectionPopup.style.top = top + 'px';
   _selectionPopup.style.visibility = 'visible';
   _selectionPopup.classList.add('selection-popup--visible');
 }
@@ -492,14 +583,11 @@ let _dictPanel = null;
 let _dictOverlay = null;
 
 function showDictPanel(word, url) {
-  // 如果已有面板，先移除
   closeDictPanel();
 
-  // 创建遮罩
   _dictOverlay = document.createElement('div');
   _dictOverlay.className = 'dict-overlay';
 
-  // 创建面板
   _dictPanel = document.createElement('div');
   _dictPanel.className = 'dict-panel';
   _dictPanel.innerHTML = `
@@ -519,20 +607,17 @@ function showDictPanel(word, url) {
   document.body.appendChild(_dictOverlay);
   document.body.appendChild(_dictPanel);
 
-  // 添加动画
   requestAnimationFrame(() => {
     _dictPanel.classList.add('dict-panel--visible');
     _dictOverlay.classList.add('dict-overlay--visible');
   });
 
-  // iframe 加载完成后隐藏 loading
   const iframe = _dictPanel.querySelector('.dict-panel__iframe');
   iframe.addEventListener('load', () => {
     _dictPanel.querySelector('.dict-panel__loading').style.display = 'none';
     iframe.style.display = 'block';
   });
 
-  // 关闭事件
   _dictPanel.querySelector('.dict-panel__close').addEventListener('click', closeDictPanel);
   _dictOverlay.addEventListener('click', closeDictPanel);
   document.addEventListener('keydown', _dictEscHandler);

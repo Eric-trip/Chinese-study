@@ -1,5 +1,5 @@
 /**
- * knowledge.js - 知识页逻辑
+ * knowledge.js - 知识页逻辑（适配扁平数据结构）
  */
 let currentState = { bianId: 1, partId: 1, sectionIndex: 0 };
 let currentTablePage = 1;
@@ -37,17 +37,17 @@ function renderSidebar() {
       </div>
       <div class="tree-children" id="bian-${bian.id}" style="${isCurrentBian ? '' : 'display:none'}">`;
     for (const part of bian.parts) {
-      const isCurrentPart = bian.id === currentState.bianId && part.part_id === currentState.partId;
+      const isCurrentPart = bian.id === currentState.bianId && part.id === currentState.partId;
       html += `<div class="tree-item">
-        <div class="tree-node tree-node--part${isCurrentPart ? ' tree-node--active' : ''}" onclick="toggleTree('part-${bian.id}-${part.part_id}', event)">
+        <div class="tree-node tree-node--part${isCurrentPart ? ' tree-node--active' : ''}" onclick="toggleTree('part-${bian.id}-${part.id}', event)">
           <span class="tree-arrow${isCurrentPart ? ' tree-arrow--expanded' : ''}">▶</span>
-          <span>${part.part_name}</span>
+          <span>${part.name}</span>
         </div>
-        <div class="tree-children" id="part-${bian.id}-${part.part_id}" style="${isCurrentPart ? '' : 'display:none'}">`;
+        <div class="tree-children" id="part-${bian.id}-${part.id}" style="${isCurrentPart ? '' : 'display:none'}">`;
       part.sections.forEach((sec, si) => {
-        const isCurrent = bian.id === currentState.bianId && part.part_id === currentState.partId && si === currentState.sectionIndex;
-        html += `<div class="tree-node tree-node--section${isCurrent ? ' tree-node--active' : ''}" onclick="loadSection(${bian.id}, ${part.part_id}, ${si}); event.stopPropagation();">
-          ${sec.section_name}
+        const isCurrent = bian.id === currentState.bianId && part.id === currentState.partId && si === currentState.sectionIndex;
+        html += `<div class="tree-node tree-node--section${isCurrent ? ' tree-node--active' : ''}" onclick="loadSection(${bian.id}, ${part.id}, ${si}); event.stopPropagation();">
+          ${sec.name}
         </div>`;
       });
       html += `</div></div>`;
@@ -63,11 +63,9 @@ function toggleTree(id, event) {
   if (!el) return;
   const isHidden = el.style.display === 'none';
 
-  // 手风琴：关闭同级其他展开项
   const level = id.startsWith('bian-') ? 'bian' : 'part';
   if (isHidden) {
     if (level === 'bian') {
-      // 关闭其他编
       document.querySelectorAll('.tree-children[id^="bian-"]').forEach(sib => {
         if (sib.id !== id) {
           sib.style.display = 'none';
@@ -76,7 +74,6 @@ function toggleTree(id, event) {
         }
       });
     } else if (level === 'part') {
-      // 关闭同编下的其他部
       const parentBian = el.closest('.tree-children[id^="bian-"]');
       if (parentBian) {
         parentBian.querySelectorAll(':scope > .tree-item > .tree-children[id^="part-"]').forEach(sib => {
@@ -100,9 +97,8 @@ function loadSection(bianId, partId, sectionIndex) {
   currentState = { bianId, partId, sectionIndex };
   currentTablePage = 1;
 
-  const section = getSection(bianId, partId, sectionIndex);
   const navPath = getNavPath(bianId, partId, sectionIndex);
-  if (!section) return;
+  if (!navPath.partName) return;
 
   // 面包屑
   document.getElementById('breadcrumb').innerHTML = `
@@ -115,306 +111,175 @@ function loadSection(bianId, partId, sectionIndex) {
     <span class="breadcrumb__item" style="color:var(--color-text-secondary);">${navPath.sectionName}</span>
   `;
 
-  // 标题
   document.getElementById('content-title').textContent = navPath.partName;
   document.getElementById('content-section-name').textContent = navPath.sectionName;
 
-  // 更新侧边栏高亮
   document.querySelectorAll('.tree-node--section').forEach(n => n.classList.remove('tree-node--active'));
   document.querySelectorAll('.tree-node--part').forEach(n => n.classList.remove('tree-node--active'));
   document.querySelectorAll('.tree-node--bian').forEach(n => n.classList.remove('tree-node--active'));
 
   // 渲染内容
   const contentEl = document.getElementById('section-content');
-  contentEl.innerHTML = renderSectionContent(section);
+  const nodes = getSectionContent(bianId, partId, sectionIndex);
+  contentEl.innerHTML = renderFlatContent(nodes);
 
-  // 笔记区
   renderNoteArea();
-
-  // 收藏状态
   updateBookmarkBtn();
-
-  // 前后导航
   renderNavButtons();
-
-  // 记录浏览
   ProgressTracker.recordBrowse(bianId, partId, sectionIndex);
 
-  // 关闭移动端侧边栏
   const sidebar = document.querySelector('.sidebar');
   const overlay = document.querySelector('.sidebar__overlay');
   if (sidebar) sidebar.classList.remove('sidebar--open');
   if (overlay) overlay.classList.remove('sidebar__overlay--visible');
 
-  // 滚动到顶部
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ==================== 内容渲染 ====================
-function renderSectionContent(section) {
-  let html = '';
-
-  // 简单文本内容
-  if (section.content && typeof section.content === 'string') {
-    html += `<div class="content-text">${formatText(section.content)}</div>`;
+// ==================== 内容渲染（扁平结构）====================
+/**
+ * 遍历扁平内容节点，按 type 分发渲染
+ * - heading: 按 level 渲染为 h4/h5/h6
+ * - paragraph: 渲染为段落文本
+ * - table: 解析 HTML 表格，转为分页表格渲染
+ * - image: 跳过（不渲染）
+ */
+function renderFlatContent(nodes) {
+  if (!nodes || nodes.length === 0) {
+    return '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
   }
 
-  // 子节
-  if (section.subsections) {
-    for (const sub of section.subsections) {
-      html += `<div class="subsection">`;
-      if (sub.title) html += `<h3 class="subsection__title">${sub.title}</h3>`;
+  let html = '';
+  let inList = false;
 
-      // content: 字符串
-      if (sub.content && typeof sub.content === 'string' && sub.content.trim()) {
-        html += `<div class="content-text">${formatText(sub.content)}</div>`;
-      }
+  for (const node of nodes) {
+    if (!node || !node.type) continue;
 
-      // content: 单个表格对象 {type:"table", headers, rows}
-      if (sub.content && typeof sub.content === 'object' && !Array.isArray(sub.content) && sub.content.headers) {
-        html += renderTable(sub.content);
-      }
-
-      // content: 数组（可能包含子条目或表格）
-      if (sub.content && Array.isArray(sub.content)) {
-        for (const item of sub.content) {
-          if (!item || typeof item !== 'object') continue;
-          // 表格对象
-          if (item.headers && item.rows) {
-            html += renderTable(item);
-          }
-          // 子条目 {title, content, table}
-          else if (item.title || item.content || item.table) {
-            html += `<div class="sub-item">`;
-            if (item.title) html += `<div class="sub-item__title">${item.title}</div>`;
-            if (item.content && typeof item.content === 'string') {
-              html += `<div class="content-text">${formatText(item.content)}</div>`;
-            }
-            if (item.content && typeof item.content === 'object' && !Array.isArray(item.content) && item.content.headers) {
-              html += renderTable(item.content);
-            }
-            if (item.table) html += renderTable(item.table);
-            html += `</div>`;
-          }
-        }
-      }
-
-      // tables（复数）：多个表格
-      if (sub.tables && Array.isArray(sub.tables)) {
-        for (const tbl of sub.tables) {
-          if (tbl && tbl.headers && tbl.rows) {
-            html += renderTable(tbl);
-          }
-        }
-      }
-
-      // 子项
-      if (sub.sub_items) {
-        for (const item of sub.sub_items) {
-          html += renderSubItem(item);
-        }
-      }
-
-      // 词组辨析列表（实词/虚词/成语/重点词语）
-      if (sub.word_groups && Array.isArray(sub.word_groups)) {
-        html += renderWordGroups(sub.word_groups);
-      }
-
-      // subsection 自身的 items 字段
-      // 结构1：{letter, list} — 按字母分组的词语列表（如容易读错的成语）
-      // 结构2：{letter, table} — 按字母分组的表格（如多音字）
-      // 结构3：{id, content} — 编号句子列表（如巧记多音多义字）
-      // 结构4：古诗词/文言文名句卡片（由 renderItemsList 处理）
-      if (sub.items && Array.isArray(sub.items)) {
-        // 判断 items 类型
-        const first = sub.items[0];
-        if (first && first.letter !== undefined && first.list !== undefined) {
-          // 结构1：按字母分组的词语列表
-          html += renderLetterList(sub.items);
-        } else if (first && first.letter !== undefined && first.table !== undefined) {
-          // 结构2：按字母分组的表格
-          for (const it of sub.items) {
-            if (it.letter) html += `<div class="letter-group__label">${it.letter}</div>`;
-            if (it.table) html += renderTable(it.table);
-          }
-        } else if (first && first.id !== undefined && first.content !== undefined) {
-          // 结构3：编号句子列表
-          html += renderNumberedSentences(sub.items);
+    switch (node.type) {
+      case 'heading': {
+        if (inList) { html += '</ul>'; inList = false; }
+        const level = node.level || 4;
+        const text = formatText(node.text || '');
+        if (level <= 3) {
+          html += `<h3 class="subsection__title">${text}</h3>`;
+        } else if (level === 4) {
+          html += `<h4 class="sub-item__title">${text}</h4>`;
         } else {
-          // 结构4：古诗词/名句卡片
-          html += renderItemsList(sub.items);
+          html += `<h5 class="content-subtitle">${text}</h5>`;
         }
+        break;
       }
 
-      // 直接挂在subsection上的table
-      if (sub.table) html += renderTable(sub.table);
-      html += `</div>`;
+      case 'paragraph': {
+        if (inList) { html += '</ul>'; inList = false; }
+        const text = node.text || '';
+        if (text.trim()) {
+          html += `<div class="content-text">${formatText(text)}</div>`;
+        }
+        break;
+      }
+
+      case 'table': {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += renderHtmlTable(node.html || '');
+        break;
+      }
+
+      case 'image': {
+        // 跳过，不渲染
+        break;
+      }
     }
   }
+  if (inList) html += '</ul>';
 
   return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
 }
 
 /**
- * 渲染单个 sub_item，支持递归嵌套
- * 处理以下数据结构：
- * - {title, content(str)} — 文本内容
- * - {title, content({headers,rows})} — content 中的表格
- * - {title, table} — 直接表格
- * - {title, tables[]} — 多表格
- * - {title, headers, rows} — headers/rows 直接挂在 item 上（文化常识等）
- * - {title, sub_items[]} — 嵌套子项（递归）
- * - {title, items[]} — 键值对列表转表格，或名句卡片列表
+ * 将 HTML 表格字符串解析为 {headers, rows} 然后复用已有的分页表格渲染
  */
-function renderSubItem(item) {
-  if (!item || typeof item !== 'object') return '';
-  let html = `<div class="sub-item">`;
-  if (item.title) html += `<div class="sub-item__title">${item.title}</div>`;
-  // content: 字符串
-  if (item.content && typeof item.content === 'string') {
-    html += `<div class="content-text">${formatText(item.content)}</div>`;
-  }
-  // content: 表格对象 {headers, rows}
-  if (item.content && typeof item.content === 'object' && !Array.isArray(item.content) && item.content.headers) {
-    html += renderTable(item.content);
-  }
-  // 直接挂在 item 上的表格
-  if (item.table) html += renderTable(item.table);
-  // headers/rows 直接挂在 item 上（如文化常识表格子项）
-  if (item.headers && item.rows) html += renderTable(item);
-  // 多表格
-  if (item.tables && Array.isArray(item.tables)) {
-    for (const tbl of item.tables) {
-      if (tbl && tbl.headers && tbl.rows) html += renderTable(tbl);
-    }
-  }
-  // 嵌套 sub_items（如谦称/敬称表）
-  if (item.sub_items && Array.isArray(item.sub_items)) {
-    for (const nested of item.sub_items) {
-      html += renderSubItem(nested);
-    }
-  }
-  // items 字段
-  if (item.items && Array.isArray(item.items)) {
-    const first = item.items[0];
-    if (typeof first === 'string') {
-      // 字符串数组（如作文技法列表）→ 渲染为列表
-      html += '<ul class="content-list">';
-      for (const it of item.items) {
-        if (it) html += `<li>${formatText(it)}</li>`;
+function renderHtmlTable(htmlStr) {
+  if (!htmlStr) return '';
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString('<table>' + htmlStr.replace(/^<table>|<\/table>$/g, '') + '</table>', 'text/html');
+    const tableEl = doc.querySelector('table');
+    if (!tableEl) return '';
+
+    const rows = [];
+    let headers = [];
+
+    const trList = tableEl.querySelectorAll('tr');
+    trList.forEach((tr, ri) => {
+      const cells = [];
+      tr.querySelectorAll('td,th').forEach(cell => {
+        cells.push(cell.textContent.trim());
+      });
+      if (cells.length === 0) return;
+
+      // 第一行如果只有一个 cell 且是字母（如 "A"），当作分类标题
+      if (ri === 0 && cells.length <= 2) {
+        // 判断是否是表头（如 "A" "B" 等字母）
+        if (cells.length === 1 && /^[A-Z]$/.test(cells[0])) {
+          // 字母分组标题，不做表头
+          rows.push(cells);
+          return;
+        }
+        if (cells.length === 2 && cells[0] === '') {
+          // 第一列空，第二列是字母
+          rows.push(cells);
+          return;
+        }
       }
-      html += '</ul>';
-    } else if (first && typeof first === 'object' &&
-        !first.title && !first.content && !first.source && !first.quotes && !first.letter && !first.id) {
-      // 键值对结构（如 {类别:"姓氏", 说明:"..."}）→ 转为表格渲染
-      const headers = Object.keys(first);
-      const rows = item.items.map(it => headers.map(h => it[h] || ''));
-      html += renderTable({ headers, rows });
-    } else {
-      // 名句/古诗词卡片
-      html += renderItemsList(item.items);
-    }
-  }
-  html += `</div>`;
-  return html;
-}
 
-function renderWordGroups(wordGroups) {
-  if (!wordGroups || !Array.isArray(wordGroups) || wordGroups.length === 0) return '';
-  let html = '<div class="word-groups">';
-  for (const section of wordGroups) {
-    if (section.letter) {
-      html += `<div class="word-groups__letter">${section.letter}</div>`;
-    }
-    if (section.groups && Array.isArray(section.groups)) {
-      html += '<ul class="word-groups__list">';
-      for (const group of section.groups) {
-        html += `<li class="word-groups__item"><div class="content-text">${formatText(group)}</div></li>`;
+      // 判断第一行是否是表头
+      if (ri === 0 && headers.length === 0) {
+        const ths = tr.querySelectorAll('th');
+        if (ths.length > 0) {
+          headers = cells;
+          return;
+        }
+        // 如果没有 th，但第一行看起来像表头（短文字），也当表头
+        // 对于易错词表格，第一行可能是 "A" 这种字母，不当表头
+        if (cells.length >= 2 && cells.every(c => c.length <= 10)) {
+          // 不确定是表头还是数据，先当数据
+          rows.push(cells);
+        } else {
+          rows.push(cells);
+        }
+      } else {
+        rows.push(cells);
       }
-      html += '</ul>';
-    }
-  }
-  html += '</div>';
-  return html;
-}
+    });
 
-// ==================== 名句/诗词列表渲染 ====================
-function renderItemsList(items) {
-  if (!items || !Array.isArray(items) || items.length === 0) return '';
-  let html = '<div class="items-list">';
-  for (const it of items) {
-    if (!it || typeof it !== 'object') continue;
-    // 结构1：古诗词 {title, author, dynasty, content}
-    if (it.content && typeof it.content === 'string') {
-      html += `<div class="poem-card">`;
-      const meta = [it.author, it.dynasty].filter(Boolean).join(' · ');
-      html += `<div class="poem-card__head"><span class="poem-card__title">${it.title || ''}</span>${meta ? `<span class="poem-card__meta">${meta}</span>` : ''}</div>`;
-      html += `<div class="poem-card__content">${formatText(it.content)}</div>`;
-      html += `</div>`;
-    }
-    // 结构2：文言文/现代文 {source, quotes}
-    else if (it.quotes && Array.isArray(it.quotes) && it.quotes.length > 0) {
-      html += `<div class="poem-card">`;
-      if (it.source) html += `<div class="poem-card__head"><span class="poem-card__title">${it.source}</span></div>`;
-      html += `<ul class="poem-card__quotes">`;
-      for (const q of it.quotes) {
-        if (q) html += `<li>${formatText(q)}</li>`;
+    // 如果没有明确表头，用第一行数据做表头（适用于有标题的表格）
+    if (headers.length === 0 && rows.length > 0) {
+      // 判断第一行是否像表头（如"容易读错的词语1499个"这种）
+      const firstRow = rows[0];
+      if (firstRow.length <= 2 && firstRow[0].length > 3) {
+        // 可能是分类标题，不做表头
+      } else if (firstRow.length >= 2) {
+        headers = firstRow;
+        rows.shift();
       }
-      html += `</ul>`;
-      html += `</div>`;
     }
-  }
-  html += '</div>';
-  return html;
-}
 
-/**
- * 渲染按字母分组的词语列表（如：容易读错的成语）
- * items: [{letter:"A", list:["爱憎(zēng)分明", ...]}, ...]
- */
-function renderLetterList(items) {
-  if (!items || !Array.isArray(items)) return '';
-  let html = '<div class="letter-list">';
-  for (const group of items) {
-    if (!group || !group.list) continue;
-    html += `<div class="letter-group">`;
-    html += `<div class="letter-group__label">${group.letter}</div>`;
-    html += `<div class="letter-group__items">`;
-    for (const word of group.list) {
-      html += `<span class="letter-group__item">${word}</span>`;
-    }
-    html += `</div></div>`;
-  }
-  html += '</div>';
-  return html;
-}
+    if (rows.length === 0) return '';
+    if (headers.length === 0) headers = Array.from({length: rows[0].length}, (_, i) => `列${i+1}`);
 
-/**
- * 渲染编号句子列表（如：巧记多音多义字）
- * items: [{id:1, content:"艾：他在耆艾 ài 之年..."}, ...]
- */
-function renderNumberedSentences(items) {
-  if (!items || !Array.isArray(items)) return '';
-  let html = '<div class="numbered-list">';
-  for (const item of items) {
-    if (!item || !item.content) continue;
-    html += `<div class="numbered-list__item">`;
-    html += `<span class="numbered-list__num">${item.id}</span>`;
-    html += `<span class="numbered-list__content">${formatText(item.content)}</span>`;
-    html += `</div>`;
+    return renderTable({ headers, rows });
+  } catch (e) {
+    console.error('表格解析失败:', e);
+    return '';
   }
-  html += '</div>';
-  return html;
 }
 
 function formatText(text) {
   if (!text) return '';
   if (typeof text !== 'string') return '';
-  // 转义HTML
   text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  // 换行
   text = text.replace(/\n/g, '<br>');
-  // 序号高亮
   text = text.replace(/(①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩)/g, '<span class="highlight-accent">$1</span>');
   return text;
 }
@@ -422,7 +287,6 @@ function formatText(text) {
 function renderTable(table) {
   if (!table || !table.headers || !table.rows || table.rows.length === 0) return '';
 
-  // 判断是否使用紧凑网格模式：2列、第二列为短文本（如拼音/读音）、且数据量大
   const col2MaxLen = table.rows.length > 0
     ? Math.max(...table.rows.map(r => (r[1] || '').length))
     : 0;
@@ -434,10 +298,8 @@ function renderTable(table) {
   let html = `<div id="${tableId}">`;
 
   if (isCompact) {
-    // 紧凑网格模式：响应式自适应列数，适合词语+拼音类大表
     html += `<div class="compact-grid" id="${tableId}-body"></div>`;
   } else {
-    // 传统表格模式
     html += `<table class="data-table"><thead><tr>`;
     for (const h of table.headers) html += `<th>${h}</th>`;
     html += `</tr></thead><tbody id="${tableId}-body">`;
@@ -459,7 +321,6 @@ function renderTable(table) {
 
   html += `</div>`;
 
-  // 存储表格数据供分页使用
   setTimeout(() => {
     window[tableId + '_data'] = table.rows;
     window[tableId + '_pageSize'] = PAGE_SIZE;
@@ -482,7 +343,6 @@ function renderTablePage(tableId, page) {
   if (!body) return;
   let html = '';
   if (isCompact) {
-    // 紧凑网格：每个单元格展示 词语（主）+ 拼音（辅）
     for (let i = start; i < end; i++) {
       const row = rows[i];
       html += `<div class="compact-grid__cell">`;
@@ -510,7 +370,6 @@ function changeTablePage(tableId, totalRows, pageSize, page, dir) {
 
   renderTablePage(tableId, page);
 
-  // 更新按钮状态
   document.querySelectorAll(`[id^="${tableId}-btn-"]`).forEach(b => b.classList.remove('active'));
   const activeBtn = document.getElementById(`${tableId}-btn-${page}`);
   if (activeBtn) activeBtn.classList.add('active');
@@ -565,13 +424,13 @@ function updateBookmarkBtn() {
 
 // ==================== 朗读 ====================
 function toggleReadAloud() {
-  const section = getSection(currentState.bianId, currentState.partId, currentState.sectionIndex);
-  if (!section) return;
-  let text = section.content || '';
-  if (section.subsections) {
-    for (const sub of section.subsections) {
-      if (sub.title) text += ' ' + sub.title;
-      if (sub.content && typeof sub.content === 'string') text += ' ' + sub.content;
+  const nodes = getSectionContent(currentState.bianId, currentState.partId, currentState.sectionIndex);
+  let text = '';
+  for (const node of nodes) {
+    if (node.type === 'heading' || node.type === 'paragraph') {
+      text += ' ' + (node.text || '');
+    } else if (node.type === 'table') {
+      text += ' ' + (node.html || '').replace(/<[^>]+>/g, ' ');
     }
   }
   if (!text.trim()) { showToast('该章节没有可朗读的内容'); return; }
@@ -583,7 +442,6 @@ function toggleReadAloud() {
   }
 }
 
-// 朗读核心函数（重命名避免与data.js冲突）
 function toggleReadAloudCore(text) {
   if (!('speechSynthesis' in window)) { showToast('浏览器不支持语音朗读'); return false; }
   if (window._currentUtterance) {

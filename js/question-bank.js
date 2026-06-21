@@ -117,6 +117,156 @@ function validateQuestion(q) {
 }
 
 // ==================== 数据提取 ====================
+
+/**
+ * 从扁平内容的某个 section 区间提取题目数据
+ * 根据 section 名称判断要提取什么类型的数据
+ */
+function _extractSectionData(bank, sectionName, content, start, end) {
+  const name = sectionName || '';
+  // 收集区间内所有文本和表格
+  const textParts = [];
+  const tableParts = [];
+  for (let i = start + 1; i < end && i < content.length; i++) {
+    const item = content[i];
+    if (item.type === 'paragraph' && item.text) textParts.push(item.text);
+    else if (item.type === 'table' && item.html) tableParts.push(item.html);
+    else if (item.type === 'heading' && item.text) textParts.push(item.text);
+  }
+  const fullText = textParts.join('\n');
+
+  // 字音：必考知识梳理 下的易错词语/成语表格
+  if (name.includes('必考知识梳理') || name.includes('容易读错') || name.includes('多音字')) {
+    // 从表格 HTML 中提取 词语(拼音) 格式
+    for (const html of tableParts) {
+      const cells = _parseTableHtml(html);
+      for (const row of cells) {
+        for (const cell of row) {
+          // 匹配 "词语(拼音)" 或 "词语(pinyin)" 格式
+          const m = cell.match(/(.+?)\(([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜüÜ\s]+)\)/);
+          if (m && m[1] && m[2]) {
+            const word = m[1].trim();
+            const pinyin = m[2].trim();
+            if (word.length >= 2 && word.length <= 8 && pinyin.length > 0) {
+              bank.pinyinWords.push({ word, pinyin });
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 成语/词语：提取成语及释义
+  if (name.includes('必考知识梳理') && _isInPart(content, start, '词语')) {
+    const regex = /([^\s、，（()：。；！？\n]{2,8})（([^）]+)）/g;
+    let m;
+    while ((m = regex.exec(fullText)) !== null) {
+      const idiom = m[1].trim();
+      const meaning = m[2].trim();
+      if (idiom.length >= 2 && idiom.length <= 8 && meaning.length > 2) {
+        if (!bank.idioms.some(i => i.idiom === idiom)) {
+          bank.idioms.push({ idiom, meaning });
+        }
+      }
+    }
+  }
+
+  // 修辞：提取修辞类型和例句
+  if (name.includes('必考知识梳理') && _isInPart(content, start, '修辞')) {
+    const lines = fullText.split('\n');
+    for (const line of lines) {
+      const m = line.match(/^\d+\.\s*(.+?)[:：](.+)/);
+      if (m) {
+        const rname = m[1].trim();
+        const desc = m[2].trim();
+        if (rname.length <= 6 && desc.length > 5) {
+          if (!bank.rhetoricTypes.some(r => r.name === rname)) {
+            bank.rhetoricTypes.push({ name: rname, desc });
+          }
+        }
+      }
+    }
+    // 也从表格提取
+    for (const html of tableParts) {
+      const rows = _parseTableHtml(html);
+      for (const row of rows) {
+        if (row.length >= 2 && row[0] && row[1]) {
+          if (row[0].includes('修辞') || row[0].length <= 4) {
+            if (!bank.rhetoricTypes.some(r => r.name === row[0])) {
+              bank.rhetoricTypes.push({ name: row[0], desc: row[1] });
+            }
+          }
+          // 例句
+          if (row[1] && row[1].length > 5) {
+            bank.rhetoricExamples.push({ type: row[0] || '', example: row[1] });
+          }
+        }
+      }
+    }
+  }
+
+  // 文学常识：提取作家信息
+  if (name.includes('必考知识梳理') && _isInPart(content, start, '文学常识')) {
+    const regex = /([^、，,（）()\s]{2,6})（([^）]+)）/g;
+    let m;
+    while ((m = regex.exec(fullText)) !== null) {
+      const authorName = m[1].trim();
+      const info = m[2].trim();
+      if (authorName.length >= 2 && authorName.length <= 6 && info.length > 1) {
+        if (!bank.authors.some(a => a.name === authorName)) {
+          bank.authors.push({ name: authorName, dynasty: info });
+        }
+      }
+    }
+    // 提取"第一"相关
+    const parts = fullText.split(/[；;。\n]/);
+    for (const p of parts) {
+      const fm = p.match(/第一.+?[——\-](.+?)[。，；]/);
+      if (fm) {
+        const t = fm[1].trim().replace(/[《》]/g, '');
+        if (t.length > 0 && t.length <= 10 && !/\d+项$/.test(t) && !/\d+种$/.test(t) && !/等$/.test(t)) {
+          if (!bank.firstWorks.some(w => w.title === t)) {
+            bank.firstWorks.push({ title: t, desc: p.trim() });
+          }
+        }
+      }
+    }
+  }
+}
+
+/** 解析 HTML 表格为二维数组 */
+function _parseTableHtml(html) {
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const table = doc.querySelector('table');
+    if (!table) return [];
+    const rows = [];
+    table.querySelectorAll('tr').forEach(tr => {
+      const cells = [];
+      tr.querySelectorAll('td,th').forEach(cell => {
+        cells.push(cell.textContent.trim());
+      });
+      if (cells.length > 0) rows.push(cells);
+    });
+    return rows;
+  } catch (e) {
+    return [];
+  }
+}
+
+/** 判断某个位置是否在某个"部分"内 */
+function _isInPart(content, pos, partName) {
+  // 向上找 level 2 heading
+  for (let i = pos; i >= 0; i--) {
+    const item = content[i];
+    if (item && item.type === 'heading' && item.level === 2) {
+      return (item.text || '').includes(partName);
+    }
+  }
+  return false;
+}
+
 function extractQuestionData() {
   if (_questionCache) return _questionCache;
   const data = HANDBOOK_DATA;
@@ -137,154 +287,54 @@ function extractQuestionData() {
     charPairs: []
   };
 
-  const bian1 = data.bians[0];
-
-  // --- 语音 ---
-  for (const sec of bian1.parts[0].sections) {
-    if (sec.section_name === '必考知识梳理') {
-      for (const sub of sec.subsections || []) {
-        if ((sub.title || '').includes('容易读错的词语') && sub.table) {
-          for (const row of sub.table.rows) {
-            if (row[0] && row[1]) bank.pinyinWords.push({ word: row[0], pinyin: row[1] });
-          }
-        }
-        if ((sub.title || '').includes('容易读错的成语') && sub.table) {
-          for (const row of sub.table.rows) {
-            if (row[0] && row[1]) bank.pinyinWords.push({ word: row[0], pinyin: row[1] });
-          }
-        }
-      }
+  // --- 从扁平结构提取数据 ---
+  const content = data.content || [];
+  const getContentText = (start, end) => {
+    const parts = [];
+    for (let i = start; i < end && i < content.length; i++) {
+      const item = content[i];
+      if (item.type === 'paragraph' && item.text) parts.push(item.text);
+      else if (item.type === 'table' && item.html) parts.push(item.html.replace(/<[^>]+>/g, ' '));
+      else if (item.type === 'heading' && item.text) parts.push(item.text);
     }
-    if (sec.section_name === '知识能力解读') {
-      for (const sub of sec.subsections || []) {
-        if ((sub.title || '').includes('误读') && sub.table) {
-          for (const row of sub.table.rows) {
-            if (row[1] && row[2]) {
-              bank.pinyinErrors.push({
-                reason: row[0],
-                correct: row[1],
-                wrong: row[2]
-              });
-            }
-          }
-        }
+    return parts.join('\n');
+  };
+
+  // 定位各部分的区间
+  let inPinyinPart = false, inWordPart = false, inRhetoricPart = false, inLitPart = false;
+  let inPinyinSection = false, inWordSection = false, inRhetoricSection = false, inLitSection = false;
+  let sectionStart = -1, sectionName = '';
+
+  for (let i = 0; i < content.length; i++) {
+    const item = content[i];
+    if (item.type !== 'heading') continue;
+    const text = (item.text || '').trim();
+    const level = item.level;
+
+    // Level 2: 第X部分
+    if (level === 2) {
+      inPinyinPart = text.includes('语音');
+      inWordPart = text.includes('词语');
+      inRhetoricPart = text.includes('修辞') || text.includes('修 辞');
+      inLitPart = text.includes('文学常识');
+    }
+
+    // Level 3: section
+    if (level === 3) {
+      // 处理上一个 section
+      if (sectionStart >= 0) {
+        _extractSectionData(bank, sectionName, content, sectionStart, i);
       }
+      sectionStart = i;
+      sectionName = text;
     }
   }
-
-  // --- 成语 ---
-  for (const sec of bian1.parts[2].sections) {
-    if (sec.section_name === '必考知识梳理') {
-      for (const sub of sec.subsections || []) {
-        const title = sub.title || '';
-        if (title.includes('重点成语')) {
-          const content = sub.content || '';
-          const regex = /([^\s、，（()：。；！？]+)（([^）]+)）/g;
-          let m;
-          while ((m = regex.exec(content)) !== null) {
-            const idiom = m[1].trim();
-            const meaning = m[2].trim();
-            if (idiom.length >= 2 && idiom.length <= 8 && meaning.length > 2) {
-              bank.idioms.push({ idiom, meaning });
-            }
-          }
-          const noParenPart = content.replace(regex, '');
-          const tokens = noParenPart.split(/[、，,]/).map(s => s.trim()).filter(s => {
-            if (s.length < 2 || s.length > 8) return false;
-            if (/[：。；！？排列包括等]/.test(s)) return false;
-            return true;
-          });
-          for (const t of tokens) {
-            if (!bank.idioms.some(i => i.idiom === t)) {
-              bank.idioms.push({ idiom: t, meaning: '' });
-            }
-          }
-        }
-      }
-    }
+  // 处理最后一个 section
+  if (sectionStart >= 0) {
+    _extractSectionData(bank, sectionName, content, sectionStart, content.length);
   }
 
-  // --- 修辞 ---
-  for (const sec of bian1.parts[5].sections) {
-    for (const sub of sec.subsections || []) {
-      if (Array.isArray(sub.content)) {
-        for (const item of sub.content) {
-          if (item && typeof item === 'object' && item.table) {
-            const headers = item.table.headers || [];
-            for (const row of item.table.rows) {
-              if (headers[0] && headers[0].includes('修辞')) {
-                const typeName = row[0];
-                const desc = row[1] || '';
-                if (typeName && desc) {
-                  bank.rhetoricTypes.push({ name: typeName, desc });
-                }
-              }
-              if (headers.includes('典型示例') || headers.includes('例句')) {
-                const exampleIdx = headers.includes('典型示例') ? headers.indexOf('典型示例') : headers.indexOf('例句');
-                const typeIdx = headers.includes('比喻类型') ? headers.indexOf('比喻类型') : 0;
-                if (row[exampleIdx]) {
-                  const examples = row[exampleIdx].split(/[①②③④⑤\n]/).map(s => s.trim()).filter(s => s.length > 5);
-                  for (const ex of examples) {
-                    bank.rhetoricExamples.push({ type: row[typeIdx] || '', example: ex });
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    if (sec.section_name === '必考知识梳理') {
-      for (const sub of sec.subsections || []) {
-        const content = sub.content || '';
-        const lines = content.split('\n');
-        for (const line of lines) {
-          const m = line.match(/^\d+\.\s*(.+?)[:：](.+)/);
-          if (m) {
-            const name = m[1].trim();
-            const desc = m[2].trim();
-            if (name.length <= 4 && desc.length > 5) {
-              if (!bank.rhetoricTypes.some(r => r.name === name)) {
-                bank.rhetoricTypes.push({ name, desc });
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // --- 文学常识 ---
-  for (const sec of bian1.parts[6].sections) {
-    if (sec.section_name === '必考知识梳理') {
-      for (const sub of sec.subsections || []) {
-        const title = sub.title || '';
-        const content = sub.content || '';
-        if (title.includes('古代作家')) {
-          const regex = /([^、，,（）()]+)（([^）]+)）/g;
-          let m;
-          while ((m = regex.exec(content)) !== null) {
-            bank.authors.push({ name: m[1].trim(), dynasty: m[2].trim() });
-          }
-        }
-        if (title.includes('第一')) {
-          const parts = content.split(/[；;。\n]/);
-          for (const p of parts) {
-            const m = p.match(/第一.+?——(.+?)$/);
-            if (m) {
-              const t = m[1].trim().replace(/[《》]/g, '');
-              // 过滤垃圾数据：长度1-10，不含数字+项/种等
-              if (t.length > 0 && t.length <= 10 && !/\d+项$/.test(t) && !/\d+种$/.test(t) && !/等$/.test(t)) {
-                bank.firstWorks.push({ title: t, desc: p.trim() });
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // --- 名句 ---
+  // --- 名句（保留硬编码，质量好） ---
   bank.quotes = [
     { quote: '海内存知己，天涯若比邻', author: '王勃', source: '《送杜少府之任蜀州》' },
     { quote: '落霞与孤鹜齐飞，秋水共长天一色', author: '王勃', source: '《滕王阁序》' },
