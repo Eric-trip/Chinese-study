@@ -18,6 +18,7 @@ img { max-width: 100%; }
 
 /* ---------- CSS Variables ---------- */
 :root {
+  --nav-height: 64px;
   --color-primary: #2C5F5D;
   --color-primary-dark: #1A403E;
   --color-primary-light: #3A7573;
@@ -272,6 +273,9 @@ img { max-width: 100%; }
 .table-pagination__info { font-size: 0.82rem; color: var(--color-text-tertiary); margin: 0 var(--space-sm); }
 .table-pagination__dots { font-size: 0.82rem; color: var(--color-text-tertiary); padding: 0 4px; user-select: none; }
 
+/* 滚动锚点偏移（兼容桌面/手机，由 --nav-height 控制） */
+.voice-section-wrapper { scroll-margin-top: var(--nav-height); }
+
 /* Letter Group List (按字母分组的词语列表，如容易读错的成语) */
 .letter-list { margin-top: var(--space-md); }
 .letter-group { margin-bottom: var(--space-lg); }
@@ -355,6 +359,7 @@ img { max-width: 100%; }
   line-height: 1.6;
 }
 @media (max-width: 768px) {
+  :root { --nav-height: 56px; }
   .compact-grid { gap: 4px 8px; }
   .compact-tag { font-size: 0.85rem; padding: 2px 6px; }
   .data-table { font-size: 0.78rem; }

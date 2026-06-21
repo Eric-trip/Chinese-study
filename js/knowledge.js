@@ -574,12 +574,8 @@ function switchMnemonicPage(sectionKey, page) {
   if (panel) {
     panel.innerHTML = panelHtml;
     requestAnimationFrame(() => {
-      // 滚动到子章节标题，让标题完整显示
       const wrapper = panel.closest('.voice-section-wrapper');
-      const heading = wrapper ? wrapper.querySelector('h2,h3') : null;
-      const target = heading || panel;
-      const top = target.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: 'smooth' });
+      if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 
@@ -659,12 +655,8 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   if (panel) {
     panel.innerHTML = panelHtml;
     requestAnimationFrame(() => {
-      // 滚动到子章节标题，让标题完整显示
       const wrapper = panel.closest('.voice-section-wrapper');
-      const heading = wrapper ? wrapper.querySelector('h2,h3') : null;
-      const target = heading || panel;
-      const top = target.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: 'smooth' });
+      if (wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   }
 
