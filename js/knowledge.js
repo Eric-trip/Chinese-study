@@ -451,10 +451,33 @@ function renderVoiceItems(sectionKey, items, totalCount) {
     </div>`;
     setTimeout(() => switchVoicePage(sectionKey, 1), 0);
   } else {
-    // mnemonics: 原样渲染，数据自带编号（格式不统一，不拆分）
+    // mnemonics: 以冒号为界，剔除前面乱码序号，统一重新编号
     html += `<div class="mnemonic-list">`;
+    const CIRCLED = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
+      '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳',
+      '㉑','㉒','㉓','㉔','㉕','㉖','㉗','㉘','㉙','㉚',
+      '㉛','㉜','㉝','㉞','㉟',
+      '㊱','㊲','㊳','㊴','㊵','㊶','㊷','㊸','㊹','㊺',
+      '㊻','㊼','㊽','㊾','㊿'];
+    function circledNum(n) { return (n >= 1 && n <= 50) ? CIRCLED[n] : (n + '.'); }
+    let idx = 0;
     for (const item of items) {
-      html += `<div class="mnemonic-list__item">${formatInline(escHtml(item.trim()))}</div>`;
+      let text = item.trim();
+      // 找冒号，检查前一个字符是否是汉字
+      const colonPos = text.indexOf('：') !== -1 ? text.indexOf('：') : text.indexOf(':');
+      if (colonPos > 0) {
+        const charBefore = text[colonPos - 1];
+        if (/[\u4e00-\u9fff]/.test(charBefore)) {
+          // 去掉冒号前所有乱码序号，保留"汉字+冒号+后面内容"
+          const rest = text.slice(colonPos - 1);
+          text = circledNum(++idx) + ' ' + rest;
+          html += `<div class="mnemonic-list__item">${formatInline(escHtml(text))}</div>`;
+          continue;
+        }
+      }
+      // 无法识别格式，原样输出并编号
+      text = circledNum(++idx) + ' ' + text;
+      html += `<div class="mnemonic-list__item">${formatInline(escHtml(text))}</div>`;
     }
     html += `</div>`;
   }
