@@ -1,15 +1,14 @@
 /**
  * knowledge.js - 知识页逻辑（适配扁平数据结构）
  *
- * 导航树结构：
- *   编（第X编）→ 部分（第X部分）→ 章节（课标解读/中考热点/知识能力解读/...）
- * 章节判定：level 3 的标准标题（课标解读/中考热点/知识能力解读/方法技巧归纳/必考知识梳理）
- * 其他 level 3（如"示例："）及 level 4+ 不单独做导航节点，作为章节内部内容渲染
+ * 导航树：编 → 部分 → 章节（标准 level 3 标题）
+ * 内容渲染：遍历 section 区间内的扁平节点，按 type 分发渲染
+ *   - heading: 按 level 渲染为不同层级标题
+ *   - paragraph: 渲染为段落，支持 ①②③ 高亮
+ *   - table: HTML 表格直接渲染，大数据表格分页
+ *   - image: 跳过
  */
 let currentState = { bianId: 1, partId: 1, sectionIndex: 0 };
-let currentTablePage = 1;
-
-// STANDARD_SECTIONS 定义在 data.js 中，这里不重复声明
 
 document.addEventListener('DOMContentLoaded', async () => {
   const data = await loadHandbookData();
@@ -51,7 +50,6 @@ function renderSidebar() {
           <span>${part.name}</span>
         </div>
         <div class="tree-children" id="part-${bian.id}-${part.id}" style="${isCurrentPart ? '' : 'display:none'}">`;
-      // 只显示标准章节
       part.sections.forEach((sec, si) => {
         if (!STANDARD_SECTIONS.some(s => sec.name.includes(s))) return;
         const isCurrent = bian.id === currentState.bianId && part.id === currentState.partId && si === currentState.sectionIndex;
@@ -104,12 +102,10 @@ function toggleTree(id, event) {
 // ==================== 加载内容 ====================
 function loadSection(bianId, partId, sectionIndex) {
   currentState = { bianId, partId, sectionIndex };
-  currentTablePage = 1;
 
   const navPath = getNavPath(bianId, partId, sectionIndex);
   if (!navPath.partName) return;
 
-  // 面包屑
   document.getElementById('breadcrumb').innerHTML = `
     <a class="breadcrumb__item" href="index.html">首页</a>
     <span class="breadcrumb__sep">/</span>
@@ -119,7 +115,6 @@ function loadSection(bianId, partId, sectionIndex) {
     <span class="breadcrumb__sep">/</span>
     <span class="breadcrumb__item" style="color:var(--color-text-secondary);">${navPath.sectionName}</span>
   `;
-
   document.getElementById('content-title').textContent = navPath.partName;
   document.getElementById('content-section-name').textContent = navPath.sectionName;
 
@@ -127,10 +122,9 @@ function loadSection(bianId, partId, sectionIndex) {
   document.querySelectorAll('.tree-node--part').forEach(n => n.classList.remove('tree-node--active'));
   document.querySelectorAll('.tree-node--bian').forEach(n => n.classList.remove('tree-node--active'));
 
-  // 渲染内容
   const contentEl = document.getElementById('section-content');
   const nodes = getSectionContent(bianId, partId, sectionIndex);
-  contentEl.innerHTML = renderFlatContent(nodes);
+  contentEl.innerHTML = renderContent(nodes);
 
   renderNoteArea();
   updateBookmarkBtn();
@@ -145,194 +139,240 @@ function loadSection(bianId, partId, sectionIndex) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ==================== 内容渲染（扁平结构）====================
+// ==================== 内容渲染核心 ====================
 /**
- * 遍历扁平内容节点，按 type 分发渲染
- * - heading: 按 level 渲染为 h3/h4/h5
- * - paragraph: 渲染为段落文本
- * - table: 解析 HTML 表格，转为分页表格渲染
- * - image: 跳过（不渲染）
+ * 遍历 section 区间内的扁平节点，按 type 分发渲染
+ * 渲染规则：
+ *   - heading level 4: 子标题（如"一、容易读错的词语"）
+ *   - heading level 5-6: 小标题
+ *   - heading level 3: 区分标题（如"示例："），作为子标题
+ *   - paragraph: 段落文本，支持 ①②③ 高亮、数字编号高亮
+ *   - table: 解析 HTML 表格，判断布局后渲染
+ *   - image: 跳过
  */
-function renderFlatContent(nodes) {
+function renderContent(nodes) {
   if (!nodes || nodes.length === 0) {
     return '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
   }
 
   let html = '';
+  let tableSeq = 0;
 
   for (const node of nodes) {
     if (!node || !node.type) continue;
 
-    switch (node.type) {
-      case 'heading': {
-        const level = node.level || 4;
-        const text = formatText(node.text || '');
-        if (level <= 3) {
-          html += `<h3 class="subsection__title">${text}</h3>`;
-        } else if (level === 4) {
-          html += `<h4 class="sub-item__title">${text}</h4>`;
-        } else {
-          html += `<h5 class="content-subtitle">${text}</h5>`;
-        }
-        break;
-      }
+    if (node.type === 'heading') {
+      const level = node.level || 4;
+      const text = escHtml(node.text || '');
+      if (!text.trim()) continue;
 
-      case 'paragraph': {
-        const text = node.text || '';
-        if (text.trim()) {
-          html += `<div class="content-text">${formatText(text)}</div>`;
-        }
-        break;
+      if (level <= 3) {
+        // section 内部的 level 3 标题（如"示例："），作为子标题
+        html += `<h4 class="sub-item__title">${formatInline(text)}</h4>`;
+      } else if (level === 4) {
+        html += `<h4 class="sub-item__title">${formatInline(text)}</h4>`;
+      } else {
+        html += `<h5 class="content-subtitle">${formatInline(text)}</h5>`;
       }
-
-      case 'table': {
-        html += renderHtmlTable(node.html || '');
-        break;
-      }
-
-      case 'image': {
-        // 跳过，不渲染
-        break;
-      }
+      continue;
     }
+
+    if (node.type === 'paragraph') {
+      const text = (node.text || '').trim();
+      if (!text) continue;
+      html += `<div class="content-text">${formatInline(escHtml(text))}</div>`;
+      continue;
+    }
+
+    if (node.type === 'table') {
+      tableSeq++;
+      html += renderTable(node.html || '', tableSeq);
+      continue;
+    }
+
+    // image: 跳过
   }
 
   return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
 }
 
+// ==================== 表格渲染 ====================
 /**
- * 将 HTML 表格字符串解析为 {headers, rows} 然后复用已有的分页表格渲染
+ * 解析 HTML 表格字符串，判断类型后渲染：
+ * 1. 紧凑网格表格（2列、多行、每格短文本）→ 网格布局 + 分页
+ * 2. 普通表格（有表头或列数>2）→ 标准表格 + 分页
+ * 3. 分类标题行（如"A"、"B"字母分隔）→ 合并到数据中作为分隔
  */
-function renderHtmlTable(htmlStr) {
+function renderTable(htmlStr, seq) {
   if (!htmlStr) return '';
+
+  let rows;
   try {
     const parser = new DOMParser();
-    const doc = parser.parseFromString('<table>' + htmlStr.replace(/^<table>|<\/table>$/g, '') + '</table>', 'text/html');
+    const doc = parser.parseFromString(htmlStr, 'text/html');
     const tableEl = doc.querySelector('table');
     if (!tableEl) return '';
 
-    const rows = [];
-    let headers = [];
-
-    const trList = tableEl.querySelectorAll('tr');
-    trList.forEach((tr, ri) => {
+    rows = [];
+    tableEl.querySelectorAll('tr').forEach(tr => {
       const cells = [];
       tr.querySelectorAll('td,th').forEach(cell => {
         cells.push(cell.textContent.trim());
       });
-      if (cells.length === 0) return;
-
-      // 第一行如果是 th，当表头
-      const ths = tr.querySelectorAll('th');
-      if (ri === 0 && ths.length > 0) {
-        headers = cells;
-        return;
-      }
-      rows.push(cells);
+      if (cells.length > 0) rows.push(cells);
     });
-
-    // 如果没有明确表头，尝试用第一行
-    if (headers.length === 0 && rows.length > 0) {
-      const firstRow = rows[0];
-      // 如果第一行像分类标题（如"容易读错的词语1499个"），不当表头
-      if (firstRow.length <= 2 && firstRow[0].length > 3 && firstRow.every(c => c.length > 2)) {
-        // 分类标题行，保留为数据
-      } else if (firstRow.length >= 2 && firstRow.every(c => c.length <= 10)) {
-        headers = firstRow;
-        rows.shift();
-      }
-    }
-
-    if (rows.length === 0) return '';
-    if (headers.length === 0) headers = Array.from({length: rows[0].length}, (_, i) => `列${i+1}`);
-
-    return renderTable({ headers, rows });
   } catch (e) {
-    console.error('表格解析失败:', e);
     return '';
   }
-}
 
-function formatText(text) {
-  if (!text) return '';
-  if (typeof text !== 'string') return '';
-  text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  text = text.replace(/\n/g, '<br>');
-  text = text.replace(/(①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩)/g, '<span class="highlight-accent">$1</span>');
-  return text;
-}
+  if (rows.length === 0) return '';
 
-function renderTable(table) {
-  if (!table || !table.headers || !table.rows || table.rows.length === 0) return '';
+  // 判断是否有 th 表头
+  let headers = [];
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlStr, 'text/html');
+    const firstTr = doc.querySelector('tr');
+    if (firstTr) {
+      const ths = firstTr.querySelectorAll('th');
+      if (ths.length > 0) {
+        ths.forEach(th => headers.push(th.textContent.trim()));
+        rows.shift(); // 去掉表头行
+      }
+    }
+  } catch {}
 
-  const col2MaxLen = table.rows.length > 0
-    ? Math.max(...table.rows.map(r => (r[1] || '').length))
-    : 0;
-  const isCompact = table.headers.length === 2 && table.rows.length > 30 && col2MaxLen <= 20;
-  const PAGE_SIZE = isCompact ? 60 : 15;
-  const totalPages = Math.ceil(table.rows.length / PAGE_SIZE);
-  const tableId = 'table-' + Math.random().toString(36).substr(2, 9);
+  // 判断表格类型
+  const colCount = rows[0] ? rows[0].length : 0;
+  const hasHeaders = headers.length > 0;
 
-  let html = `<div id="${tableId}">`;
-
-  if (isCompact) {
-    html += `<div class="compact-grid" id="${tableId}-body"></div>`;
-  } else {
-    html += `<table class="data-table"><thead><tr>`;
-    for (const h of table.headers) html += `<th>${h}</th>`;
-    html += `</tr></thead><tbody id="${tableId}-body">`;
-    html += `</tbody></table>`;
+  // 紧凑网格：2列、行数多、每格文本短
+  if (!hasHeaders && colCount === 2 && rows.length > 20) {
+    const maxCellLen = Math.max(...rows.flat().map(c => (c || '').length));
+    if (maxCellLen <= 25) {
+      return renderCompactGrid(rows, seq);
+    }
   }
+
+  // 普通表格
+  if (!hasHeaders) {
+    // 尝试从第一行推断表头
+    if (rows.length > 1 && rows[0].every(c => c.length <= 8 && c.length > 0)) {
+      headers = rows[0];
+      rows = rows.slice(1);
+    } else {
+      headers = Array.from({ length: colCount }, (_, i) => '');
+    }
+  }
+
+  if (rows.length === 0) return '';
+  return renderDataTable(headers, rows, seq);
+}
+
+/** 紧凑网格渲染（适合易错词、成语等短文本表格） */
+function renderCompactGrid(rows, seq) {
+  const PAGE_SIZE = 60;
+  const totalPages = Math.ceil(rows.length / PAGE_SIZE);
+  const id = `tbl${seq}`;
+
+  let html = `<div id="${id}" class="table-wrapper">`;
+  html += `<div class="compact-grid" id="${id}-body"></div>`;
 
   if (totalPages > 1) {
-    html += `<div class="table-pagination">
-      <button onclick="changeTablePage('${tableId}', ${table.rows.length}, ${PAGE_SIZE}, 1, 'prev')" id="${tableId}-prev" disabled>上一页</button>`;
+    html += `<div class="table-pagination">`;
+    html += `<button onclick="turnPage('${id}',-1)" id="${id}-prev" disabled>上一页</button>`;
     for (let p = 1; p <= totalPages; p++) {
-      html += `<button onclick="changeTablePage('${tableId}', ${table.rows.length}, ${PAGE_SIZE}, ${p})" class="${p === 1 ? 'active' : ''}" id="${tableId}-btn-${p}">${p}</button>`;
+      html += `<button onclick="goPage('${id}',${p})" class="${p === 1 ? 'active' : ''}" id="${id}-btn-${p}">${p}</button>`;
     }
-    html += `<button onclick="changeTablePage('${tableId}', ${table.rows.length}, ${PAGE_SIZE}, ${totalPages}, 'next')" id="${tableId}-next">下一页</button>`;
-    html += `<span class="table-pagination__info">共 ${table.rows.length} 条</span>`;
+    html += `<button onclick="turnPage('${id}',1)" id="${id}-next">下一页</button>`;
+    html += `<span class="table-pagination__info">共 ${rows.length} 条</span>`;
     html += `</div>`;
   } else {
-    html += `<div class="table-pagination__info" style="text-align:center;padding:8px;">共 ${table.rows.length} 条</div>`;
+    html += `<div class="table-pagination__info" style="text-align:center;padding:8px;">共 ${rows.length} 条</div>`;
   }
-
   html += `</div>`;
 
+  // 存数据
   setTimeout(() => {
-    window[tableId + '_data'] = table.rows;
-    window[tableId + '_pageSize'] = PAGE_SIZE;
-    window[tableId + '_totalPages'] = totalPages;
-    window[tableId + '_compact'] = isCompact;
-    renderTablePage(tableId, 1);
+    window[id + '_data'] = rows;
+    window[id + '_pageSize'] = PAGE_SIZE;
+    window[id + '_totalPages'] = totalPages;
+    window[id + '_page'] = 1;
+    window[id + '_type'] = 'compact';
+    paintPage(id, 1);
   }, 0);
 
   return html;
 }
 
-function renderTablePage(tableId, page) {
-  const rows = window[tableId + '_data'];
-  const pageSize = window[tableId + '_pageSize'];
-  const isCompact = window[tableId + '_compact'];
+/** 标准表格渲染 */
+function renderDataTable(headers, rows, seq) {
+  const PAGE_SIZE = 15;
+  const totalPages = Math.ceil(rows.length / PAGE_SIZE);
+  const id = `tbl${seq}`;
+
+  let html = `<div id="${id}" class="table-wrapper">`;
+  html += `<table class="data-table"><thead><tr>`;
+  for (const h of headers) html += `<th>${escHtml(h)}</th>`;
+  html += `</tr></thead><tbody id="${id}-body"></tbody></table>`;
+
+  if (totalPages > 1) {
+    html += `<div class="table-pagination">`;
+    html += `<button onclick="turnPage('${id}',-1)" id="${id}-prev" disabled>上一页</button>`;
+    for (let p = 1; p <= totalPages; p++) {
+      html += `<button onclick="goPage('${id}',${p})" class="${p === 1 ? 'active' : ''}" id="${id}-btn-${p}">${p}</button>`;
+    }
+    html += `<button onclick="turnPage('${id}',1)" id="${id}-next">下一页</button>`;
+    html += `<span class="table-pagination__info">共 ${rows.length} 条</span>`;
+    html += `</div>`;
+  } else {
+    html += `<div class="table-pagination__info" style="text-align:center;padding:8px;">共 ${rows.length} 条</div>`;
+  }
+  html += `</div>`;
+
+  setTimeout(() => {
+    window[id + '_data'] = rows;
+    window[id + '_pageSize'] = PAGE_SIZE;
+    window[id + '_totalPages'] = totalPages;
+    window[id + '_page'] = 1;
+    window[id + '_type'] = 'table';
+    paintPage(id, 1);
+  }, 0);
+
+  return html;
+}
+
+/** 渲染某一页的数据 */
+function paintPage(id, page) {
+  const rows = window[id + '_data'];
+  const pageSize = window[id + '_pageSize'];
+  const type = window[id + '_type'];
   if (!rows) return;
+
   const start = (page - 1) * pageSize;
   const end = Math.min(start + pageSize, rows.length);
-  const body = document.getElementById(tableId + '-body');
+  const body = document.getElementById(id + '-body');
   if (!body) return;
+
   let html = '';
-  if (isCompact) {
+  if (type === 'compact') {
     for (let i = start; i < end; i++) {
       const row = rows[i];
-      html += `<div class="compact-grid__cell">`;
-      html += `<span class="compact-grid__main">${row[0] || ''}</span>`;
-      if (row[1]) html += `<span class="compact-grid__sub">${row[1]}</span>`;
-      html += `</div>`;
+      // 如果是分类标题行（如"A"、"B"），跨列显示
+      if (row.length === 2 && (!row[0] || !row[1]) && (row[0] || row[1]).length <= 3) {
+        html += `<div class="compact-grid__cell compact-grid__cell--header">${row[0] || row[1]}</div>`;
+      } else {
+        html += `<div class="compact-grid__cell">`;
+        html += `<span class="compact-grid__main">${escHtml(row[0] || '')}</span>`;
+        if (row[1]) html += `<span class="compact-grid__sub">${escHtml(row[1])}</span>`;
+        html += `</div>`;
+      }
     }
   } else {
     for (let i = start; i < end; i++) {
       html += '<tr>';
       for (const cell of rows[i]) {
-        html += `<td>${cell || ''}</td>`;
+        html += `<td>${escHtml(cell || '')}</td>`;
       }
       html += '</tr>';
     }
@@ -340,22 +380,43 @@ function renderTablePage(tableId, page) {
   body.innerHTML = html;
 }
 
-function changeTablePage(tableId, totalRows, pageSize, page, dir) {
-  const totalPages = window[tableId + '_totalPages'];
-  if (dir === 'prev') page = Math.max(1, currentTablePage - 1);
-  if (dir === 'next') page = Math.min(totalPages, currentTablePage + 1);
-  currentTablePage = page;
+function turnPage(id, dir) {
+  const totalPages = window[id + '_totalPages'];
+  let page = window[id + '_page'];
+  page = dir > 0 ? Math.min(totalPages, page + 1) : Math.max(1, page - 1);
+  goPage(id, page);
+}
 
-  renderTablePage(tableId, page);
+function goPage(id, page) {
+  window[id + '_page'] = page;
+  paintPage(id, page);
 
-  document.querySelectorAll(`[id^="${tableId}-btn-"]`).forEach(b => b.classList.remove('active'));
-  const activeBtn = document.getElementById(`${tableId}-btn-${page}`);
-  if (activeBtn) activeBtn.classList.add('active');
+  document.querySelectorAll(`[id^="${id}-btn-"]`).forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`${id}-btn-${page}`);
+  if (btn) btn.classList.add('active');
 
-  const prevBtn = document.getElementById(`${tableId}-prev`);
-  const nextBtn = document.getElementById(`${tableId}-next`);
-  if (prevBtn) prevBtn.disabled = page <= 1;
-  if (nextBtn) nextBtn.disabled = page >= totalPages;
+  const prev = document.getElementById(`${id}-prev`);
+  const next = document.getElementById(`${id}-next`);
+  if (prev) prev.disabled = page <= 1;
+  if (next) next.disabled = page >= window[id + '_totalPages'];
+}
+
+// ==================== 文本工具 ====================
+/** HTML 转义 */
+function escHtml(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/** 行内格式化：圆圈数字高亮、换行 */
+function formatInline(text) {
+  if (!text) return '';
+  text = text.replace(/\n/g, '<br>');
+  text = text.replace(/(①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩)/g, '<span class="highlight-accent">$1</span>');
+  return text;
 }
 
 // ==================== 笔记区 ====================
@@ -394,9 +455,7 @@ function updateBookmarkBtn() {
   const btn = document.getElementById('btn-bookmark');
   if (btn) {
     btn.classList.toggle('toolbar__btn--active', isBookmarked);
-    btn.innerHTML = isBookmarked
-      ? '<span>⭐</span> 已收藏'
-      : '<span>☆</span> 收藏';
+    btn.innerHTML = isBookmarked ? '<span>⭐</span> 已收藏' : '<span>☆</span> 收藏';
   }
 }
 
@@ -457,9 +516,7 @@ function copySectionLink() {
 // ==================== 前后导航 ====================
 function renderNavButtons() {
   const { bianId, partId, sectionIndex } = currentState;
-  // 获取该 part 下所有 section（包括非标准的）
   const sections = getSections(bianId, partId);
-  // 但只在前后的标准 section 之间导航
   const standardIndices = sections
     .map((s, i) => ({ s, i }))
     .filter(({ s }) => STANDARD_SECTIONS.some(name => s.name.includes(name)))
@@ -470,12 +527,8 @@ function renderNavButtons() {
   const nextIdx = currentPos >= 0 && currentPos < standardIndices.length - 1 ? standardIndices[currentPos + 1] : null;
 
   document.getElementById('nav-buttons').innerHTML = `
-    <button class="nav-btn" ${prevIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">
-      ← 上一节
-    </button>
-    <button class="nav-btn" ${nextIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">
-      下一节 →
-    </button>
+    <button class="nav-btn" ${prevIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>
+    <button class="nav-btn" ${nextIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">下一节 →</button>
   `;
 }
 
@@ -483,13 +536,9 @@ function renderNavButtons() {
 function filterSidebar(query) {
   const nodes = document.querySelectorAll('.tree-node--section, .tree-node--part');
   const q = query.trim().toLowerCase();
-  if (!q) {
-    nodes.forEach(n => n.style.display = '');
-    return;
-  }
+  if (!q) { nodes.forEach(n => n.style.display = ''); return; }
   nodes.forEach(n => {
-    const text = n.textContent.toLowerCase();
-    n.style.display = text.includes(q) ? '' : 'none';
+    n.style.display = n.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
 }
 
