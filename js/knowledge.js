@@ -404,14 +404,68 @@ function renderCleanVoiceSection(sectionKey, heading) {
     setTimeout(() => switchVoiceLetter(sectionKey, availableLetters[0] || ''), 0);
 
   } else if (sec.items) {
-    // 段落类型（polyphones, mnemonics）：逐段渲染
-    for (const item of sec.items) {
-      html += `<div class="content-text">${formatInline(escHtml(item))}</div>`;
-    }
-    html += `<div class="content-text" style="margin-top:8px; color:var(--color-text-secondary); font-size:0.85rem;">
-      共 ${sec.totalCount} 条
-    </div>`;
+    // 段落类型渲染为紧凑卡片
+    html += renderVoiceItems(sectionKey, sec.items, sec.totalCount);
   }
+
+  return html;
+}
+
+/** 渲染 polyphones / mnemonics 的 items 为紧凑卡片 */
+function renderVoiceItems(sectionKey, items, totalCount) {
+  if (!items || items.length === 0) return '';
+
+  // polyphones: 将同一个字的①②③行合并为一个卡片
+  // mnemonics: 每条独立编号，直接使用编号
+  const isPolyphones = sectionKey === 'polyphones';
+  let html = '';
+
+  if (isPolyphones) {
+    // 合并同一字符的多行
+    const merged = [];
+    let current = null;
+    for (const item of items) {
+      const text = item.trim();
+      const m = text.match(/^([\u4e00-\u9fff])\s+①/);
+      if (m) {
+        if (current) merged.push(current);
+        current = { char: m[1], lines: [text] };
+      } else if (current) {
+        current.lines.push(text);
+      } else {
+        merged.push({ char: '', lines: [text] });
+      }
+    }
+    if (current) merged.push(current);
+
+    html += `<div class="polyphone-grid">`;
+    for (const item of merged) {
+      html += `<div class="polyphone-card">`;
+      for (const line of item.lines) {
+        html += `<div class="polyphone-card__line">${formatInline(escHtml(line))}</div>`;
+      }
+      html += `</div>`;
+    }
+    html += `</div>`;
+  } else {
+    // mnemonics: 编号列表
+    html += `<div class="numbered-list">`;
+    for (const item of items) {
+      const text = item.trim();
+      const numMatch = text.match(/^(①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩|\d+[①②③])/);
+      const num = numMatch ? numMatch[1] : '';
+      const content = num ? text.slice(num.length).replace(/^[：:]/, '') : text;
+      html += `<div class="numbered-list__item">`;
+      if (num) html += `<span class="numbered-list__num">${escHtml(num)}</span>`;
+      html += `<span class="numbered-list__content">${formatInline(escHtml(content))}</span>`;
+      html += `</div>`;
+    }
+    html += `</div>`;
+  }
+
+  html += `<div class="content-text" style="margin-top:12px; color:var(--color-text-secondary); font-size:0.85rem;">
+    共 ${totalCount} 条
+  </div>`;
 
   return html;
 }
