@@ -626,8 +626,8 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   // 渲染当前页
   const infoText = `${letter} 组 · ${words.length} 个词语${totalPages > 1 ? ` · 第 ${currentPage}/${totalPages} 页` : ''}`;
   let panelHtml = `<table class="data-table" style="margin-bottom:12px;">`;
-  panelHtml += `<thead><tr><th colspan="${COLS}" style="text-align:center;background:var(--color-primary-lighter);color:var(--color-primary);font-weight:700;font-size:1rem;">
-    <span style="font-weight:400;font-size:0.85rem;color:var(--color-text-secondary);">${escHtml(infoText)}</span> &nbsp;
+  panelHtml += `<thead><tr><th colspan="${COLS}" style="position:relative;text-align:center;background:var(--color-primary-lighter);color:var(--color-primary);font-weight:700;font-size:1rem;padding:10px 12px;">
+    <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-weight:400;font-size:0.82rem;color:var(--color-text-secondary);white-space:nowrap;">${escHtml(infoText)}</span>
     <span style="font-size:1.15rem;">${escHtml(letter)}</span>
   </th></tr></thead>`;
   panelHtml += `<tbody>`;
