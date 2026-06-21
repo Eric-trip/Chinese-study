@@ -31,6 +31,12 @@ async function loadHandbookData() {
   }
 }
 
+// 标准章节名称（level 3 中只认这些作为 section）
+const STANDARD_SECTIONS = [
+  '课标解读', '中考热点', '知识能力解读', '方法技巧归纳', '必考知识梳理',
+  '附录', '知识要点'
+];
+
 // ==================== 章节索引构建 ====================
 /**
  * 遍历扁平 content 数组，构建层级索引：
@@ -77,22 +83,22 @@ function buildIndex() {
         currentBian.start = i;
         currentBian.end = content.length;
         currentBian.parts = [];
-        const idx = _index.bians.indexOf(existing);
-        if (idx > 0) {
-          _index.bians[idx - 1].end = i;
-        }
+        // 不更新前一个 bian 的 end（目录区连续标题不代表内容边界）
+        currentPart = null;
+        currentSection = null;
+        partId = 0;
+        sectionIdx = 0;
+        continue;
       } else {
         currentBian = { id: _index.bians.length + 1, name: text, parts: [], start: i, end: content.length };
         _index.bians.push(currentBian);
-        if (_index.bians.length > 1) {
-          _index.bians[_index.bians.length - 2].end = i;
-        }
+        // 不更新前一个 bian 的 end（目录区连续标题不代表内容边界）
+        currentPart = null;
+        currentSection = null;
+        partId = 0;
+        sectionIdx = 0;
+        continue;
       }
-      currentPart = null;
-      currentSection = null;
-      partId = 0;
-      sectionIdx = 0;
-      continue;
     }
 
     if (!currentBian) continue;
@@ -111,9 +117,21 @@ function buildIndex() {
 
       // 如果当前 bian 不对，切换
       if (isReadingPart && currentBian.name.includes('第一编')) {
+        // 关闭第一编
+        currentBian.end = i;
+        for (const p of currentBian.parts) {
+          if (p.end > i) p.end = i;
+          for (const s of p.sections) if (s.end > i) s.end = i;
+        }
         const readingBian = _index.bians.find(b => b.name.includes('第二编'));
         if (readingBian) { currentBian = readingBian; partId = currentBian.parts.length; }
       } else if (isWritingPart && !currentBian.name.includes('第三编')) {
+        // 关闭当前编
+        currentBian.end = i;
+        for (const p of currentBian.parts) {
+          if (p.end > i) p.end = i;
+          for (const s of p.sections) if (s.end > i) s.end = i;
+        }
         const writingBian = _index.bians.find(b => b.name.includes('第三编'));
         if (writingBian) { currentBian = writingBian; partId = currentBian.parts.length; }
       } else if (!isReadingPart && !isWritingPart && !currentBian.name.includes('第一编')) {
@@ -135,8 +153,10 @@ function buildIndex() {
 
     if (!currentPart) continue;
 
-    // Level 3: section（课标解读、中考热点、知识能力解读、方法技巧归纳、必考知识梳理等）
-    if (level === 3) {
+    // Level 3: section
+    // 只认标准章节名（课标解读/中考热点/知识能力解读/方法技巧归纳/必考知识梳理等）
+    // 非标准 level 3（如"示例："）及 level 4+ 不做 section，归入前一个 section 的内容范围
+    if (level === 3 && STANDARD_SECTIONS.some(s => text.includes(s))) {
       // 关闭上一个 section
       if (currentSection) {
         currentSection.end = i;

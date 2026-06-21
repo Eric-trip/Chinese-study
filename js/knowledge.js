@@ -1,8 +1,15 @@
 /**
  * knowledge.js - 知识页逻辑（适配扁平数据结构）
+ *
+ * 导航树结构：
+ *   编（第X编）→ 部分（第X部分）→ 章节（课标解读/中考热点/知识能力解读/...）
+ * 章节判定：level 3 的标准标题（课标解读/中考热点/知识能力解读/方法技巧归纳/必考知识梳理）
+ * 其他 level 3（如"示例："）及 level 4+ 不单独做导航节点，作为章节内部内容渲染
  */
 let currentState = { bianId: 1, partId: 1, sectionIndex: 0 };
 let currentTablePage = 1;
+
+// STANDARD_SECTIONS 定义在 data.js 中，这里不重复声明
 
 document.addEventListener('DOMContentLoaded', async () => {
   const data = await loadHandbookData();
@@ -44,7 +51,9 @@ function renderSidebar() {
           <span>${part.name}</span>
         </div>
         <div class="tree-children" id="part-${bian.id}-${part.id}" style="${isCurrentPart ? '' : 'display:none'}">`;
+      // 只显示标准章节
       part.sections.forEach((sec, si) => {
+        if (!STANDARD_SECTIONS.some(s => sec.name.includes(s))) return;
         const isCurrent = bian.id === currentState.bianId && part.id === currentState.partId && si === currentState.sectionIndex;
         html += `<div class="tree-node tree-node--section${isCurrent ? ' tree-node--active' : ''}" onclick="loadSection(${bian.id}, ${part.id}, ${si}); event.stopPropagation();">
           ${sec.name}
@@ -139,7 +148,7 @@ function loadSection(bianId, partId, sectionIndex) {
 // ==================== 内容渲染（扁平结构）====================
 /**
  * 遍历扁平内容节点，按 type 分发渲染
- * - heading: 按 level 渲染为 h4/h5/h6
+ * - heading: 按 level 渲染为 h3/h4/h5
  * - paragraph: 渲染为段落文本
  * - table: 解析 HTML 表格，转为分页表格渲染
  * - image: 跳过（不渲染）
@@ -150,14 +159,12 @@ function renderFlatContent(nodes) {
   }
 
   let html = '';
-  let inList = false;
 
   for (const node of nodes) {
     if (!node || !node.type) continue;
 
     switch (node.type) {
       case 'heading': {
-        if (inList) { html += '</ul>'; inList = false; }
         const level = node.level || 4;
         const text = formatText(node.text || '');
         if (level <= 3) {
@@ -171,7 +178,6 @@ function renderFlatContent(nodes) {
       }
 
       case 'paragraph': {
-        if (inList) { html += '</ul>'; inList = false; }
         const text = node.text || '';
         if (text.trim()) {
           html += `<div class="content-text">${formatText(text)}</div>`;
@@ -180,7 +186,6 @@ function renderFlatContent(nodes) {
       }
 
       case 'table': {
-        if (inList) { html += '</ul>'; inList = false; }
         html += renderHtmlTable(node.html || '');
         break;
       }
@@ -191,7 +196,6 @@ function renderFlatContent(nodes) {
       }
     }
   }
-  if (inList) html += '</ul>';
 
   return html || '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
 }
@@ -218,48 +222,22 @@ function renderHtmlTable(htmlStr) {
       });
       if (cells.length === 0) return;
 
-      // 第一行如果只有一个 cell 且是字母（如 "A"），当作分类标题
-      if (ri === 0 && cells.length <= 2) {
-        // 判断是否是表头（如 "A" "B" 等字母）
-        if (cells.length === 1 && /^[A-Z]$/.test(cells[0])) {
-          // 字母分组标题，不做表头
-          rows.push(cells);
-          return;
-        }
-        if (cells.length === 2 && cells[0] === '') {
-          // 第一列空，第二列是字母
-          rows.push(cells);
-          return;
-        }
+      // 第一行如果是 th，当表头
+      const ths = tr.querySelectorAll('th');
+      if (ri === 0 && ths.length > 0) {
+        headers = cells;
+        return;
       }
-
-      // 判断第一行是否是表头
-      if (ri === 0 && headers.length === 0) {
-        const ths = tr.querySelectorAll('th');
-        if (ths.length > 0) {
-          headers = cells;
-          return;
-        }
-        // 如果没有 th，但第一行看起来像表头（短文字），也当表头
-        // 对于易错词表格，第一行可能是 "A" 这种字母，不当表头
-        if (cells.length >= 2 && cells.every(c => c.length <= 10)) {
-          // 不确定是表头还是数据，先当数据
-          rows.push(cells);
-        } else {
-          rows.push(cells);
-        }
-      } else {
-        rows.push(cells);
-      }
+      rows.push(cells);
     });
 
-    // 如果没有明确表头，用第一行数据做表头（适用于有标题的表格）
+    // 如果没有明确表头，尝试用第一行
     if (headers.length === 0 && rows.length > 0) {
-      // 判断第一行是否像表头（如"容易读错的词语1499个"这种）
       const firstRow = rows[0];
-      if (firstRow.length <= 2 && firstRow[0].length > 3) {
-        // 可能是分类标题，不做表头
-      } else if (firstRow.length >= 2) {
+      // 如果第一行像分类标题（如"容易读错的词语1499个"），不当表头
+      if (firstRow.length <= 2 && firstRow[0].length > 3 && firstRow.every(c => c.length > 2)) {
+        // 分类标题行，保留为数据
+      } else if (firstRow.length >= 2 && firstRow.every(c => c.length <= 10)) {
         headers = firstRow;
         rows.shift();
       }
@@ -479,15 +457,23 @@ function copySectionLink() {
 // ==================== 前后导航 ====================
 function renderNavButtons() {
   const { bianId, partId, sectionIndex } = currentState;
+  // 获取该 part 下所有 section（包括非标准的）
   const sections = getSections(bianId, partId);
-  const prevSec = sectionIndex > 0 ? sectionIndex - 1 : null;
-  const nextSec = sectionIndex < sections.length - 1 ? sectionIndex + 1 : null;
+  // 但只在前后的标准 section 之间导航
+  const standardIndices = sections
+    .map((s, i) => ({ s, i }))
+    .filter(({ s }) => STANDARD_SECTIONS.some(name => s.name.includes(name)))
+    .map(({ i }) => i);
+
+  const currentPos = standardIndices.indexOf(sectionIndex);
+  const prevIdx = currentPos > 0 ? standardIndices[currentPos - 1] : null;
+  const nextIdx = currentPos >= 0 && currentPos < standardIndices.length - 1 ? standardIndices[currentPos + 1] : null;
 
   document.getElementById('nav-buttons').innerHTML = `
-    <button class="nav-btn" ${prevSec === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${prevSec})">
+    <button class="nav-btn" ${prevIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">
       ← 上一节
     </button>
-    <button class="nav-btn" ${nextSec === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${nextSec})">
+    <button class="nav-btn" ${nextIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">
       下一节 →
     </button>
   `;
