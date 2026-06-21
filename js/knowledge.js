@@ -451,17 +451,10 @@ function renderVoiceItems(sectionKey, items, totalCount) {
     </div>`;
     setTimeout(() => switchVoicePage(sectionKey, 1), 0);
   } else {
-    // mnemonics: 编号列表
-    html += `<div class="numbered-list">`;
+    // mnemonics: 原样渲染，数据自带编号（格式不统一，不拆分）
+    html += `<div class="mnemonic-list">`;
     for (const item of items) {
-      const text = item.trim();
-      const numMatch = text.match(/^(①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩|\d+[①②③])/);
-      const num = numMatch ? numMatch[1] : '';
-      const content = num ? text.slice(num.length).replace(/^[：:]/, '') : text;
-      html += `<div class="numbered-list__item">`;
-      if (num) html += `<span class="numbered-list__num">${escHtml(num)}</span>`;
-      html += `<span class="numbered-list__content">${formatInline(escHtml(content))}</span>`;
-      html += `</div>`;
+      html += `<div class="mnemonic-list__item">${formatInline(escHtml(item.trim()))}</div>`;
     }
     html += `</div>`;
   }
