@@ -613,7 +613,7 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   }
 
   const words = groups[letter];
-  const PAGE_SIZE = 48; // 12行×4列
+  const PAGE_SIZE = 40; // 10行×4列
   const totalPages = Math.ceil(words.length / PAGE_SIZE);
   const currentPage = Math.max(1, Math.min(page, totalPages));
   const start = (currentPage - 1) * PAGE_SIZE;
