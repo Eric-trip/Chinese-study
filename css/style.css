@@ -220,7 +220,8 @@ img { max-width: 100%; }
   padding-left: 12px; border-left: 3px solid var(--color-primary);
 }
 .sub-item { margin-bottom: var(--space-md); padding: var(--space-md); background: var(--color-surface-alt); border-radius: var(--radius-sm); }
-.sub-item__title { font-weight: 600; color: var(--color-text); margin-bottom: 6px; scroll-margin-top: var(--nav-height); }
+.sub-item__title { font-family: 'Noto Serif SC', serif; font-size: 1.1rem; font-weight: 700; color: var(--color-primary); margin: var(--space-md) 0 6px; text-indent: 2em; scroll-margin-top: var(--nav-height); }
+.content-subtitle { font-family: 'Noto Serif SC', serif; font-size: 1.05rem; font-weight: 600; color: var(--color-text); margin: var(--space-sm) 0 4px; text-indent: 2em; }
 
 /* Poem / Quote cards (名句名段) */
 .items-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-md); margin-top: var(--space-md); }
