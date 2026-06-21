@@ -454,30 +454,13 @@ function renderVoiceItems(sectionKey, items, totalCount) {
     </div>`;
     setTimeout(() => switchVoicePage(sectionKey, 1), 0);
   } else {
-    // mnemonics: 统一彩色圆圈序号，不分页
-    const CIRCLED = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
-      '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳',
-      '㉑','㉒','㉓','㉔','㉕','㉖','㉗','㉘','㉙','㉚',
-      '㉛','㉜','㉝','㉞','㉟',
-      '㊱','㊲','㊳','㊴','㊵','㊶','㊷','㊸','㊹','㊺',
-      '㊻','㊼','㊽','㊾','㊿'];
-    function circledNum(n) { return (n >= 1 && n <= 50) ? CIRCLED[n] : (n + '.'); }
-    html += `<div class="mnemonic-list">`;
-    let idx = 0;
-    for (const item of items) {
-      let text = item.trim();
-      const colonPos = text.indexOf('：') !== -1 ? text.indexOf('：') : text.indexOf(':');
-      if (colonPos > 0 && /[\u4e00-\u9fff]/.test(text[colonPos - 1])) {
-        text = text.slice(colonPos - 1);
-      }
-      idx++;
-      html += `<div class="mnemonic-list__item">`;
-      html += `<span class="mnemonic-num">${circledNum(idx)}</span>`;
-      html += `<span class="mnemonic-content">${formatInline(escHtml(text))}</span>`;
-      html += `</div>`;
-    }
-    html += `</div>`;
+    // mnemonics: 分页渲染，12条/页
+    const uniqueId = `voice-${sectionKey}`;
+    window[`__voiceData_${sectionKey}`] = { items, totalCount, uniqueId };
+    html += `<div class="mnemonic-list" id="${uniqueId}-panel"></div>`;
+    html += `<div class="voice-pagination" id="${uniqueId}-pager"></div>`;
     html += `<div class="content-text" style="margin-top:8px;color:var(--color-text-secondary);font-size:0.85rem;">共 ${totalCount} 条</div>`;
+    setTimeout(() => switchMnemonicPage(sectionKey, 1), 0);
   }
 
   return html;
@@ -547,13 +530,66 @@ function switchVoicePage(sectionKey, page) {
   // 渲染分页器
   const pager = document.getElementById(`${uniqueId}-pager`);
   if (pager && totalPages > 1) {
-    let pagerHtml = `<span class="voice-pagination__info">${currentPage} / ${totalPages}</span>`;
-    pagerHtml += `<div class="voice-pagination__btns">`;
+    let pagerHtml = `<div class="voice-pagination__btns">`;
     pagerHtml += `<button onclick="switchVoicePage('${sectionKey}',${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
     for (let p = 1; p <= totalPages; p++) {
       pagerHtml += `<button class="${p === currentPage ? 'active' : ''}" onclick="switchVoicePage('${sectionKey}',${p})">${p}</button>`;
     }
     pagerHtml += `<button onclick="switchVoicePage('${sectionKey}',${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>`;
+    pagerHtml += `</div>`;
+    pager.innerHTML = pagerHtml;
+  }
+}
+
+/** 巧记多音多义字分页切换（12条/页） */
+function switchMnemonicPage(sectionKey, page) {
+  const voiceDataKey = `__voiceData_${sectionKey}`;
+  const data = window[voiceDataKey];
+  if (!data) return;
+  const { items, totalCount, uniqueId } = data;
+  const PAGE_SIZE = 12;
+  const totalPages = Math.ceil(items.length / PAGE_SIZE);
+  const currentPage = Math.max(1, Math.min(page, totalPages));
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const end = Math.min(start + PAGE_SIZE, items.length);
+
+  let panelHtml = '';
+  let globalIdx = start;
+  for (let i = start; i < end; i++) {
+    const item = items[i];
+    let text = item.trim();
+    const colonPos = text.indexOf('：') !== -1 ? text.indexOf('：') : text.indexOf(':');
+    if (colonPos > 0 && /[\u4e00-\u9fff]/.test(text[colonPos - 1])) {
+      text = text.slice(colonPos - 1);
+    }
+    globalIdx++;
+    panelHtml += `<div class="mnemonic-list__item">`;
+    panelHtml += `<span class="mnemonic-num">${globalIdx}</span>`;
+    panelHtml += `<span class="mnemonic-content">${formatInline(escHtml(text))}</span>`;
+    panelHtml += `</div>`;
+  }
+
+  const panel = document.getElementById(`${uniqueId}-panel`);
+  if (panel) {
+    panel.innerHTML = panelHtml;
+    requestAnimationFrame(() => {
+      const wrapper = panel.closest('.voice-section-wrapper');
+      if (wrapper) {
+        const heading = wrapper.previousElementSibling;
+        const target = (heading && heading.tagName === 'H4') ? heading : wrapper;
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  const pager = document.getElementById(`${uniqueId}-pager`);
+  if (pager && totalPages > 1) {
+    let pagerHtml = `<div class="voice-pagination__btns">`;
+    pagerHtml += `<button onclick="switchMnemonicPage('${sectionKey}',${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
+    for (let p = 1; p <= totalPages; p++) {
+      pagerHtml += `<button class="${p === currentPage ? 'active' : ''}" onclick="switchMnemonicPage('${sectionKey}',${p})">${p}</button>`;
+    }
+    pagerHtml += `<button onclick="switchMnemonicPage('${sectionKey}',${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>下一页</button>`;
     pagerHtml += `</div>`;
     pager.innerHTML = pagerHtml;
   }
@@ -610,7 +646,6 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   // 分页器（超过1页才显示）
   if (totalPages > 1) {
     panelHtml += `<div class="voice-pagination">`;
-    panelHtml += `<span class="voice-pagination__info">${currentPage} / ${totalPages}</span>`;
     panelHtml += `<div class="voice-pagination__btns">`;
     panelHtml += `<button onclick="switchVoiceLetter('${sectionKey}','${letter}',${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>上一页</button>`;
     for (let p = 1; p <= totalPages; p++) {
