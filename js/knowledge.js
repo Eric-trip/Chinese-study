@@ -518,9 +518,11 @@ function switchVoicePage(sectionKey, page) {
   const panel = document.getElementById(`${uniqueId}-panel`);
   if (panel) {
     panel.innerHTML = panelHtml;
-    // 滚动到表格上方
-    const top = panel.getBoundingClientRect().top + window.scrollY - 64;
-    window.scrollTo({ top, behavior: 'smooth' });
+    // 延迟一帧，待浏览器完成重排后再滚动
+    requestAnimationFrame(() => {
+      const top = panel.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   }
 
   // 渲染分页器
@@ -571,8 +573,10 @@ function switchMnemonicPage(sectionKey, page) {
   const panel = document.getElementById(`${uniqueId}-panel`);
   if (panel) {
     panel.innerHTML = panelHtml;
-    const top = panel.getBoundingClientRect().top + window.scrollY - 64;
-    window.scrollTo({ top, behavior: 'smooth' });
+    requestAnimationFrame(() => {
+      const top = panel.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   }
 
   // 渲染分页器
@@ -650,9 +654,10 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
   const panel = document.getElementById(`${uniqueId}-panel`);
   if (panel) {
     panel.innerHTML = panelHtml;
-    // 翻页后滚动到该组词语最上方（避开导航栏）
-    const top = panel.getBoundingClientRect().top + window.scrollY - 64;
-    window.scrollTo({ top, behavior: 'smooth' });
+    requestAnimationFrame(() => {
+      const top = panel.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
   }
 
   // 更新统计信息
