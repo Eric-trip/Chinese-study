@@ -426,14 +426,17 @@ function renderVoiceItems(sectionKey, items, totalCount) {
     let current = null;
     for (const item of items) {
       const text = item.trim();
-      const m = text.match(/^([\u4e00-\u9fff])\s+①/);
+      const m = text.match(/^([\u4e00-\u9fff])\s*①/);
       if (m) {
         if (current) merged.push(current);
-        current = { char: m[1], pronunciations: [parsePolyphoneLine(text)] };
+        // 去掉行首汉字后再解析，避免 words 中出现重复字
+        const rest = text.replace(/^[\u4e00-\u9fff]\s*/, '');
+        current = { char: m[1], pronunciations: parseAllPronunciations(rest) };
       } else if (current) {
-        current.pronunciations.push(parsePolyphoneLine(text));
+        // 续行可能包含多个读音（如 "②ào 拗口③niù 执拗"）
+        current.pronunciations.push(...parseAllPronunciations(text));
       } else {
-        merged.push({ char: '', pronunciations: [parsePolyphoneLine(text)] });
+        merged.push({ char: '', pronunciations: parseAllPronunciations(text) });
       }
     }
     if (current) merged.push(current);
@@ -470,13 +473,23 @@ function renderVoiceItems(sectionKey, items, totalCount) {
   return html;
 }
 
-/** 解析多音字行："阿 ①ā 阿长 阿哥" → {num:①, pinyin:ā, words:阿长 阿哥} */
-function parsePolyphoneLine(text) {
-  const m = text.match(/([①②③④⑤⑥⑦⑧⑨⑩]+)([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛ]+)\s+(.+)$/);
-  if (m) {
-    return { num: m[1], pinyin: m[2], words: m[3] };
+/** 从一行文本中提取所有读音（支持一行多个读音，如 "②ào 拗口③niù 执拗"）
+ *  返回 [{num, pinyin, words}, ...]
+ */
+function parseAllPronunciations(text) {
+  const results = [];
+  // 按 ①②③④⑤⑥⑦⑧⑨⑩ 分割
+  const parts = text.split(/(?=[①②③④⑤⑥⑦⑧⑨⑩])/);
+  for (const part of parts) {
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    // 匹配 "①ā 阿长 阿哥" 或 "②ái挨打"（无空格）
+    const m = trimmed.match(/^([①②③④⑤⑥⑦⑧⑨⑩]+)\s*([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛ]+)\s*(.+)$/);
+    if (m) {
+      results.push({ num: m[1], pinyin: m[2], words: m[3].trim() });
+    }
   }
-  return { num: '', pinyin: '', words: text };
+  return results;
 }
 
 /** 多音字分页切换 */
