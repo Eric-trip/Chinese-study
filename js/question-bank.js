@@ -13,14 +13,21 @@
  * 7. 判断题正/误比例随机，不能永远出同一方向
  */
 
+// 题型定义 — 保留旧名称兼容已有错题记录
+// 新注册表见 data/question-types.json + js/question-registry.js
+// 旧名 → 新名映射：idiom→word_usage, quote→recitation
 const QUESTION_TYPES = {
-  pinyin:    { name: '字音',   icon: '🔊', color: 'pinyin' },
-  char:      { name: '字形',   icon: '✏️', color: 'char' },
-  idiom:     { name: '成语',   icon: '📖', color: 'idiom' },
-  rhetoric:  { name: '修辞',   icon: '🎨', color: 'rhetoric' },
-  literature:{ name: '文学常识', icon: '📚', color: 'literature' },
-  quote:     { name: '名句默写', icon: '📝', color: 'quote' },
-  sentence:  { name: '病句',   icon: '🔧', color: 'sentence' }
+  pinyin:     { name: '字音',     icon: '🔊', color: 'pinyin',     _newId: 'pinyin' },
+  char:       { name: '字形',     icon: '✏️', color: 'char',       _newId: 'char' },
+  word_usage: { name: '词语运用', icon: '💭', color: 'word_usage', _newId: 'word_usage' },
+  // 旧名兼容：idiom 仍可被错题记录引用
+  idiom:      { name: '词语运用', icon: '💭', color: 'word_usage', _newId: 'word_usage' },
+  rhetoric:   { name: '修辞手法', icon: '🎨', color: 'rhetoric',   _newId: 'rhetoric' },
+  literature: { name: '文学常识', icon: '📚', color: 'literature', _newId: 'literature' },
+  // 旧名兼容：quote 仍可被错题记录引用
+  recitation: { name: '古诗文默写', icon: '📝', color: 'recitation', _newId: 'recitation' },
+  quote:      { name: '古诗文默写', icon: '📝', color: 'recitation', _newId: 'recitation' },
+  sentence:   { name: '病句辨析', icon: '🔧', color: 'sentence',   _newId: 'sentence' }
 };
 
 const DIFFICULTIES = {
@@ -1072,6 +1079,11 @@ const GENERATORS = {
     };
   }
 };
+
+// ==================== 生成器别名（新题型ID → 旧生成器）====================
+// 让新题型 ID 也能找到对应的生成器
+GENERATORS.word_usage = GENERATORS.idiom;
+GENERATORS.recitation = GENERATORS.quote;
 
 // ==================== 生成假拼音（用于字音判断题干扰）====================
 function _fakeSimilarPinyin(correctPinyin) {

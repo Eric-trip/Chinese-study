@@ -1,11 +1,16 @@
 /**
  * practice.js - 刷题练习逻辑
+ * 支持模式：按知识点 / 随机抽题 / 模拟测试 / 错题重练 / 真题套卷
+ * 支持筛选：题型 / 难度 / 学期 / 来源
  */
 let practiceState = {
-  mode: 'topic',       // topic | random | mock | error
+  mode: 'topic',       // topic | random | mock | error | exam_paper
   type: 'all',
   difficulty: 'mixed',
   count: 10,
+  semester: 'all',     // all | g7s1 | g7s2 | g8s1 | g8s2 | g9s1 | g9s2
+  source: 'all',       // all | exam | auto
+  paperId: null,       // 真题套卷模式选中的试卷ID
   questions: [],
   currentIdx: 0,
   answers: [],
@@ -15,6 +20,7 @@ let practiceState = {
 document.addEventListener('DOMContentLoaded', async () => {
   const data = await loadHandbookData();
   if (!data) { document.getElementById('practice-main').innerHTML = '<div class="loading"><div class="loading__spinner"></div>数据加载失败</div>'; return; }
+  await loadAllQuestionData();
   setupNavbar();
   renderModeCards();
   renderConfig();
@@ -24,10 +30,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ==================== 模式选择 ====================
 function renderModeCards() {
   const modes = [
-    { id: 'topic', icon: '📌', title: '按知识点练习', desc: '选择题型专项训练' },
-    { id: 'random', icon: '🎲', title: '随机抽题', desc: '随机出题综合练习' },
-    { id: 'mock', icon: '📝', title: '模拟测试', desc: '限时完整测试' },
-    { id: 'error', icon: '❌', title: '错题重练', desc: '复习做错的题目' }
+    { id: 'topic',     icon: '📌', title: '按知识点练习', desc: '选择题型专项训练' },
+    { id: 'random',    icon: '🎲', title: '随机抽题',     desc: '随机出题综合练习' },
+    { id: 'mock',      icon: '📝', title: '模拟测试',     desc: '限时完整测试' },
+    { id: 'error',     icon: '❌', title: '错题重练',     desc: '复习做错的题目' },
+    { id: 'exam_paper',icon: '📋', title: '真题套卷',     desc: '按真题原卷顺序做题' }
   ];
   document.getElementById('mode-cards').innerHTML = modes.map(m => `
     <div class="mode-card${m.id === practiceState.mode ? ' mode-card--active' : ''}" onclick="selectMode('${m.id}')">
@@ -40,6 +47,7 @@ function renderModeCards() {
 
 function selectMode(mode) {
   practiceState.mode = mode;
+  practiceState.paperId = null;
   renderModeCards();
   renderConfig();
 }
@@ -65,16 +73,36 @@ function renderConfig() {
     return;
   }
 
+  // 真题套卷模式：选择试卷
+  if (mode === 'exam_paper') {
+    const papers = getExamPapers();
+    if (papers.length === 0) {
+      html = `<div style="text-align:center;padding:var(--space-md);">
+        <p style="color:var(--color-text-tertiary);">真题库中还没有试卷</p>
+        <p style="color:var(--color-text-tertiary);font-size:0.88rem;">等真题录入后会在这里显示</p>
+      </div>`;
+      panel.innerHTML = html;
+      document.getElementById('btn-start').style.display = 'none';
+      return;
+    }
+    html += `<div class="config-row"><span class="config-label">试卷</span><div class="chip-group" style="flex-wrap:wrap;">`;
+    for (const p of papers) {
+      const qCount = getPaperQuestions(p.id).length;
+      html += `<span class="chip${practiceState.paperId === p.id ? ' chip--active' : ''}" onclick="selectPaper('${p.id}', this)">
+        ${p.year}·${p.region} ${qCount > 0 ? `(${qCount}题)` : ''}
+      </span>`;
+    }
+    html += `</div></div>`;
+    panel.innerHTML = html;
+    document.getElementById('btn-start').style.display = practiceState.paperId ? '' : 'none';
+    return;
+  }
+
   document.getElementById('btn-start').style.display = '';
 
   // 题型选择（topic模式显示，random/mock可选all）
   if (mode === 'topic') {
-    html += `<div class="config-row"><span class="config-label">题型</span><div class="chip-group">`;
-    html += `<span class="chip chip--active" onclick="selectType('all', this)">全部</span>`;
-    for (const [key, val] of Object.entries(QUESTION_TYPES)) {
-      html += `<span class="chip" onclick="selectType('${key}', this)">${val.icon} ${val.name}</span>`;
-    }
-    html += `</div></div>`;
+    html += renderTypeSelector();
   }
 
   // 难度
@@ -84,6 +112,12 @@ function renderConfig() {
     html += `<span class="chip chip--${val.color}" onclick="selectDifficulty('${key}', this)">${val.name}</span>`;
   }
   html += `</div></div>`;
+
+  // 来源筛选
+  html += renderSourceSelector();
+
+  // 学期筛选
+  html += renderSemesterSelector();
 
   // 数量
   const counts = mode === 'mock' ? [20, 30, 50] : [5, 10, 15, 20];
@@ -102,6 +136,49 @@ function renderConfig() {
   panel.innerHTML = html;
 }
 
+/** 渲染题型选择器 — 按板块分组 */
+function renderTypeSelector() {
+  const categories = getAllCategories();
+  const typesByCat = getActiveTypesByCategory();
+  let html = `<div class="config-row"><span class="config-label">题型</span><div class="chip-group" style="flex-wrap:wrap;">`;
+  html += `<span class="chip chip--active" onclick="selectType('all', this)">全部</span>`;
+  for (const [catId, cat] of Object.entries(categories)) {
+    const types = typesByCat[catId];
+    if (!types || types.length === 0) continue;
+    for (const t of types) {
+      html += `<span class="chip" onclick="selectType('${t.id}', this)">${t.icon} ${t.name}</span>`;
+    }
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+/** 渲染来源选择器 */
+function renderSourceSelector() {
+  const sources = getAllSources();
+  let html = `<div class="config-row"><span class="config-label">来源</span><div class="chip-group">`;
+  html += `<span class="chip chip--active" onclick="selectSource('all', this)">全部</span>`;
+  for (const [key, val] of Object.entries(sources)) {
+    html += `<span class="chip" onclick="selectSource('${key}', this)">${val.icon} ${val.name}</span>`;
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+/** 渲染学期选择器 */
+function renderSemesterSelector() {
+  const semesters = getAllSemesters();
+  let html = `<div class="config-row"><span class="config-label">学期</span><div class="chip-group" style="flex-wrap:wrap;">`;
+  html += `<span class="chip chip--active" onclick="selectSemester('all', this)">全部</span>`;
+  const orderedKeys = ['g7s1','g7s2','g8s1','g8s2','g9s1','g9s2'];
+  for (const key of orderedKeys) {
+    if (!semesters[key]) continue;
+    html += `<span class="chip" onclick="selectSemester('${key}', this)">${semesters[key].name}</span>`;
+  }
+  html += `</div></div>`;
+  return html;
+}
+
 function selectType(type, el) {
   practiceState.type = type;
   el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('chip--active'));
@@ -118,16 +195,51 @@ function selectCount(c, el) {
   el.classList.add('chip--active');
   if (practiceState.mode === 'mock') renderConfig();
 }
+function selectSource(s, el) {
+  practiceState.source = s;
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('chip--active'));
+  el.classList.add('chip--active');
+}
+function selectSemester(s, el) {
+  practiceState.semester = s;
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('chip--active'));
+  el.classList.add('chip--active');
+}
+function selectPaper(paperId, el) {
+  practiceState.paperId = paperId;
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('chip--active'));
+  el.classList.add('chip--active');
+  document.getElementById('btn-start').style.display = '';
+}
 
 // ==================== 开始练习 ====================
 function startPractice() {
-  practiceState.questions = generateQuestions(
-    practiceState.type,
-    practiceState.difficulty,
-    practiceState.count
-  );
+  // 真题套卷模式
+  if (practiceState.mode === 'exam_paper' && practiceState.paperId) {
+    practiceState.questions = getPaperQuestions(practiceState.paperId);
+    if (practiceState.questions.length === 0) {
+      showToast('该试卷暂无题目');
+      return;
+    }
+    practiceState.currentIdx = 0;
+    practiceState.answers = [];
+    practiceState.startTime = Date.now();
+    showQuizView();
+    renderQuestion();
+    return;
+  }
+
+  // 统一出题接口（合并真题+自主题）
+  practiceState.questions = generateUnifiedQuestions({
+    type: practiceState.type,
+    difficulty: practiceState.difficulty,
+    count: practiceState.count,
+    source: practiceState.source,
+    semester: practiceState.semester
+  });
+
   if (practiceState.questions.length === 0) {
-    showToast('题目生成失败，请重试');
+    showToast('题目生成失败，请重试或调整筛选条件');
     return;
   }
   practiceState.currentIdx = 0;
@@ -196,7 +308,8 @@ function renderQuestion() {
   const q = practiceState.questions[practiceState.currentIdx];
   if (!q) return;
 
-  const typeInfo = QUESTION_TYPES[q.type] || { name: q.type, color: 'pinyin' };
+  // 兼容新旧题型ID
+  const typeInfo = getTypeInfoCompat(q.type) || QUESTION_TYPES[q.type] || { name: q.type, icon: '❓', color: 'pinyin' };
   const diffInfo = DIFFICULTIES[q.difficulty] || { name: '', color: 'easy' };
   const total = practiceState.questions.length;
   const idx = practiceState.currentIdx;
@@ -208,9 +321,15 @@ function renderQuestion() {
 
   // 题目卡片
   let html = `<div class="question-card fade-in">
-    <span class="question-card__type question-card__type--${typeInfo.color}">${typeInfo.icon || ''} ${typeInfo.name}</span>
-    <span class="question-card__difficulty question-card__difficulty--${diffInfo.color}">${diffInfo.name}</span>
-    <div class="question-card__text">${formatQuestionText(q.question)}</div>`;
+    <span class="question-card__type question-card__type--${typeInfo.color || typeInfo._newId || 'pinyin'}">${typeInfo.icon || ''} ${typeInfo.name}</span>
+    <span class="question-card__difficulty question-card__difficulty--${diffInfo.color}">${diffInfo.name}</span>`;
+
+  // 真题来源标记
+  if (q.source === 'exam' && q.exam_info) {
+    html += `<span class="question-card__tag">📋 ${q.exam_info.year}·${q.exam_info.region}</span>`;
+  }
+
+  html += `<div class="question-card__text">${formatQuestionText(q.question)}</div>`;
 
   if (q.isFill) {
     // 填空题
@@ -355,7 +474,7 @@ function finishPractice() {
   practiceState.questions.forEach((q, i) => {
     const ans = practiceState.answers[i];
     if (!ans?.correct) {
-      const typeInfo = QUESTION_TYPES[q.type] || { name: q.type };
+      const typeInfo = getTypeInfoCompat(q.type) || QUESTION_TYPES[q.type] || { name: q.type };
       reviewHtml += `<div class="error-item">
         <div class="error-item__header">
           <span class="error-item__type">${typeInfo.name}</span>

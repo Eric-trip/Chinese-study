@@ -428,6 +428,14 @@ img { max-width: 100%; }
 .question-card__type--literature { background: #F3E5F5; color: #7B1FA2; }
 .question-card__type--quote { background: #E0F2F1; color: #00695C; }
 .question-card__type--sentence { background: #FFF3E0; color: #E65100; }
+.question-card__type--word_usage { background: var(--color-gold-lighter); color: #8B6914; }
+.question-card__type--pinyin_char { background: #F3E5F5; color: #6A1B9A; }
+.question-card__type--punctuation { background: #E0F7FA; color: #00838F; }
+.question-card__type--culture { background: #FFF8E1; color: #BF360C; }
+.question-card__type--recitation { background: #E0F2F1; color: #00695C; }
+.question-card__type--classics_reading { background: #FCE4EC; color: #AD1457; }
+.question-card__type--language_practice { background: #E8EAF6; color: #283593; }
+.question-card__tag { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; margin-left: 6px; background: #ECEFF1; color: #455A64; }
 .question-card__difficulty { float: right; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; }
 .question-card__difficulty--easy { background: #E8F5E9; color: #2E7D32; }
 .question-card__difficulty--medium { background: #FFF3E0; color: #E65100; }

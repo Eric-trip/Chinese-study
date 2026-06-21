@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "categories": {
+    "basic":       { "name": "积累与运用", "icon": "📝" },
+    "ancient":     { "name": "古诗文阅读", "icon": "📜" },
+    "modern":      { "name": "现代文阅读", "icon": "📖" },
+    "classics":    { "name": "名著阅读",   "icon": "📕" },
+    "integrated":  { "name": "综合性学习", "icon": "🔗" },
+    "writing":     { "name": "写作",       "icon": "✍️" }
+  },
+  "types": {
+    "pinyin": {
+      "name": "字音", "icon": "🔊", "category": "basic",
+      "knowledge_part": "语音",
+      "forms": ["choice", "judge"],
+      "auto_generate": true,
+      "active": true
+    },
+    "char": {
+      "name": "字形", "icon": "✏️", "category": "basic",
+      "knowledge_part": "汉字",
+      "forms": ["choice", "judge"],
+      "auto_generate": true,
+      "active": true
+    },
+    "pinyin_char": {
+      "name": "字音字形综合", "icon": "🔤", "category": "basic",
+      "knowledge_part": "语音+汉字",
+      "forms": ["choice"],
+      "auto_generate": false,
+      "active": true
+    },
+    "word_usage": {
+      "name": "词语运用", "icon": "💭", "category": "basic",
+      "knowledge_part": "词语",
+      "forms": ["choice", "judge"],
+      "auto_generate": true,
+      "active": true
+    },
+    "sentence": {
+      "name": "病句辨析", "icon": "🔧", "category": "basic",
+      "knowledge_part": "句子",
+      "forms": ["choice", "judge"],
+      "auto_generate": true,
+      "active": true
+    },
+    "punctuation": {
+      "name": "标点符号", "icon": "标注", "category": "basic",
+      "knowledge_part": "标点符号",
+      "forms": ["choice"],
+      "auto_generate": false,
+      "active": true
+    },
+    "rhetoric": {
+      "name": "修辞手法", "icon": "🎨", "category": "basic",
+      "knowledge_part": "修辞",
+      "forms": ["choice", "judge"],
+      "auto_generate": true,
+      "active": true
+    },
+    "literature": {
+      "name": "文学常识", "icon": "📚", "category": "basic",
+      "knowledge_part": "文学常识",
+      "forms": ["choice", "judge"],
+      "auto_generate": true,
+      "active": true
+    },
+    "culture": {
+      "name": "文化常识", "icon": "🏯", "category": "basic",
+      "knowledge_part": "文化常识",
+      "forms": ["choice", "judge"],
+      "auto_generate": false,
+      "active": true
+    },
+    "recitation": {
+      "name": "古诗文默写", "icon": "📝", "category": "basic",
+      "knowledge_part": "名句名段",
+      "forms": ["fill", "choice"],
+      "auto_generate": true,
+      "active": true
+    },
+    "classics_reading": {
+      "name": "名著阅读", "icon": "📕", "category": "classics",
+      "knowledge_part": "名著导读",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": true
+    },
+    "language_practice": {
+      "name": "语言运用", "icon": "💬", "category": "integrated",
+      "knowledge_part": "口语交际及语言运用",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": true
+    },
+    "reading_poetry": {
+      "name": "古诗词鉴赏", "icon": "🌸", "category": "ancient",
+      "knowledge_part": "古代诗歌鉴赏",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": false
+    },
+    "reading_classical": {
+      "name": "文言文阅读", "icon": "📜", "category": "ancient",
+      "knowledge_part": "文言文阅读",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": false
+    },
+    "reading_narrative": {
+      "name": "记叙文阅读", "icon": "📖", "category": "modern",
+      "knowledge_part": "记叙文阅读",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": false
+    },
+    "reading_expository": {
+      "name": "说明文阅读", "icon": "📊", "category": "modern",
+      "knowledge_part": "说明文阅读",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": false
+    },
+    "reading_argumentative": {
+      "name": "议论文阅读", "icon": "⚖️", "category": "modern",
+      "knowledge_part": "议论文阅读",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": false
+    },
+    "reading_nonfiction": {
+      "name": "非连续性文本", "icon": "📋", "category": "modern",
+      "knowledge_part": "非连续性文本阅读",
+      "forms": ["choice", "judge", "fill"],
+      "auto_generate": false,
+      "active": false
+    },
+    "essay": {
+      "name": "作文", "icon": "✍️", "category": "writing",
+      "knowledge_part": "写作",
+      "forms": ["fill"],
+      "auto_generate": false,
+      "active": false
+    }
+  },
+  "difficulties": {
+    "easy":   { "name": "简单", "level": 1 },
+    "medium": { "name": "中等", "level": 2 },
+    "hard":   { "name": "困难", "level": 3 }
+  },
+  "semesters": {
+    "g7s1":  { "name": "初一上", "grade": 7, "semester": 1 },
+    "g7s2":  { "name": "初一下", "grade": 7, "semester": 2 },
+    "g8s1":  { "name": "初二上", "grade": 8, "semester": 1 },
+    "g8s2":  { "name": "初二下", "grade": 8, "semester": 2 },
+    "g9s1":  { "name": "初三上", "grade": 9, "semester": 1 },
+    "g9s2":  { "name": "初三下", "grade": 9, "semester": 2 },
+    "all":   { "name": "全学段", "grade": 0, "semester": 0 }
+  },
+  "sources": {
+    "exam":  { "name": "中考真题", "icon": "📋" },
+    "auto":  { "name": "自主生成", "icon": "🤖" },
+    "mock":  { "name": "模拟题", "icon": "📝" }
+  }
+}
