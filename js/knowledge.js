@@ -1051,10 +1051,49 @@ function renderNavButtons() {
   const prevIdx = currentPos > 0 ? standardIndices[currentPos - 1] : null;
   const nextIdx = currentPos >= 0 && currentPos < standardIndices.length - 1 ? standardIndices[currentPos + 1] : null;
 
+  // 检查是否处于部分的最后一节
+  const isLastSection = nextIdx === null;
+  let nextPartInfo = null;
+  if (isLastSection) {
+    nextPartInfo = getNextPart(bianId, partId);
+  }
+
+  let nextButtonHtml = '';
+  if (isLastSection && nextPartInfo) {
+    // 是最后一节且存在下一个部分：显示"下一章"按钮
+    nextButtonHtml = `<button class="nav-btn" onclick="loadSection(${nextPartInfo.bianId}, ${nextPartInfo.partId}, 0)">下一章 →</button>`;
+  } else if (isLastSection && !nextPartInfo) {
+    // 是最后一节且不存在下一个部分：禁用按钮
+    nextButtonHtml = `<button class="nav-btn" disabled>下一节 →</button>`;
+  } else {
+    // 不是最后一节：显示"下一节"按钮
+    nextButtonHtml = `<button class="nav-btn" onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">下一节 →</button>`;
+  }
+
   document.getElementById('nav-buttons').innerHTML = `
     <button class="nav-btn" ${prevIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>
-    <button class="nav-btn" ${nextIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">下一节 →</button>
+    ${nextButtonHtml}
   `;
+}
+
+/** 获取下一个部分的信息 */
+function getNextPart(bianId, partId) {
+  const bians = getBians();
+  let foundCurrent = false;
+  
+  for (const bian of bians) {
+    for (const part of bian.parts) {
+      if (foundCurrent) {
+        // 找到下一个部分
+        return { bianId: bian.id, partId: part.id };
+      }
+      // 检查是否是当前部分
+      if (bian.id === bianId && part.id === partId) {
+        foundCurrent = true;
+      }
+    }
+  }
+  return null; // 没有下一个部分
 }
 
 // ==================== 侧边栏搜索 ====================
