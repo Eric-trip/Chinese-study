@@ -120,12 +120,14 @@ function toggleTree(id, event) {
 
 // ==================== 加载内容 ====================
 function loadSection(bianId, partId, sectionIndex) {
-  // 强制滚动到顶部（最可靠的方法）
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  if (window.scrollTo) {
-    try { window.scrollTo(0, 0); } catch(e) {}
-  }
+  // 强制滚动到顶部（用 requestAnimationFrame 确保在渲染前执行）
+  requestAnimationFrame(() => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    if (window.scrollTo) {
+      try { window.scrollTo(0, 0); } catch(e) {}
+    }
+  });
 
   currentState = { bianId, partId, sectionIndex };
 
@@ -1069,20 +1071,20 @@ function renderNavButtons() {
   let prevButtonHtml = '';
   if (isFirstSection && prevPartInfo) {
     // 是第一节且存在上一个部分：显示"上一章"按钮
-    prevButtonHtml = `<button class="nav-btn" onclick="loadSection(${prevPartInfo.bianId}, ${prevPartInfo.partId}, ${prevPartInfo.lastSectionIdx})">← 上一章</button>`;
+    prevButtonHtml = `<button class="nav-btn" onclick="window.scrollTo(0,0);loadSection(${prevPartInfo.bianId}, ${prevPartInfo.partId}, ${prevPartInfo.lastSectionIdx})">← 上一章</button>`;
   } else if (!isFirstSection) {
     // 不是第一节：显示"上一节"按钮
-    prevButtonHtml = `<button class="nav-btn" onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>`;
+    prevButtonHtml = `<button class="nav-btn" onclick="window.scrollTo(0,0);loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>`;
   }
   // 如果是第一节且不存在上一个部分：不显示按钮
 
   let nextButtonHtml = '';
   if (isLastSection && nextPartInfo) {
     // 是最后一节且存在下一个部分：显示"下一章"按钮
-    nextButtonHtml = `<button class="nav-btn" onclick="loadSection(${nextPartInfo.bianId}, ${nextPartInfo.partId}, 0)">下一章 →</button>`;
+    nextButtonHtml = `<button class="nav-btn" onclick="window.scrollTo(0,0);loadSection(${nextPartInfo.bianId}, ${nextPartInfo.partId}, 0)">下一章 →</button>`;
   } else if (!isLastSection) {
     // 不是最后一节：显示"下一节"按钮
-    nextButtonHtml = `<button class="nav-btn" onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">下一节 →</button>`;
+    nextButtonHtml = `<button class="nav-btn" onclick="window.scrollTo(0,0);loadSection(${bianId}, ${partId}, ${nextIdx})">下一节 →</button>`;
   }
   // 如果是最后一节且不存在下一个部分：不显示按钮
 
