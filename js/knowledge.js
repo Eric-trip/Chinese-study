@@ -677,6 +677,13 @@ function switchVoiceLetter(sectionKey, letter, page = 1) {
 function renderTable(htmlStr, seq) {
   if (!htmlStr) return '';
 
+  // 安全获取 cell 的文本值（支持纯字符串和 rowspan 对象）
+  const cellText = (cell) => {
+    if (cell && typeof cell === 'object' && cell.__rs__) return cell.v || '';
+    return cell || '';
+  };
+  const cellLen = (cell) => String(cellText(cell)).length;
+
   let rows;
   try {
     const parser = new DOMParser();
@@ -684,20 +691,103 @@ function renderTable(htmlStr, seq) {
     const tables = doc.querySelectorAll('table');
     if (tables.length === 0) return '';
 
+    // 使用网格模型正确处理 rowspan/colspan
     rows = [];
     tables.forEach(tableEl => {
+      const grid = [];       // 二维网格
+      let colCount = 0;       // 总列数
+      let rowCursor = 0;      // 当前 <tr> 对应的网格行号
+
       tableEl.querySelectorAll('tr').forEach(tr => {
-        const cells = [];
+        const trs = [];
         tr.querySelectorAll('td,th').forEach(cell => {
-          let text = cell.textContent.trim();
-          // 过滤图片占位符标记 [1/24]、[1748]、[2DX5] 等
-          if (/^\[[\w/]+\]$/.test(text)) text = '';
-          cells.push(text);
+          const rowspan = parseInt(cell.getAttribute('rowspan')) || 1;
+          const colspan = parseInt(cell.getAttribute('colspan')) || 1;
+
+          const inner = cell.innerHTML.trim();
+          const hasImgTag = /<img[\s>]/i.test(inner);
+
+          if (hasImgTag) {
+            trs.push({ content: inner, isHtml: true, rowspan, colspan });
+          } else {
+            let text = cell.textContent.trim();
+            if (/^\[[\w/]+\]$/.test(text)) text = '';
+            trs.push({ content: text, isHtml: false, rowspan, colspan });
+          }
         });
-        if (cells.length > 0) rows.push(cells);
+
+        // 放置本行单元格到网格
+        let col = 0;
+        for (const item of trs) {
+          // 跳过被上方 rowspan 占据的列
+          while (grid[rowCursor] && col < grid[rowCursor].length &&
+                 grid[rowCursor][col] !== undefined && grid[rowCursor][col] !== null) {
+            col++;
+          }
+
+          // 填入跨度区域
+          for (let r = 0; r < item.rowspan; r++) {
+            const ri = rowCursor + r;
+            if (!grid[ri]) grid[ri] = [];
+            for (let c = 0; c < item.colspan; c++) {
+              grid[ri][col + c] = (r === 0 && c === 0) ? item.content : '__SPAN__';
+            }
+          }
+          col += item.colspan;
+        }
+
+        // 更新总列数
+        if (grid[rowCursor] && grid[rowCursor].length > colCount) {
+          colCount = grid[rowCursor].length;
+        }
+        rowCursor++;
       });
+
+      // 补齐所有行列
+      for (let r = 0; r < grid.length; r++) {
+        if (!grid[r]) grid[r] = [];
+        for (let c = grid[r].length; c < colCount; c++) {
+          grid[r][c] = '';
+        }
+      }
+
+      // 转为 rows，同时计算 rowspan（让渲染层能输出正确的 rowspan 属性）
+      const skipSet = new Set();  // "r,c" 格式，标记被上方 rowspan 占用的单元格
+      for (let r = 0; r < grid.length; r++) {
+        if (!grid[r]) grid[r] = [];
+        for (let c = grid[r].length; c < colCount; c++) grid[r][c] = '';
+      }
+      const localRows = [];
+      for (let r = 0; r < grid.length; r++) {
+        const cells = [];
+        for (let c = 0; c < colCount; c++) {
+          if (skipSet.has(`${r},${c}`)) {
+            cells.push('__SKIP__');  // 渲染时跳过，不输出 <td>
+            continue;
+          }
+          const val = grid[r][c];
+          if (val === '__SPAN__') {
+            cells.push('');
+            continue;
+          }
+          // 计算该单元格的 rowspan
+          let rs = 1;
+          while (r + rs < grid.length && grid[r + rs][c] === '__SPAN__') {
+            skipSet.add(`${r + rs},${c}`);
+            rs++;
+          }
+          if (rs > 1) {
+            cells.push({ __rs__: rs, __html__: /<img[\s>]/i.test(String(val)), v: val });
+          } else {
+            cells.push(val);
+          }
+        }
+        if (cells.some(c => c !== '__SKIP__' && c !== '')) localRows.push(cells);
+      }
+      rows.push(...localRows);
     });
   } catch (e) {
+    console.error('renderTable error:', e);
     return '';
   }
 
@@ -719,24 +809,24 @@ function renderTable(htmlStr, seq) {
 
   const colCount = rows[0] ? rows[0].length : 0;
   const hasHeaders = headers.length > 0;
-  const hasNote = rows.some(r => r[0] && r[0].startsWith('__NOTE__'));
+  const hasNote = rows.some(r => r[0] && cellText(r[0]).startsWith('__NOTE__'));
 
   if (!hasHeaders && (colCount === 2 || hasNote) && rows.length >= 1) {
     if (hasNote) return renderCompactGrid(rows, seq);
-    const sampleCells = rows.flat().slice(0, 6).filter(c => c);
-    const pinyinRatio = sampleCells.filter(c => /\([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÂôÔîÎûÛäÄëËïÏöÖ\s]+\)/.test(c)).length;
+    const sampleCells = rows.flat().slice(0, 6).filter(c => cellText(c));
+    const pinyinRatio = sampleCells.filter(c => /\([a-zA-ZāáǎàōóǒòēéěèīíǐìūúǔùǖǘǚǜĀÁǍÀŌÓǑÒĒÉĚÈĪÍǏÌŪÚǓÙǕǗǙǛüÜñÑêÊâÂôÔîÎûÛäÄëËïÏöÖ\s]+\)/.test(cellText(c))).length;
     if (sampleCells.length > 0 && pinyinRatio / sampleCells.length > 0.5) {
       return renderCompactGrid(rows, seq);
     }
-    const maxCellLen = Math.max(...rows.flat().map(c => (c || '').length));
+    const maxCellLen = Math.max(...rows.flat().map(c => cellLen(c)));
     if (maxCellLen <= 25 && rows.length >= 4) {
       return renderCompactGrid(rows, seq);
     }
   }
 
   if (!hasHeaders) {
-    if (rows.length > 1 && rows[0].every(c => c.length <= 8 && c.length > 0)) {
-      headers = rows[0];
+    if (rows.length > 1 && rows[0].every(c => cellLen(c) <= 8 && cellLen(c) > 0)) {
+      headers = rows[0].map(c => cellText(c));
       rows = rows.slice(1);
     } else {
       headers = Array.from({ length: colCount }, (_, i) => '');
@@ -874,7 +964,15 @@ function paintPage(id, page) {
     for (let i = start; i < end; i++) {
       html += '<tr>';
       for (const cell of rows[i]) {
-        html += `<td>${escHtml(cell || '')}</td>`;
+        if (cell === '__SKIP__') continue;  // 被上方 rowspan 占据，不渲染
+        if (cell && typeof cell === 'object' && cell.__rs__) {
+          const content = cell.__html__ ? cell.v : escHtml(String(cell.v || ''));
+          html += `<td rowspan="${cell.__rs__}">${content}</td>`;
+        } else if (/^<img[\s>]/i.test(String(cell))) {
+          html += `<td>${cell}</td>`;
+        } else {
+          html += `<td>${escHtml(String(cell || ''))}</td>`;
+        }
       }
       html += '</tr>';
     }
