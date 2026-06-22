@@ -1038,7 +1038,7 @@ function copySectionLink() {
   }
 }
 
-// ==================== 前后导航 ====================
+// =================== 前后导航 ====================
 function renderNavButtons() {
   const { bianId, partId, sectionIndex } = currentState;
   const sections = getSections(bianId, partId);
@@ -1051,11 +1051,30 @@ function renderNavButtons() {
   const prevIdx = currentPos > 0 ? standardIndices[currentPos - 1] : null;
   const nextIdx = currentPos >= 0 && currentPos < standardIndices.length - 1 ? standardIndices[currentPos + 1] : null;
 
+  // 检查是否处于部分的第一节
+  const isFirstSection = prevIdx === null;
+  let prevPartInfo = null;
+  if (isFirstSection) {
+    prevPartInfo = getPrevPart(bianId, partId);
+  }
+
   // 检查是否处于部分的最后一节
   const isLastSection = nextIdx === null;
   let nextPartInfo = null;
   if (isLastSection) {
     nextPartInfo = getNextPart(bianId, partId);
+  }
+
+  let prevButtonHtml = '';
+  if (isFirstSection && prevPartInfo) {
+    // 是第一节且存在上一个部分：显示"上一章"按钮
+    prevButtonHtml = `<button class="nav-btn" onclick="loadSection(${prevPartInfo.bianId}, ${prevPartInfo.partId}, ${prevPartInfo.lastSectionIdx})">← 上一章</button>`;
+  } else if (isFirstSection && !prevPartInfo) {
+    // 是第一节且不存在上一个部分：禁用按钮
+    prevButtonHtml = `<button class="nav-btn" disabled>← 上一节</button>`;
+  } else {
+    // 不是第一节：显示"上一节"按钮
+    prevButtonHtml = `<button class="nav-btn" onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>`;
   }
 
   let nextButtonHtml = '';
@@ -1071,7 +1090,7 @@ function renderNavButtons() {
   }
 
   document.getElementById('nav-buttons').innerHTML = `
-    <button class="nav-btn" ${prevIdx === null ? 'disabled' : ''} onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>
+    ${prevButtonHtml}
     ${nextButtonHtml}
   `;
 }
@@ -1085,7 +1104,8 @@ function getNextPart(bianId, partId) {
     for (const part of bian.parts) {
       if (foundCurrent) {
         // 找到下一个部分
-        return { bianId: bian.id, partId: part.id };
+        const lastSectionIdx = getLastSectionIndex(bian.id, part.id);
+        return { bianId: bian.id, partId: part.id, lastSectionIdx };
       }
       // 检查是否是当前部分
       if (bian.id === bianId && part.id === partId) {
@@ -1094,6 +1114,41 @@ function getNextPart(bianId, partId) {
     }
   }
   return null; // 没有下一个部分
+}
+
+/** 获取上一个部分的信息 */
+function getPrevPart(bianId, partId) {
+  const bians = getBians();
+  let prevPart = null;
+  
+  for (const bian of bians) {
+    for (const part of bian.parts) {
+      // 检查是否是当前部分
+      if (bian.id === bianId && part.id === partId) {
+        // 返回上一个部分
+        if (prevPart) {
+          const lastSectionIdx = getLastSectionIndex(prevPart.bianId, prevPart.partId);
+          return { bianId: prevPart.bianId, partId: prevPart.partId, lastSectionIdx };
+        }
+        return null; // 没有上一个部分
+      }
+      // 记录上一个部分
+      prevPart = { bianId: bian.id, partId: part.id };
+    }
+  }
+  return null; // 没有上一个部分
+}
+
+/** 获取部分的最后一节的索引 */
+function getLastSectionIndex(bianId, partId) {
+  const sections = getSections(bianId, partId);
+  const standardIndices = sections
+    .map((s, i) => ({ s, i }))
+    .filter(({ s }) => STANDARD_SECTIONS.some(name => s.name.includes(name)))
+    .map(({ i }) => i);
+  
+  if (standardIndices.length === 0) return 0;
+  return standardIndices[standardIndices.length - 1];
 }
 
 // ==================== 侧边栏搜索 ====================
