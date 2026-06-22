@@ -120,6 +120,13 @@ function toggleTree(id, event) {
 
 // ==================== 加载内容 ====================
 function loadSection(bianId, partId, sectionIndex) {
+  // 强制滚动到顶部（最可靠的方法）
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  if (window.scrollTo) {
+    try { window.scrollTo(0, 0); } catch(e) {}
+  }
+
   currentState = { bianId, partId, sectionIndex };
 
   const navPath = getNavPath(bianId, partId, sectionIndex);
@@ -154,19 +161,6 @@ function loadSection(bianId, partId, sectionIndex) {
   const overlay = document.querySelector('.sidebar__overlay');
   if (sidebar) sidebar.classList.remove('sidebar--open');
   if (overlay) overlay.classList.remove('sidebar__overlay--visible');
-
-  // 滚动到页面顶部（确保章节内容从顶部开始显示）
-  setTimeout(() => {
-    // 方法1：使用 scrollTop（最兼容）
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;  // Safari 兼容
-    
-    // 方法2：同时滚动内容区域到标题
-    const target = document.getElementById('content-title') || document.getElementById('section-content');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, 100);
 }
 
 // ==================== 内容渲染核心 ====================
