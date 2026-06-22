@@ -62,9 +62,9 @@ function renderKnowledgeMap() {
   document.getElementById('knowledge-map-grid').innerHTML = bians.map((bian, i) => {
     const partsHtml = bian.parts.map(part => {
       const sectionCount = part.sections.length;
-      return `<a class="km-item" href="knowledge.html?bian=${bian.id}&part=${part.part_id}&sec=0">
+      return `<a class="km-item" href="knowledge.html?bian=${bian.id}&part=${part.id}&sec=0">
         <span class="km-item__dot"></span>
-        <span>${part.part_name}</span>
+        <span>${part.name}</span>
         <span style="margin-left:auto;font-size:0.75rem;color:var(--color-text-tertiary);">${sectionCount}节</span>
       </a>`;
     }).join('');
