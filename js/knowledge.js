@@ -1069,25 +1069,21 @@ function renderNavButtons() {
   if (isFirstSection && prevPartInfo) {
     // 是第一节且存在上一个部分：显示"上一章"按钮
     prevButtonHtml = `<button class="nav-btn" onclick="loadSection(${prevPartInfo.bianId}, ${prevPartInfo.partId}, ${prevPartInfo.lastSectionIdx})">← 上一章</button>`;
-  } else if (isFirstSection && !prevPartInfo) {
-    // 是第一节且不存在上一个部分：禁用按钮
-    prevButtonHtml = `<button class="nav-btn" disabled>← 上一节</button>`;
-  } else {
+  } else if (!isFirstSection) {
     // 不是第一节：显示"上一节"按钮
     prevButtonHtml = `<button class="nav-btn" onclick="loadSection(${bianId}, ${partId}, ${prevIdx})">← 上一节</button>`;
   }
+  // 如果是第一节且不存在上一个部分：不显示按钮
 
   let nextButtonHtml = '';
   if (isLastSection && nextPartInfo) {
     // 是最后一节且存在下一个部分：显示"下一章"按钮
     nextButtonHtml = `<button class="nav-btn" onclick="loadSection(${nextPartInfo.bianId}, ${nextPartInfo.partId}, 0)">下一章 →</button>`;
-  } else if (isLastSection && !nextPartInfo) {
-    // 是最后一节且不存在下一个部分：禁用按钮
-    nextButtonHtml = `<button class="nav-btn" disabled>下一节 →</button>`;
-  } else {
+  } else if (!isLastSection) {
     // 不是最后一节：显示"下一节"按钮
     nextButtonHtml = `<button class="nav-btn" onclick="loadSection(${bianId}, ${partId}, ${nextIdx})">下一节 →</button>`;
   }
+  // 如果是最后一节且不存在下一个部分：不显示按钮
 
   document.getElementById('nav-buttons').innerHTML = `
     ${prevButtonHtml}
