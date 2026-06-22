@@ -157,8 +157,11 @@ function loadSection(bianId, partId, sectionIndex) {
 
   // 滚动到页面顶部（确保章节内容从顶部开始显示）
   setTimeout(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // 同时滚动内容区域到标题
+    // 方法1：使用 scrollTop（最兼容）
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;  // Safari 兼容
+    
+    // 方法2：同时滚动内容区域到标题
     const target = document.getElementById('content-title') || document.getElementById('section-content');
     if (target) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
