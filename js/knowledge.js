@@ -155,11 +155,15 @@ function loadSection(bianId, partId, sectionIndex) {
   if (sidebar) sidebar.classList.remove('sidebar--open');
   if (overlay) overlay.classList.remove('sidebar__overlay--visible');
 
-  // 滚动到内容标题
-  requestAnimationFrame(() => {
+  // 滚动到页面顶部（确保章节内容从顶部开始显示）
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 同时滚动内容区域到标题
     const target = document.getElementById('content-title') || document.getElementById('section-content');
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 100);
 }
 
 // ==================== 内容渲染核心 ====================
