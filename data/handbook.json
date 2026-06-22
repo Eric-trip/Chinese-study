@@ -9619,7 +9619,7 @@
     },
     {
       "type": "table",
-      "html": "<table><tr><td colspan=\"2\">文字</td><td>形成时代</td><td>主要载体</td></tr><tr><td colspan=\"2\">甲骨文</td><td>殷商</td><td>龟甲、兽骨</td></tr><tr><td colspan=\"2\">金文</td><td>商周</td><td>青铜器</td></tr><tr><td rowspan=\"2\">篆书</td><td>大篆</td><td>西周晚期</td><td>石器</td></tr><tr><td>小篆</td><td>秦</td><td>石器、竹简</td></tr><tr><td colspan=\"2\">隶书</td><td>秦</td><td>竹简、帛</td></tr><tr><td colspan=\"2\">草书</td><td>汉初</td><td>帛</td></tr><tr><td colspan=\"2\">行书</td><td>汉末</td><td>帛、纸</td></tr><tr><td colspan=\"2\">楷书</td><td>汉末</td><td>纸</td></tr></table>"
+      "html": "<table><tr><td>字体</td><td>形成时代</td><td>主要载体</td></tr><tr><td>甲骨文</td><td>殷商</td><td>龟甲、兽骨</td></tr><tr><td>金文</td><td>商周</td><td>青铜器</td></tr><tr><td>大篆</td><td>西周晚期</td><td>石器</td></tr><tr><td>小篆</td><td>秦</td><td>石器、竹简</td></tr><tr><td>隶书</td><td>秦</td><td>竹简、帛</td></tr><tr><td>草书</td><td>汉初</td><td>帛</td></tr><tr><td>行书</td><td>汉末</td><td>帛、纸</td></tr><tr><td>楷书</td><td>汉末</td><td>纸</td></tr></table>"
     },
     {
       "type": "paragraph",
