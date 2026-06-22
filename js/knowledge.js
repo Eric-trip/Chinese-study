@@ -174,6 +174,31 @@ function renderContent(nodes) {
     return '<div class="empty-state"><div class="empty-state__icon">📄</div><div class="empty-state__text">该章节暂无内容</div></div>';
   }
 
+  // 预处理：合并连续且表头相同的表格（不修改原始数据）
+  const getHdr = (html) => {
+    try {
+      const d = new DOMParser().parseFromString(html, 'text/html');
+      const t = d.querySelector('table');
+      if (!t) return '';
+      const r = t.querySelector('tr');
+      return r ? [...r.querySelectorAll('td,th')].map(c => c.textContent.trim()).join('|') : '';
+    } catch(e) { return ''; }
+  };
+  for (let i = 0; i < nodes.length - 1; i++) {
+    const a = nodes[i], b = nodes[i + 1];
+    if (a.type === 'table' && b.type === 'table' && a.html && b.html && getHdr(a.html) === getHdr(b.html)) {
+      const d2 = new DOMParser().parseFromString(b.html, 'text/html');
+      const t2 = d2.querySelector('table');
+      if (t2) {
+        const trs = t2.querySelectorAll('tr');
+        for (let ri = 1; ri < trs.length; ri++) {
+          a.html = a.html.replace('</table>', `<tr>${trs[ri].innerHTML}</tr></table>`);
+        }
+      }
+      nodes.splice(i + 1, 1);
+    }
+  }
+
   // "必考知识梳理" section 可能包含多个 level 4 子章节（一/二/三/四）
   // 按 level 4 标题拆分成区块，逐块渲染
   const blocks = splitByLevel4Headings(nodes);
@@ -325,7 +350,9 @@ function renderContentBlock(nodes, nextTableSeqFn) {
   }
 
   let html = '';
-  for (const node of mergedFinal) {
+  const arr = Array.isArray(mergedFinal) ? mergedFinal : [];
+  for (let idx = 0; idx < arr.length; idx++) {
+    const node = arr[idx];
     if (!node || !node.type) continue;
     if (node.type === 'heading') {
       const lv = node.level || 4;
