@@ -28,7 +28,8 @@
       "question": "阅读文段，给加点字注音：\n\n【沧】海桑田\n\n\"沧\"字的读音是：______\n\n（示例：zhong1 一声，数字表示声调）",
       "answer": "cang1",
       "explanation": "\"沧\"读作 cāng（一声）。沧海桑田（cāng hǎi sāng tián），比喻世事变化很大。",
-      "knowledgePath": "基础知识 > 语音"
+      "knowledgePath": "基础知识 > 语音",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-02",
@@ -44,7 +45,8 @@
       "question": "阅读文段，根据拼音写汉字：\n\n春寒liào（　）峭",
       "answer": "料",
       "explanation": "春寒料峭（chūn hán liào qiào），形容初春的寒冷。",
-      "knowledgePath": "基础知识 > 汉字"
+      "knowledgePath": "基础知识 > 汉字",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-03",
@@ -78,7 +80,8 @@
       ],
       "answer": "A",
       "explanation": "A项成分残缺，缺主语，可在“往往”前加上“人们”。",
-      "knowledgePath": "基础知识 > 病句辨析"
+      "knowledgePath": "基础知识 > 病句辨析",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-04",
@@ -94,7 +97,8 @@
       "question": "根据提示填写诗文（毛泽东《沁园春·雪》）：\n\n互文，写寒冬雪景，气势磅礴，境界阔大。\n　　，　　。",
       "answer": "千里冰封，万里雪飘",
       "explanation": "出自毛泽东《沁园春·雪》。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-05",
@@ -110,7 +114,8 @@
       "question": "根据提示填写诗文（韩愈《左迁至蓝关示侄孙湘》）：\n\n即景抒情，云遮雪塞，道尽英雄失路之悲慨。\n　　？　　。",
       "answer": "云横秦岭家何在？雪拥蓝关马不前",
       "explanation": "出自韩愈《左迁至蓝关示侄孙湘》。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-06",
@@ -126,7 +131,8 @@
       "question": "根据提示填写诗文：\n\n比喻，喻雪飞扬之态，轻盈之雅。（刘义庆编《　　》）\n未若柳絮因风起",
       "answer": "咏雪",
       "explanation": "出自刘义庆《世说新语·咏雪》。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-07",
@@ -142,7 +148,8 @@
       "question": "根据提示填写诗文：\n\n　　《卖炭翁》　景物描写，写雪后卖炭路途之艰难。",
       "answer": "白居易",
       "explanation": "《卖炭翁》作者为白居易。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-08",
@@ -158,7 +165,8 @@
       "question": "根据提示填写诗文（白居易《卖炭翁》）：\n\n景物描写，写雪后卖炭路途之艰难。\n　　，　　。",
       "answer": "夜来城外一尺雪，晓驾炭车辗冰辙",
       "explanation": "出自白居易《卖炭翁》。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-09",
@@ -174,7 +182,8 @@
       "question": "根据提示填写诗文（张岱《湖心亭看雪》）：\n\n间接描写，描绘雪后雾气弥漫，天地浑然难辩的景象。\n雾凇沆砀，　　，　　。",
       "answer": "天与云与山与水，上下一白",
       "explanation": "出自张岱《湖心亭看雪》。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-10",
@@ -190,7 +199,8 @@
       "question": "根据提示填写诗文（柳宗元《江雪》）：\n\n写雪景，却没有“雪”字，凸显空灵之境。\n　　，　　。",
       "answer": "千山鸟飞绝，万径人踪灭",
       "explanation": "出自柳宗元《江雪》。",
-      "knowledgePath": "基础知识 > 名句名段"
+      "knowledgePath": "基础知识 > 名句名段",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-11",
@@ -224,7 +234,8 @@
       ],
       "answer": "C",
       "explanation": "C项“物我分离”有误，应为“物我合一（物我交融）”，全诗达到物我合一的境界。",
-      "knowledgePath": "阅读理解 > 古诗词鉴赏"
+      "knowledgePath": "阅读理解 > 古诗词鉴赏",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-12",
@@ -258,7 +269,8 @@
       ],
       "answer": "D",
       "explanation": "D项“真实存在的桃花源”有误，桃花源是作者陶渊明构想的理想世界，并非真实存在。",
-      "knowledgePath": "阅读理解 > 文言文阅读"
+      "knowledgePath": "阅读理解 > 文言文阅读",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-13",
@@ -274,7 +286,8 @@
       "question": "用“/”给下面的句子断句（限断两处）：\n\n义熙二年解印去县乃赋《归去来》",
       "answer": "义熙二年/解印去县/乃赋《归去来》",
       "explanation": "“义熙二年”为时间状语，在其后断一处；“乃”为连词，在“乃”前断一处。句意：义熙二年，将印绶交还离开了彭泽县，于是作了《归去来兮辞》。",
-      "knowledgePath": "阅读理解 > 文言文阅读"
+      "knowledgePath": "阅读理解 > 文言文阅读",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-14",
@@ -290,7 +303,8 @@
       "question": "写出《桃花源记》中下列词语的古义与今义。\n\n（1）妻子——古义：______　今义：对已婚男子配偶的称呼\n（2）绝境——古义：______　今义：______\n（3）无论——古义：______　今义：连词，表示任何条件下结果都不会改变",
       "answer": "（1）妻子儿女\n（2）与人世隔绝的地方；没有出路的困境，进退维谷的境地\n（3）不要说，更不必说",
       "explanation": "“妻子”古义为妻子儿女；“绝境”古义为与人世隔绝的地方，今义为没有出路的困境；“无论”古义为不要说，更不必说。",
-      "knowledgePath": "阅读理解 > 文言文阅读"
+      "knowledgePath": "阅读理解 > 文言文阅读",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-15",
@@ -306,7 +320,8 @@
       "question": "将文中画横线的句子翻译成现代汉语：\n\n黄发垂髫，并怡然自乐。",
       "answer": "老人和小孩们个个都安适愉快，自得其乐。",
       "explanation": "黄发垂髫：指老人和小孩；怡然：安适自在的样子。",
-      "knowledgePath": "阅读理解 > 文言文阅读"
+      "knowledgePath": "阅读理解 > 文言文阅读",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-16",
@@ -322,7 +337,8 @@
       "question": "将文中画横线的句子翻译成现代汉语：\n\n少怀高尚，博学善属文。",
       "answer": "他少年时心怀高尚，知识渊博善于做文章。",
       "explanation": "少：年少时；博学：学识渊博；善：善于、擅长；属：撰写、做。",
-      "knowledgePath": "阅读理解 > 文言文阅读"
+      "knowledgePath": "阅读理解 > 文言文阅读",
+      "semester": "all"
     },
     {
       "id": "2022-GX-BBW-17",
@@ -338,7 +354,8 @@
       "question": "初中经典名著分类复习计划表中，3月分类为“散文、诗歌”，已有《朝花夕拾》《傅雷家书》，请再补充一部诗集：\n\n《　　》",
       "answer": "艾青诗选",
       "explanation": "初中课本推荐的诗集有《艾青诗选》《繁星》《春水》《唐诗三百首》等，任选一部即可。",
-      "knowledgePath": "基础知识 > 名著导读"
+      "knowledgePath": "基础知识 > 名著导读",
+      "semester": "all"
     }
   ]
 }
