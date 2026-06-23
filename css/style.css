@@ -249,8 +249,8 @@ img { max-width: 100%; }
   border-left: 3px solid var(--color-primary-light);
 }
 .content-text { font-family: 'Noto Serif SC', 'Noto Sans SC', serif; font-size: 0.95rem; line-height: 1.85; text-indent: 2em; text-align: justify; }
-.content-text--option { text-align: center; text-indent: 0; font-size: 1.1rem; font-weight: 600; padding: 8px 0; }
-.content-text--option .content-image { display: inline-block; vertical-align: middle; margin: 0 0 0 8px; max-height: 100px; }
+.content-text--option { display: flex; align-items: center; justify-content: center; gap: 8px; text-indent: 0; font-size: 1.1rem; font-weight: 600; padding: 8px 0; }
+.content-text--option .content-image { display: inline-block; max-height: 100px; border-radius: 4px; }
 .content-image { display: block; max-width: 180px; max-height: 120px; margin: 8px auto 4px; border-radius: 4px; }
 .word-groups__item .content-text { font-size: 0.9rem; line-height: 1.75; }
 
