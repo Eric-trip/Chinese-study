@@ -426,11 +426,13 @@ function submitFill() {
   const userAnswer = input.value.trim();
   if (!userAnswer) { showToast('请输入答案'); return; }
   const q = practiceState.questions[practiceState.currentIdx];
+  // 归一化：去标点 + 声调符号转字母 + 声调数字转字母 + 小写
   const normalize = s => s.trim()
     .replace(/[，,。.!！？?]/g, '')
     .replace(/[āáǎà]/g, 'a').replace(/[ēéěè]/g, 'e')
     .replace(/[īíǐì]/g, 'i').replace(/[ōóǒò]/g, 'o')
     .replace(/[ūúǔù]/g, 'u').replace(/[ǖǘǚǜü]/g, 'u')
+    .replace(/([aeiouv])([1-4])/gi, '$1')  // cang1 → cang
     .toLowerCase();
   const correct = normalize(userAnswer) === normalize(q.answer);
   practiceState.answers[practiceState.currentIdx] = { answered: true, correct, answer: userAnswer };
