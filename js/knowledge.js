@@ -387,7 +387,9 @@ function renderContentBlock(nodes, nextTableSeqFn) {
       const withImages = safe.replace(/__IMG__([^_]+)__IMG__/g, (match, url) => {
         return `<img src="${escHtml(url)}" alt="" class="content-image">`;
       });
-      const isOption = /^__IMG__[^_]+__IMG__$/.test(text) || /^__IMG__[^_]+__IMG__\s*$/.test(text);
+      // 判断是否为选项行：文字部分为单个大写字母(A/B/C/D)+图片
+      const rawText = text.replace(/__IMG__[^_]+__IMG__/g, '').trim();
+      const isOption = /^[A-D]$/.test(rawText);
       const cls = isOption ? 'content-text content-text--option' : 'content-text';
       html += `<div class="${cls}">${formatInline(withImages)}</div>`;
       continue;
