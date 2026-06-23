@@ -387,7 +387,9 @@ function renderContentBlock(nodes, nextTableSeqFn) {
       const withImages = safe.replace(/__IMG__([^_]+)__IMG__/g, (match, url) => {
         return `<img src="${escHtml(url)}" alt="" class="content-image">`;
       });
-      html += `<div class="content-text">${formatInline(withImages)}</div>`;
+      const isOption = /^__IMG__[^_]+__IMG__$/.test(text) || /^__IMG__[^_]+__IMG__\s*$/.test(text);
+      const cls = isOption ? 'content-text content-text--option' : 'content-text';
+      html += `<div class="${cls}">${formatInline(withImages)}</div>`;
       continue;
     }
     if (node.type === 'table') {
