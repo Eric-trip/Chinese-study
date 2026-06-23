@@ -343,11 +343,28 @@ function renderContentBlock(nodes, nextTableSeqFn) {
         continue;
       }
       // 普通正文段落（非词语列表），走正常 content-text 渲染
-      mergedFinal.push(node);
-      continue;
-    }
     mergedFinal.push(node);
+    continue;
   }
+  // image 节点：合并到后一个 paragraph 节点后面
+  // 数据结构中 image 在选项字母(A/B/C/D)前面，如: image → "A" → image → "B"
+  // 所以需要把 image URL 存下来，等处理到后面的 paragraph 时追加进去
+  if (node.type === 'image') {
+    // 向后查找最近的 paragraph 节点，将 image 合并进去
+    for (let k = m + 1; k < merged.length; k++) {
+      const nxt = merged[k];
+      if (!nxt || !nxt.type) continue;
+      if (nxt.type === 'paragraph' && node.url) {
+        nxt.text = (nxt.text || '') + `__IMG__${node.url}__IMG__`;
+        break; // 只合并到第一个遇到的 paragraph
+      }
+      // 如果遇到 heading 或 table 等其他类型，停止向后找
+      if (nxt.type !== 'image') break;
+    }
+    continue;
+  }
+  mergedFinal.push(node);
+}
 
   let html = '';
   const arr = Array.isArray(mergedFinal) ? mergedFinal : [];
@@ -362,15 +379,22 @@ function renderContentBlock(nodes, nextTableSeqFn) {
       continue;
     }
     if (node.type === 'paragraph') {
-      const text = (node.text || '').trim();
+      let text = (node.text || '').trim();
       if (!text) continue;
-      html += `<div class="content-text">${formatInline(escHtml(text))}</div>`;
+      // 先转义普通文本，再替换 __IMG__ 占位符为 <img> 标签
+      // 顺序不能反：如果先替换再 escHtml，<img> 标签会被转义
+      const safe = escHtml(text);
+      const withImages = safe.replace(/__IMG__([^_]+)__IMG__/g, (match, url) => {
+        return `<img src="${escHtml(url)}" alt="" class="content-image">`;
+      });
+      html += `<div class="content-text">${formatInline(withImages)}</div>`;
       continue;
     }
     if (node.type === 'table') {
       html += renderTable(node.html || '', nextTableSeqFn());
       continue;
     }
+    // image 节点已在上面的 paragraph 分支中合并渲染，这里跳过
   }
   return html;
 }
