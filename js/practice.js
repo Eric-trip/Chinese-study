@@ -84,6 +84,8 @@ function loadQuestionModules() {
           .then(() => {
             _modulesLoaded = true;
             _modulesLoading = false;
+            // 自动刷新配置面板（真题套卷的试卷列表等）
+            renderConfig();
             resolve();
           })
           .catch(reject);
@@ -156,7 +158,17 @@ function renderConfig() {
   }
 
   if (mode === 'exam_paper') {
-    const papers = getExamPapersSafe();
+    // 模块未加载：显示加载提示并主动触发加载
+    if (!_modulesLoaded && typeof getExamPapers !== 'function') {
+      loadQuestionModules(); // 触发加载（不阻塞 UI）
+      html = `<div style="text-align:center;padding:var(--space-md);">
+        <div class="loading" style="margin:0;padding:var(--space-md);"><div class="loading__spinner"></div>题库加载中...</div>
+      </div>`;
+      panel.innerHTML = html;
+      document.getElementById('btn-start').style.display = 'none';
+      return;
+    }
+    const papers = getExamPapers();
     if (papers.length === 0) {
       html = `<div style="text-align:center;padding:var(--space-md);">
         <p style="color:var(--color-text-tertiary);">真题库中还没有试卷</p>
