@@ -3,6 +3,10 @@
  * 支持模式：按知识点 / 随机抽题 / 模拟测试 / 错题重练 / 真题套卷
  * 支持筛选：题型 / 难度 / 学期 / 来源
  */
+
+let _dataReady = false;
+let _deferredRender = null;
+
 let practiceState = {
   mode: 'topic',       // topic | random | mock | error | exam_paper
   type: 'all',
@@ -17,49 +21,188 @@ let practiceState = {
   startTime: 0
 };
 
-document.addEventListener('DOMContentLoaded', async () => {
-  const data = await loadHandbookData();
-  if (!data) { document.getElementById('practice-main').innerHTML = '<div class="loading"><div class="loading__spinner"></div>数据加载失败</div>'; return; }
-  await loadAllQuestionData();
+document.addEventListener('DOMContentLoaded', () => {
+  // 立刻渲染静态配置面板（不依赖数据）
   setupNavbar();
   renderModeCards();
-  renderConfig();
-  document.getElementById('btn-start').addEventListener('click', startPractice);
+  renderConfigStatic();
+  document.getElementById('btn-start').addEventListener('click', startPracticeDeferred);
+
+  // 后台并行加载数据
+  const handbookPromise = loadHandbookData();
+  const questionPromise = loadAllQuestionData();
+  Promise.all([handbookPromise, questionPromise])
+    .then(([data]) => {
+      _dataReady = true;
+      // 数据就绪后，重新渲染依赖数据的部分（题型/学期选择器）
+      refreshDataDependentUI();
+      if (_deferredRender) _deferredRender();
+    })
+    .catch(err => {
+      console.error('数据加载失败:', err);
+      document.getElementById('practice-main').innerHTML =
+        '<div class="loading"><div class="loading__spinner"></div>数据加载失败，请刷新重试</div>';
+    });
 });
 
-// ==================== 模式选择 ====================
-function renderModeCards() {
-  const modes = [
-    { id: 'topic',     icon: '📌', title: '按知识点练习', desc: '选择题型专项训练' },
-    { id: 'random',    icon: '🎲', title: '随机抽题',     desc: '随机出题综合练习' },
-    { id: 'mock',      icon: '📝', title: '模拟测试',     desc: '限时完整测试' },
-    { id: 'error',     icon: '❌', title: '错题重练',     desc: '复习做错的题目' },
-    { id: 'exam_paper',icon: '📋', title: '真题套卷',     desc: '按真题原卷顺序做题' }
-  ];
-  document.getElementById('mode-cards').innerHTML = modes.map(m => `
-    <div class="mode-card${m.id === practiceState.mode ? ' mode-card--active' : ''}" onclick="selectMode('${m.id}')">
-      <div class="mode-card__icon">${m.icon}</div>
-      <div class="mode-card__title">${m.title}</div>
-      <div class="mode-card__desc">${m.desc}</div>
-    </div>
-  `).join('');
+/** 渲染不依赖 handbook 数据的静态配置（题型用兜底数据） */
+function renderConfigStatic() {
+  const panel = document.getElementById('config-panel');
+  const mode = practiceState.mode;
+
+  // 错题重练
+  if (mode === 'error') {
+    const errors = ProgressTracker.getErrors();
+    panel.innerHTML = `<div style="text-align:center;padding:var(--space-md);">
+      <p style="margin-bottom:var(--space-md);">当前错题本中有 <strong>${errors.length}</strong> 道错题</p>
+      ${errors.length === 0
+        ? '<p style="color:var(--color-text-tertiary);">还没有错题，去练习一些题目吧！</p>'
+        : `<button class="btn-primary" onclick="startErrorPractice()">开始错题重练</button>`}
+    </div>`;
+    document.getElementById('btn-start').style.display = 'none';
+    return;
+  }
+
+  // 真题套卷
+  if (mode === 'exam_paper') {
+    const papers = getExamPapers();
+    if (papers.length === 0) {
+      panel.innerHTML = `<div style="text-align:center;padding:var(--space-md);">
+        <p style="color:var(--color-text-tertiary);">真题库中还没有试卷</p>
+        <p style="color:var(--color-text-tertiary);font-size:0.88rem;">等真题录入后会在这里显示</p>
+      </div>`;
+    } else {
+      let html = `<div class="config-row"><span class="config-label">试卷</span><div class="chip-group" style="flex-wrap:wrap;">`;
+      for (const p of papers) {
+        const qCount = getPaperQuestions(p.id).length;
+        html += `<span class="chip${practiceState.paperId === p.id ? ' chip--active' : ''}" onclick="selectPaper('${p.id}', this)">
+          ${p.year}·${p.region} ${qCount > 0 ? `(${qCount}题)` : ''}
+        </span>`;
+      }
+      html += `</div></div>`;
+      panel.innerHTML = html;
+    }
+    document.getElementById('btn-start').style.display = practiceState.paperId ? '' : 'none';
+    return;
+  }
+
+  document.getElementById('btn-start').style.display = '';
+
+  // 题型选择器：用兜底数据先渲染，数据就绪后替换
+  let html = '';
+  if (mode === 'topic') {
+    html += renderTypeSelectorStatic();
+  }
+
+  // 难度
+  html += `<div class="config-row"><span class="config-label">难度</span><div class="chip-group">`;
+  html += `<span class="chip chip--active" onclick="selectDifficulty('mixed', this)">混合</span>`;
+  for (const [key, val] of Object.entries(DIFFICULTIES)) {
+    html += `<span class="chip chip--${val.color}" onclick="selectDifficulty('${key}', this)">${val.name}</span>`;
+  }
+  html += `</div></div>`;
+
+  // 来源
+  html += renderSourceSelector();
+
+  // 学期选择器：用兜底数据先渲染
+  html += renderSemesterSelectorStatic();
+
+  // 数量
+  const counts = mode === 'mock' ? [20, 30, 50] : [5, 10, 15, 20];
+  html += `<div class="config-row"><span class="config-label">题量</span><div class="chip-group">`;
+  for (const c of counts) {
+    html += `<span class="chip${c === practiceState.count ? ' chip--active' : ''}" onclick="selectCount(${c}, this)">${c}题</span>`;
+  }
+  html += `</div></div>`;
+
+  if (mode === 'mock') {
+    const minutes = practiceState.count * 2;
+    html += `<div class="config-row"><span class="config-label">限时</span><span style="color:var(--color-text-secondary);font-size:0.88rem;">${minutes} 分钟</span></div>`;
+  }
+
+  panel.innerHTML = html;
 }
 
-function selectMode(mode) {
-  practiceState.mode = mode;
-  practiceState.paperId = null;
-  renderModeCards();
+/** 题型选择器 — 静态版（不依赖 registry，用 QUESTION_TYPES 兜底） */
+function renderTypeSelectorStatic() {
+  // 尝试用注册表，失败则用兜底
+  let types = [];
+  if (_dataReady && _registry) {
+    const cats = getAllCategories();
+    const typesByCat = getActiveTypesByCategory();
+    let html = `<div class="config-row"><span class="config-label">题型</span><div class="chip-group" style="flex-wrap:wrap;">`;
+    html += `<span class="chip chip--active" onclick="selectType('all', this)">全部</span>`;
+    for (const [catId, cat] of Object.entries(cats)) {
+      const tt = typesByCat[catId];
+      if (!tt || tt.length === 0) continue;
+      for (const t of tt) {
+        html += `<span class="chip" onclick="selectType('${t.id}', this)">${t.icon} ${t.name}</span>`;
+      }
+    }
+    html += `</div></div>`;
+    return html;
+  }
+  // 兜底：直接用 QUESTION_TYPES 对象
+  const entries = Object.entries(QUESTION_TYPES).filter(([, v]) => v._newId);
+  const unique = {};
+  for (const [k, v] of entries) {
+    if (!unique[v._newId]) unique[v._newId] = v;
+  }
+  let html = `<div class="config-row"><span class="config-label">题型</span><div class="chip-group" style="flex-wrap:wrap;">`;
+  html += `<span class="chip chip--active" onclick="selectType('all', this)">全部</span>`;
+  for (const [, v] of Object.entries(unique)) {
+    html += `<span class="chip" onclick="selectType('${v._newId}', this)">${v.icon} ${v.name}</span>`;
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+/** 学期选择器 — 静态版（不依赖 registry） */
+function renderSemesterSelectorStatic() {
+  const semesters = _dataReady && _registry ? getAllSemesters()
+    : { g7s1:{name:'七上'}, g7s2:{name:'七下'}, g8s1:{name:'八上'}, g8s2:{name:'八下'}, g9s1:{name:'九上'}, g9s2:{name:'九下'} };
+  const orderedKeys = ['g7s1','g7s2','g8s1','g8s2','g9s1','g9s2'];
+  let html = `<div class="config-row"><span class="config-label">学期</span><div class="chip-group" style="flex-wrap:wrap;">`;
+  html += `<span class="chip chip--active" onclick="selectSemester('all', this)">全部</span>`;
+  for (const key of orderedKeys) {
+    if (!semesters[key]) continue;
+    html += `<span class="chip" onclick="selectSemester('${key}', this)">${semesters[key].name}</span>`;
+  }
+  html += `</div></div>`;
+  return html;
+}
+
+/** 数据加载完成后，刷新依赖数据的 UI 部分 */
+function refreshDataDependentUI() {
+  const mode = practiceState.mode;
+  if (mode === 'topic') {
+    // 只替换题型选择器部分
+    refreshTypeSelector();
+  }
+  if (mode !== 'error' && mode !== 'exam_paper') {
+    refreshSemesterSelector();
+  }
+}
+
+function refreshTypeSelector() {
+  const panel = document.getElementById('config-panel');
+  if (!panel) return;
+  // 重新调用 renderConfig 完整重渲染（此时 _dataReady 为 true）
   renderConfig();
 }
 
-// ==================== 配置面板 ====================
+function refreshSemesterSelector() {
+  renderConfig();
+}
+
+// ==================== 原 renderConfig（数据就绪后使用）====================
 function renderConfig() {
   const panel = document.getElementById('config-panel');
   const mode = practiceState.mode;
 
   let html = '';
 
-  // 错题重练模式：不需要配置
   if (mode === 'error') {
     const errors = ProgressTracker.getErrors();
     html = `<div style="text-align:center;padding:var(--space-md);">
@@ -73,7 +216,6 @@ function renderConfig() {
     return;
   }
 
-  // 真题套卷模式：选择试卷
   if (mode === 'exam_paper') {
     const papers = getExamPapers();
     if (papers.length === 0) {
@@ -100,12 +242,10 @@ function renderConfig() {
 
   document.getElementById('btn-start').style.display = '';
 
-  // 题型选择（topic模式显示，random/mock可选all）
   if (mode === 'topic') {
     html += renderTypeSelector();
   }
 
-  // 难度
   html += `<div class="config-row"><span class="config-label">难度</span><div class="chip-group">`;
   html += `<span class="chip chip--active" onclick="selectDifficulty('mixed', this)">混合</span>`;
   for (const [key, val] of Object.entries(DIFFICULTIES)) {
@@ -113,13 +253,9 @@ function renderConfig() {
   }
   html += `</div></div>`;
 
-  // 来源筛选
   html += renderSourceSelector();
-
-  // 学期筛选
   html += renderSemesterSelector();
 
-  // 数量
   const counts = mode === 'mock' ? [20, 30, 50] : [5, 10, 15, 20];
   html += `<div class="config-row"><span class="config-label">题量</span><div class="chip-group">`;
   for (const c of counts) {
@@ -127,7 +263,6 @@ function renderConfig() {
   }
   html += `</div></div>`;
 
-  // 模拟测试显示限时
   if (mode === 'mock') {
     const minutes = practiceState.count * 2;
     html += `<div class="config-row"><span class="config-label">限时</span><span style="color:var(--color-text-secondary);font-size:0.88rem;">${minutes} 分钟</span></div>`;
@@ -136,7 +271,7 @@ function renderConfig() {
   panel.innerHTML = html;
 }
 
-/** 渲染题型选择器 — 按板块分组 */
+/** 渲染题型选择器 — 按板块分组（原逻辑，数据就绪后调用） */
 function renderTypeSelector() {
   const categories = getAllCategories();
   const typesByCat = getActiveTypesByCategory();
@@ -168,9 +303,9 @@ function renderSourceSelector() {
 /** 渲染学期选择器 */
 function renderSemesterSelector() {
   const semesters = getAllSemesters();
+  const orderedKeys = ['g7s1','g7s2','g8s1','g8s2','g9s1','g9s2'];
   let html = `<div class="config-row"><span class="config-label">学期</span><div class="chip-group" style="flex-wrap:wrap;">`;
   html += `<span class="chip chip--active" onclick="selectSemester('all', this)">全部</span>`;
-  const orderedKeys = ['g7s1','g7s2','g8s1','g8s2','g9s1','g9s2'];
   for (const key of orderedKeys) {
     if (!semesters[key]) continue;
     html += `<span class="chip" onclick="selectSemester('${key}', this)">${semesters[key].name}</span>`;
@@ -212,7 +347,23 @@ function selectPaper(paperId, el) {
   document.getElementById('btn-start').style.display = '';
 }
 
-// ==================== 开始练习 ====================
+// ==================== 开始练习（延迟版：数据未就绪时等待）====================
+function startPracticeDeferred() {
+  if (!_dataReady) {
+    // 显示 loading，等数据加载完再执行
+    const btn = document.getElementById('btn-start');
+    btn.textContent = '数据加载中...';
+    btn.disabled = true;
+    _deferredRender = () => {
+      btn.textContent = '开始练习';
+      btn.disabled = false;
+      startPractice();
+    };
+    return;
+  }
+  startPractice();
+}
+
 function startPractice() {
   // 真题套卷模式
   if (practiceState.mode === 'exam_paper' && practiceState.paperId) {
