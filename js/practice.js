@@ -324,14 +324,16 @@ function renderQuestion() {
     <span class="question-card__type question-card__type--${typeInfo.color || typeInfo._newId || 'pinyin'}">${typeInfo.icon || ''} ${typeInfo.name}</span>
     <span class="question-card__difficulty question-card__difficulty--${diffInfo.color}">${diffInfo.name}</span>`;
 
-  // 真题来源标记
-  if (q.source === 'exam' && q.exam_info) {
-    html += `<span class="question-card__tag">📋 ${q.exam_info.year}·${q.exam_info.region}</span>`;
+  // 题目来源标记
+  if (q.qsrc === 'exam' && q.sourceLabel) {
+    html += `<span class="question-card__tag">📋 ${q.sourceLabel}</span>`;
+  } else if (q.qsrc === 'mock' && q.sourceLabel) {
+    html += `<span class="question-card__tag">📝 ${q.sourceLabel}</span>`;
   }
 
   html += `<div class="question-card__text">${formatQuestionText(q.question)}</div>`;
 
-  if (q.isFill) {
+  if (q.isFill || q.format === 'fill') {
     // 填空题
     const userAnswer = practiceState.answers[idx]?.answer || '';
     const isAnswered = practiceState.answers[idx]?.answered;
@@ -376,7 +378,7 @@ function renderQuestion() {
   // 操作按钮
   html += `<div class="quiz-actions">`;
   if (!practiceState.answers[idx]?.answered) {
-    html += `<button class="btn-primary" onclick="${q.isFill ? 'submitFill()' : 'submitOption()'}">确认作答</button>`;
+    html += `<button class="btn-primary" onclick="${(q.isFill || q.format === 'fill') ? 'submitFill()' : 'submitOption()'}">确认作答</button>`;
   } else {
     if (idx < total - 1) {
       html += `<button class="btn-primary" onclick="nextQuestion()">下一题 →</button>`;

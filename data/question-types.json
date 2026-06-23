@@ -158,7 +158,7 @@
     "all":   { "name": "全学段", "grade": 0, "semester": 0 }
   },
   "sources": {
-    "exam":  { "name": "中考真题", "icon": "📋" },
+    "exam":  { "name": "真题", "icon": "📋" },
     "auto":  { "name": "自主生成", "icon": "🤖" },
     "mock":  { "name": "模拟题", "icon": "📝" }
   }

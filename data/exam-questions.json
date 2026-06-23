@@ -1,5 +1,344 @@
 {
-  "version": 1,
-  "questions": [],
-  "papers": []
+  "version": 2,
+  "papers": [
+    {
+      "id": "2022-GX-BBW",
+      "year": 2022,
+      "region": "广西北部湾",
+      "examType": "中考",
+      "title": "2022年广西北部湾经济区初中学业水平考试",
+      "fullScore": 120,
+      "duration": 150,
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考"
+    }
+  ],
+  "questions": [
+    {
+      "id": "2022-GX-BBW-01",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 1,
+      "type": "pinyin_char",
+      "typeName": "字音字形",
+      "format": "fill",
+      "difficulty": "easy",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "阅读文段，给加点字注音：\n\n沧海（　）桑田",
+      "answer": "cāng",
+      "explanation": "沧海桑田（cāng hǎi sāng tián），大海变成桑田，桑田变成大海，比喻世事变化很大。",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "2022-GX-BBW-02",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 1,
+      "type": "pinyin_char",
+      "typeName": "字音字形",
+      "format": "fill",
+      "difficulty": "easy",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "阅读文段，根据拼音写汉字：\n\n春寒liào（　）峭",
+      "answer": "料",
+      "explanation": "春寒料峭（chūn hán liào qiào），形容初春的寒冷。",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "2022-GX-BBW-03",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 5,
+      "type": "sentence",
+      "typeName": "病句辨析",
+      "format": "choice",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "下面从文段中选出来的句子，属于病句的一项是（　）",
+      "options": [
+        {
+          "text": "A. 关于四季的划分，往往习惯以“四立”（立春、立夏、立秋、立冬）为四季的起点。",
+          "correct": true
+        },
+        {
+          "text": "B. 立春过后，春暖花开，人们喜欢出城玩乐，俗称探春、踏春，这也是春游的主要形式。",
+          "correct": false
+        },
+        {
+          "text": "C. 蚯蚓也忙着帮农民翻松泥土，乡间田埂的野菜也都争相出土，万物至此皆日日攀长。",
+          "correct": false
+        },
+        {
+          "text": "D. 立秋，也意味着降水、湿度等，趋于减少或下降；万物开始从繁茂成长趋向成熟。",
+          "correct": false
+        }
+      ],
+      "answer": "A",
+      "explanation": "A项成分残缺，缺主语，可在“往往”前加上“人们”。",
+      "knowledgePath": "基础知识 > 病句辨析"
+    },
+    {
+      "id": "2022-GX-BBW-04",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文（毛泽东《沁园春·雪》）：\n\n互文，写寒冬雪景，气势磅礴，境界阔大。\n　　，　　。",
+      "answer": "千里冰封，万里雪飘",
+      "explanation": "出自毛泽东《沁园春·雪》。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-05",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文（韩愈《左迁至蓝关示侄孙湘》）：\n\n即景抒情，云遮雪塞，道尽英雄失路之悲慨。\n　　？　　。",
+      "answer": "云横秦岭家何在？雪拥蓝关马不前",
+      "explanation": "出自韩愈《左迁至蓝关示侄孙湘》。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-06",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "easy",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文：\n\n比喻，喻雪飞扬之态，轻盈之雅。（刘义庆编《　　》）\n未若柳絮因风起",
+      "answer": "咏雪",
+      "explanation": "出自刘义庆《世说新语·咏雪》。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-07",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "easy",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文：\n\n　　《卖炭翁》　景物描写，写雪后卖炭路途之艰难。",
+      "answer": "白居易",
+      "explanation": "《卖炭翁》作者为白居易。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-08",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文（白居易《卖炭翁》）：\n\n景物描写，写雪后卖炭路途之艰难。\n　　，　　。",
+      "answer": "夜来城外一尺雪，晓驾炭车辗冰辙",
+      "explanation": "出自白居易《卖炭翁》。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-09",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文（张岱《湖心亭看雪》）：\n\n间接描写，描绘雪后雾气弥漫，天地浑然难辩的景象。\n雾凇沆砀，　　，　　。",
+      "answer": "天与云与山与水，上下一白",
+      "explanation": "出自张岱《湖心亭看雪》。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-10",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 6,
+      "type": "recitation",
+      "typeName": "古诗文默写",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "根据提示填写诗文（柳宗元《江雪》）：\n\n写雪景，却没有“雪”字，凸显空灵之境。\n　　，　　。",
+      "answer": "千山鸟飞绝，万径人踪灭",
+      "explanation": "出自柳宗元《江雪》。",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "2022-GX-BBW-11",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 14,
+      "type": "classics_reading",
+      "typeName": "古诗词鉴赏",
+      "format": "choice",
+      "difficulty": "hard",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "阅读陶渊明《饮酒》（其五），下面对该诗赏析有误的一项是（　）\n\n结庐在人境，而无车马喧。问君何能尔？心远地自偏。采菊东篱下，悠然见南山。山气日夕佳，飞鸟相与还。此中有真意，欲辨已忘言。",
+      "options": [
+        {
+          "text": "A. 以草庐开篇，叙免除喧扰的归田生活，起笔舒缓，“在”一“无”，转折有势。",
+          "correct": false
+        },
+        {
+          "text": "B. 三四句巧用设问，转换叙事角度发问，颇富情趣，答语精炼，一语中的，超凡脱俗。",
+          "correct": false
+        },
+        {
+          "text": "C. 以“采菊”“见山”造悠然之境，寄情山水，投身自然，物我分离，不工而工。",
+          "correct": true
+        },
+        {
+          "text": "D. 全诗集叙事、议论、绘景于一体，自然理趣与个人志趣相映，言有尽而意无穷。",
+          "correct": false
+        }
+      ],
+      "answer": "C",
+      "explanation": "C项“物我分离”有误，应为“物我合一（物我交融）”，全诗达到物我合一的境界。",
+      "knowledgePath": "阅读理解 > 古诗词鉴赏"
+    },
+    {
+      "id": "2022-GX-BBW-12",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 15,
+      "type": "classics_reading",
+      "typeName": "文言文阅读",
+      "format": "choice",
+      "difficulty": "hard",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "阅读《桃花源记》（节选），下面对文章理解分析有误的一项是（　）\n\n晋太元中，武陵人捕鱼为业。缘溪行，忘路之远近。忽逢桃花林，夹岸数百步，中无杂树，芳草鲜美，落英缤纷。渔人甚异之，复前行，欲穷其林。林尽水源，便得一山，山有小口，仿佛若有光。便舍船，从口入。初极狭，才通人。复行数十步，豁然开朗。土地平旷，屋舍俨然，有良田、美池、桑竹之属。阡陌交通，鸡犬相闻。其中往来种作，男女衣着，悉如外人。黄发垂髫，并怡然自乐。",
+      "options": [
+        {
+          "text": "A. 渔人“缘溪行”拉开故事序幕，溪水通幽、桃林奇美，为桃花源的出现自然铺垫。",
+          "correct": false
+        },
+        {
+          "text": "B. “皆叹惋”意蕴丰厚，从中感受到渔人所说的与桃花源内的生活相比，差异巨大。",
+          "correct": false
+        },
+        {
+          "text": "C. 渔人辞别桃花源后，得其船并循来时路而返，这与渔人入桃花源的情节形成照应。",
+          "correct": false
+        },
+        {
+          "text": "D. 作者通过真实存在的桃花源，寄托政治理想，反映美好愿望，笔多曲致，富有波澜。",
+          "correct": true
+        }
+      ],
+      "answer": "D",
+      "explanation": "D项“真实存在的桃花源”有误，桃花源是作者陶渊明构想的理想世界，并非真实存在。",
+      "knowledgePath": "阅读理解 > 文言文阅读"
+    },
+    {
+      "id": "2022-GX-BBW-13",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 16,
+      "type": "classics_reading",
+      "typeName": "文言文阅读",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "用“/”给下面的句子断句（限断两处）：\n\n义熙二年解印去县乃赋《归去来》",
+      "answer": "义熙二年/解印去县/乃赋《归去来》",
+      "explanation": "“义熙二年”为时间状语，在其后断一处；“乃”为连词，在“乃”前断一处。句意：义熙二年，将印绶交还离开了彭泽县，于是作了《归去来兮辞》。",
+      "knowledgePath": "阅读理解 > 文言文阅读"
+    },
+    {
+      "id": "2022-GX-BBW-14",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 17,
+      "type": "classics_reading",
+      "typeName": "文言文阅读",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "写出《桃花源记》中下列词语的古义与今义。\n\n（1）妻子——古义：______　今义：对已婚男子配偶的称呼\n（2）绝境——古义：______　今义：______\n（3）无论——古义：______　今义：连词，表示任何条件下结果都不会改变",
+      "answer": "（1）妻子儿女\n（2）与人世隔绝的地方；没有出路的困境，进退维谷的境地\n（3）不要说，更不必说",
+      "explanation": "“妻子”古义为妻子儿女；“绝境”古义为与人世隔绝的地方，今义为没有出路的困境；“无论”古义为不要说，更不必说。",
+      "knowledgePath": "阅读理解 > 文言文阅读"
+    },
+    {
+      "id": "2022-GX-BBW-15",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 18,
+      "type": "classics_reading",
+      "typeName": "文言文阅读",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "将文中画横线的句子翻译成现代汉语：\n\n黄发垂髫，并怡然自乐。",
+      "answer": "老人和小孩们个个都安适愉快，自得其乐。",
+      "explanation": "黄发垂髫：指老人和小孩；怡然：安适自在的样子。",
+      "knowledgePath": "阅读理解 > 文言文阅读"
+    },
+    {
+      "id": "2022-GX-BBW-16",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 18,
+      "type": "classics_reading",
+      "typeName": "文言文阅读",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "将文中画横线的句子翻译成现代汉语：\n\n少怀高尚，博学善属文。",
+      "answer": "他少年时心怀高尚，知识渊博善于做文章。",
+      "explanation": "少：年少时；博学：学识渊博；善：善于、擅长；属：撰写、做。",
+      "knowledgePath": "阅读理解 > 文言文阅读"
+    },
+    {
+      "id": "2022-GX-BBW-17",
+      "paper_id": "2022-GX-BBW",
+      "original_no": 21,
+      "type": "classics_reading",
+      "typeName": "名著阅读",
+      "format": "fill",
+      "difficulty": "medium",
+      "qsrc": "exam",
+      "sourceLabel": "2022·广西北部湾中考",
+      "status": "approved",
+      "question": "初中经典名著分类复习计划表中，3月分类为“散文、诗歌”，已有《朝花夕拾》《傅雷家书》，请再补充一部诗集：\n\n《　　》",
+      "answer": "艾青诗选",
+      "explanation": "初中课本推荐的诗集有《艾青诗选》《繁星》《春水》《唐诗三百首》等，任选一部即可。",
+      "knowledgePath": "基础知识 > 名著导读"
+    }
+  ]
 }

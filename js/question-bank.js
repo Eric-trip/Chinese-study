@@ -675,7 +675,7 @@ const GENERATORS = {
       const showCorrect = Math.random() > 0.5;
       const display = showCorrect ? item.pinyin : _fakeSimilarPinyin(item.pinyin);
       return {
-        type: 'pinyin', difficulty,
+        qsrc: 'auto', type: 'pinyin', difficulty,
         question: `判断下列词语注音是否正确：\n\n"${item.word}  ${display}"`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
@@ -726,7 +726,7 @@ const GENERATORS = {
       const showCorrect = Math.random() > 0.5;
       const display = showCorrect ? pair.correct : pair.wrong;
       return {
-        type: 'char', difficulty,
+        qsrc: 'auto', type: 'char', difficulty,
         question: `判断下列词语书写是否正确：\n\n"${display}"`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
@@ -744,7 +744,7 @@ const GENERATORS = {
         .map(p => p.wrong);
       const wrongs = pickUniqueDistractors(correctPair.correct, wrongPool, 3);
       return {
-        type: 'char', difficulty,
+        qsrc: 'auto', type: 'char', difficulty,
         question: `下列词语中没有错别字的一项是：`,
         options: buildOptions(correctPair.correct, wrongs),
         answer: correctPair.correct,
@@ -757,7 +757,7 @@ const GENERATORS = {
     const correctWordPool = bank.idioms.filter(i => i.idiom !== correctPair.correct).map(i => i.idiom);
     const correctWords = pickUniqueDistractors(correctPair.wrong, correctWordPool, 3);
     return {
-      type: 'char', difficulty,
+      qsrc: 'auto', type: 'char', difficulty,
       question: `下列词语中有错别字的一项是：`,
       options: buildOptions(correctPair.wrong, correctWords),
       answer: correctPair.wrong,
@@ -777,7 +777,7 @@ const GENERATORS = {
       const distractorPool = idiomPool.filter(i => i.meaning !== correct.meaning).map(i => i.meaning);
       const distractors = pickUniqueDistractors(correct.meaning, distractorPool, 3);
       return {
-        type: 'idiom', difficulty,
+        qsrc: 'auto', type: 'idiom', difficulty,
         question: `成语"${correct.idiom}"的意思是：`,
         options: buildOptions(correct.meaning, distractors),
         answer: correct.meaning,
@@ -791,7 +791,7 @@ const GENERATORS = {
       const distractorPool = idiomPool.filter(i => i.idiom !== correct.idiom).map(i => i.idiom);
       const distractors = pickUniqueDistractors(correct.idiom, distractorPool, 3);
       return {
-        type: 'idiom', difficulty,
+        qsrc: 'auto', type: 'idiom', difficulty,
         question: `"${correct.meaning}"对应的成语是：`,
         options: buildOptions(correct.idiom, distractors),
         answer: correct.idiom,
@@ -804,7 +804,7 @@ const GENERATORS = {
     const showCorrect = Math.random() > 0.5;
     if (showCorrect) {
       return {
-        type: 'idiom', difficulty,
+        qsrc: 'auto', type: 'idiom', difficulty,
         question: `判断：成语"${idiomItem.idiom}"的意思是"${idiomItem.meaning}"。`,
         options: buildTrueFalseOptions(true),
         answer: '正确',
@@ -815,7 +815,7 @@ const GENERATORS = {
     if (others.length > 0) {
       const wrongItem = others[Math.floor(Math.random() * others.length)];
       return {
-        type: 'idiom', difficulty,
+        qsrc: 'auto', type: 'idiom', difficulty,
         question: `判断：成语"${idiomItem.idiom}"的意思是"${wrongItem.meaning}"。`,
         options: buildTrueFalseOptions(false),
         answer: '错误',
@@ -823,7 +823,7 @@ const GENERATORS = {
       };
     }
     return {
-      type: 'idiom', difficulty,
+      qsrc: 'auto', type: 'idiom', difficulty,
       question: `判断：成语"${idiomItem.idiom}"的意思是"${idiomItem.meaning}"。`,
       options: buildTrueFalseOptions(true),
       answer: '正确',
@@ -903,7 +903,7 @@ const GENERATORS = {
       const correct = builtinExamples[Math.floor(Math.random() * builtinExamples.length)];
       const distractorTypes = pickUniqueDistractors(correct.type, allTypes, 3);
       return {
-        type: 'rhetoric', difficulty,
+        qsrc: 'auto', type: 'rhetoric', difficulty,
         question: `请判断以下句子主要使用的修辞手法：\n\n"${correct.example}"`,
         options: buildOptions(correct.type, distractorTypes),
         answer: correct.type,
@@ -916,7 +916,7 @@ const GENERATORS = {
     const showCorrect = Math.random() > 0.5;
     if (showCorrect) {
       return {
-        type: 'rhetoric', difficulty,
+        qsrc: 'auto', type: 'rhetoric', difficulty,
         question: `判断：以下句子使用了"${correct.type}"的修辞手法。\n\n"${correct.example}"`,
         options: buildTrueFalseOptions(true),
         answer: '正确',
@@ -927,7 +927,7 @@ const GENERATORS = {
     const wrongTypes = allTypes.filter(t => t !== correct.type);
     if (wrongTypes.length === 0) {
       return {
-        type: 'rhetoric', difficulty,
+        qsrc: 'auto', type: 'rhetoric', difficulty,
         question: `判断：以下句子使用了"${correct.type}"的修辞手法。\n\n"${correct.example}"`,
         options: buildTrueFalseOptions(true),
         answer: '正确',
@@ -936,7 +936,7 @@ const GENERATORS = {
     }
     const wrongType = wrongTypes[Math.floor(Math.random() * wrongTypes.length)];
     return {
-      type: 'rhetoric', difficulty,
+      qsrc: 'auto', type: 'rhetoric', difficulty,
       question: `判断：以下句子使用了"${wrongType}"的修辞手法。\n\n"${correct.example}"`,
       options: buildTrueFalseOptions(false),
       answer: '错误',
@@ -954,7 +954,7 @@ const GENERATORS = {
       const distractorPool = bank.firstWorks.filter(w => w.title !== correct.title).map(w => w.title);
       const distractors = pickUniqueDistractors(correct.title, distractorPool, 3);
       return {
-        type: 'literature', difficulty,
+        qsrc: 'auto', type: 'literature', difficulty,
         question: `${descText}是：`,
         options: buildOptions(correct.title, distractors),
         answer: correct.title,
@@ -968,7 +968,7 @@ const GENERATORS = {
         const distractorPool = bank.authors.filter(a => a.dynasty !== correct.dynasty).map(a => a.dynasty);
         const distractors = pickUniqueDistractors(correct.dynasty, distractorPool, 3);
         return {
-          type: 'literature', difficulty,
+          qsrc: 'auto', type: 'literature', difficulty,
           question: `作家"${correct.name}"是哪个朝代的？`,
           options: buildOptions(correct.dynasty, distractors),
           answer: correct.dynasty,
@@ -987,7 +987,7 @@ const GENERATORS = {
         if (others.length === 0) {
           dynasty = correct.dynasty;
           return {
-            type: 'literature', difficulty,
+            qsrc: 'auto', type: 'literature', difficulty,
             question: `判断正误：${correct.name}是${dynasty}时期的作家。`,
             options: buildTrueFalseOptions(true),
             answer: '正确',
@@ -998,7 +998,7 @@ const GENERATORS = {
         dynasty = other.dynasty;
       }
       return {
-        type: 'literature', difficulty,
+        qsrc: 'auto', type: 'literature', difficulty,
         question: `判断正误：${correct.name}是${dynasty}时期的作家。`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
@@ -1028,7 +1028,7 @@ const GENERATORS = {
     if (difficulty === 'easy') {
       // 填空题：给上句填下句
       return {
-        type: 'quote', difficulty, isFill: true,
+        qsrc: 'auto', type: 'quote', difficulty, isFill: true,
         question: `请补写出下列名句的下句：\n\n"${upper}，______"`,
         answer: lower,
         explanation: `出自${q.author}${q.source}：${q.quote}`
@@ -1046,7 +1046,7 @@ const GENERATORS = {
       }
       const distractors = pickUniqueDistractors(lower, distractorPool, 3);
       return {
-        type: 'quote', difficulty,
+        qsrc: 'auto', type: 'quote', difficulty,
         question: `"${upper}"的下一句是：`,
         options: buildOptions(lower, distractors),
         answer: lower,
@@ -1056,7 +1056,7 @@ const GENERATORS = {
 
     // hard: 填空题 — 给下句填上句（反向默写，更难）
     return {
-      type: 'quote', difficulty, isFill: true,
+      qsrc: 'auto', type: 'quote', difficulty, isFill: true,
       question: `请补写出下列名句的上句：\n\n"______，${lower}"\n\n（提示：出自${q.author}${q.source}）`,
       answer: upper,
       explanation: `出自${q.author}${q.source}：${q.quote}`
@@ -1076,7 +1076,7 @@ const GENERATORS = {
       if (showCorrect && correctSentences.length > 0) {
         const sentence = correctSentences[Math.floor(Math.random() * correctSentences.length)];
         return {
-          type: 'sentence', difficulty,
+          qsrc: 'auto', type: 'sentence', difficulty,
           question: `判断下列句子是否有语病：\n\n"${sentence}"`,
           options: buildTrueFalseOptions(true),
           answer: '正确',
@@ -1086,7 +1086,7 @@ const GENERATORS = {
       const err = errors[Math.floor(Math.random() * errors.length)];
       const sentence = err.examples[Math.floor(Math.random() * err.examples.length)];
       return {
-        type: 'sentence', difficulty,
+        qsrc: 'auto', type: 'sentence', difficulty,
         question: `判断下列句子是否有语病：\n\n"${sentence}"`,
         options: buildTrueFalseOptions(false),
         answer: '错误',
@@ -1107,7 +1107,7 @@ const GENERATORS = {
       }
       const distractors = pickUniqueDistractors(correctSentence, errorSamples, 3);
       return {
-        type: 'sentence', difficulty,
+        qsrc: 'auto', type: 'sentence', difficulty,
         question: `下列句子没有语病的一项是：`,
         options: buildOptions(correctSentence, distractors),
         answer: correctSentence,
@@ -1121,7 +1121,7 @@ const GENERATORS = {
     const correctPool = correctSentences.filter(s => s !== errorSentence);
     const distractors = pickUniqueDistractors(errorSentence, correctPool, 3);
     return {
-      type: 'sentence', difficulty,
+      qsrc: 'auto', type: 'sentence', difficulty,
       question: `下列句子中有语病的一项是：`,
       options: buildOptions(errorSentence, distractors),
       answer: errorSentence,
