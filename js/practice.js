@@ -80,7 +80,7 @@ function loadQuestionModules() {
     // 只加载 question-registry.js（负责加载 auto-questions.json + exam-questions.json）
     // 不再加载 question-bank.js（实时生成器已弃用，详见该文件头部说明）
     const registryScript = document.createElement('script');
-    registryScript.src = 'js/question-registry.js?v=20260624b';
+    registryScript.src = 'js/question-registry.js?v=20260625a';
     registryScript.onload = () => {
       loadAllQuestionData()
         .then(() => {
