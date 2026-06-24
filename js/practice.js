@@ -12,7 +12,8 @@
  */
 
 // ==================== 内建常量（不依赖 question-bank.js） ====================
-const QUESTION_TYPES = {
+// 注意：不要用 QUESTION_TYPES 命名，避免和 question-bank.js 的全局 const 冲突
+const BUILTIN_TYPES = {
   pinyin:     { name: '字音',     icon: '🔊', color: 'pinyin',     _newId: 'pinyin' },
   char:       { name: '字形',     icon: '✏️', color: 'char',       _newId: 'char' },
   word_usage: { name: '词语运用', icon: '💭', color: 'word_usage', _newId: 'word_usage' },
@@ -24,7 +25,7 @@ const QUESTION_TYPES = {
   sentence:   { name: '病句辨析', icon: '🔧', color: 'sentence',   _newId: 'sentence' }
 };
 
-const DIFFICULTIES = {
+const BUILTIN_DIFFICULTIES = {
   easy:   { name: '简单', color: 'easy' },
   medium: { name: '中等', color: 'medium' },
   hard:   { name: '困难', color: 'hard' }
@@ -195,7 +196,7 @@ function renderConfig() {
   // 难度
   html += `<div class="config-row"><span class="config-label">难度</span><div class="chip-group">`;
   html += `<span class="chip chip--active" onclick="selectDifficulty('mixed', this)">混合</span>`;
-  for (const [key, val] of Object.entries(DIFFICULTIES)) {
+  for (const [key, val] of Object.entries(BUILTIN_DIFFICULTIES)) {
     html += `<span class="chip chip--${val.color}" onclick="selectDifficulty('${key}', this)">${val.name}</span>`;
   }
   html += `</div></div>`;
@@ -240,7 +241,7 @@ function renderTypeSelector() {
   } else {
     // 兜底：内建 QUESTION_TYPES
     const unique = {};
-    for (const [k, v] of Object.entries(QUESTION_TYPES)) {
+    for (const [k, v] of Object.entries(BUILTIN_TYPES)) {
       if (!unique[v._newId]) unique[v._newId] = v;
     }
     for (const [, v] of Object.entries(unique)) {
@@ -459,8 +460,8 @@ function renderQuestion() {
   const q = practiceState.questions[practiceState.currentIdx];
   if (!q) return;
 
-  const typeInfo = (typeof getTypeInfoCompat === 'function' ? getTypeInfoCompat(q.type) : null) || QUESTION_TYPES[q.type] || { name: q.type, icon: '❓', color: 'pinyin' };
-  const diffInfo = DIFFICULTIES[q.difficulty] || { name: '', color: 'easy' };
+  const typeInfo = (typeof getTypeInfoCompat === 'function' ? getTypeInfoCompat(q.type) : null) || BUILTIN_TYPES[q.type] || { name: q.type, icon: '❓', color: 'pinyin' };
+  const diffInfo = BUILTIN_DIFFICULTIES[q.difficulty] || { name: '', color: 'easy' };
   const total = practiceState.questions.length;
   const idx = practiceState.currentIdx;
 
@@ -617,7 +618,7 @@ function finishPractice() {
   practiceState.questions.forEach((q, i) => {
     const ans = practiceState.answers[i];
     if (!ans?.correct) {
-      const typeInfo = (typeof getTypeInfoCompat === 'function' ? getTypeInfoCompat(q.type) : null) || QUESTION_TYPES[q.type] || { name: q.type };
+      const typeInfo = (typeof getTypeInfoCompat === 'function' ? getTypeInfoCompat(q.type) : null) || BUILTIN_TYPES[q.type] || { name: q.type };
       reviewHtml += `<div class="error-item">
         <div class="error-item__header">
           <span class="error-item__type">${typeInfo.name}</span>
