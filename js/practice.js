@@ -86,7 +86,10 @@ function loadQuestionModules() {
         .then(() => {
           _modulesLoaded = true;
           _modulesLoading = false;
-          renderConfig();
+          // 只在真题套卷模式触发 re-render（其他模式已有兜底常量，不需要重绘）
+          if (practiceState.mode === 'exam_paper') {
+            renderConfig();
+          }
           resolve();
         })
         .catch(reject);
@@ -391,7 +394,18 @@ function startPractice() {
   });
 
   if (practiceState.questions.length === 0) {
-    showToast('题目生成失败，请重试或调整筛选条件');
+    const diag = {
+      type: practiceState.type,
+      difficulty: practiceState.difficulty,
+      count: practiceState.count,
+      source: practiceState.source,
+      semester: practiceState.semester,
+      autoCount: (typeof getAutoQuestions === 'function') ? getAutoQuestions().length : 'N/A',
+      examCount: (typeof getExamQuestions === 'function') ? getExamQuestions().length : 'N/A',
+      registryLoaded: (typeof getActiveTypesByCategory === 'function')
+    };
+    console.error('[出题] 生成失败，诊断信息:', diag);
+    showToast(`题目生成失败 (预制题:${diag.autoCount} 真题:${diag.examCount})`);
     return;
   }
   practiceState.currentIdx = 0;
