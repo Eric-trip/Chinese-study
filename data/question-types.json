@@ -13,14 +13,14 @@
       "name": "字音", "icon": "🔊", "category": "basic",
       "knowledge_part": "语音",
       "forms": ["choice", "judge"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "char": {
       "name": "字形", "icon": "✏️", "category": "basic",
       "knowledge_part": "汉字",
       "forms": ["choice", "judge"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "pinyin_char": {
@@ -34,14 +34,14 @@
       "name": "词语运用", "icon": "💭", "category": "basic",
       "knowledge_part": "词语",
       "forms": ["choice", "judge"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "sentence": {
       "name": "病句辨析", "icon": "🔧", "category": "basic",
       "knowledge_part": "句子",
       "forms": ["choice", "judge"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "punctuation": {
@@ -55,14 +55,14 @@
       "name": "修辞手法", "icon": "🎨", "category": "basic",
       "knowledge_part": "修辞",
       "forms": ["choice", "judge"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "literature": {
       "name": "文学常识", "icon": "📚", "category": "basic",
       "knowledge_part": "文学常识",
       "forms": ["choice", "judge"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "culture": {
@@ -76,7 +76,7 @@
       "name": "古诗文默写", "icon": "📝", "category": "basic",
       "knowledge_part": "名句名段",
       "forms": ["fill", "choice"],
-      "auto_generate": true,
+      "auto_generate": false,
       "active": true
     },
     "classics_reading": {
@@ -159,7 +159,7 @@
   },
   "sources": {
     "exam":  { "name": "真题", "icon": "📋" },
-    "auto":  { "name": "自主生成", "icon": "🤖" },
+    "auto":  { "name": "预制题", "icon": "📋" },
     "mock":  { "name": "模拟题", "icon": "📝" }
   }
 }

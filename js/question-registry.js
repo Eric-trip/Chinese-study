@@ -4,18 +4,20 @@
  * 职责：
  * 1. 加载题型注册表（data/question-types.json）
  * 2. 加载真题库（data/exam-questions.json）
- * 3. 提供统一的题型/难度/学期/来源查询接口
- * 4. 合并真题 + 自主题，统一输出给 practice.js
+ * 3. 加载预制题库（data/auto-questions.json）
+ * 4. 提供统一的题型/难度/学期/来源查询接口
+ * 5. 合并真题 + 预制题，统一输出给 practice.js
  *
  * 设计原则：
  * - 题型注册制：加新题型只需改 JSON，不改代码
- * - 真题/自主题统一接口：调用方不需要关心来源
- * - 向下兼容：原 question-bank.js 的 GENERATORS 继续工作
+ * - 真题/预制题统一接口：调用方不需要关心来源
+ * - 只使用预制题和真题：不依赖运行时实时生成
  */
 
 // ==================== 注册表状态 ====================
 let _registry = null;
 let _examBank = null;
+let _autoBank = null;
 let _loadPromise = null;
 
 // ==================== 加载 ====================
@@ -43,11 +45,24 @@ async function loadExamBank() {
   return _examBank;
 }
 
+/** 加载预制题库（AI 预先编写的题目，替代实时生成） */
+async function loadAutoBank() {
+  if (_autoBank) return _autoBank;
+  try {
+    const res = await fetch('data/auto-questions.json');
+    _autoBank = await res.json();
+  } catch (e) {
+    _autoBank = { version: 1, questions: [] };
+  }
+  return _autoBank;
+}
+
 async function loadAllQuestionData() {
   if (_loadPromise) return _loadPromise;
-  _loadPromise = Promise.all([loadQuestionRegistry(), loadExamBank()]);
-  const [registry, examBank] = await _loadPromise;
-  return { registry, examBank };
+  // 三个数据源并行加载：题型注册表 + 真题库 + 预制题库
+  _loadPromise = Promise.all([loadQuestionRegistry(), loadExamBank(), loadAutoBank()]);
+  const [registry, examBank, autoBank] = await _loadPromise;
+  return { registry, examBank, autoBank };
 }
 
 // ==================== 查询接口 ====================
@@ -113,6 +128,11 @@ function getExamQuestions() {
   return _examBank ? _examBank.questions : [];
 }
 
+/** 获取所有预制题 */
+function getAutoQuestions() {
+  return _autoBank ? _autoBank.questions : [];
+}
+
 /** 按条件筛选真题 */
 function filterExamQuestions(filters = {}) {
   let questions = getExamQuestions();
@@ -131,14 +151,21 @@ function filterExamQuestions(filters = {}) {
 
 /** 获取一套真题卷的所有题目（按原卷顺序） */
 function getPaperQuestions(paperId) {
-  return getExamQuestions().filter(q => q.paper_id === paperId)
+  return getExamQuestions().filter(q => q.paper_id === paperId && q.qsrc === 'exam')
     .sort((a, b) => (a.original_no || 0) - (b.original_no || 0));
 }
 
 // ==================== 统一出题接口 ====================
 
 /**
- * 统一出题：合并真题 + 自主题，按条件筛选
+ * 统一出题：合并真题 + 预制题，按条件筛选
+ *
+ * 出题策略（2026-06-24 更新）：
+ * - 只使用预制题和真题，完全放弃运行时实时生成
+ * - 预制题（auto-questions.json）：AI 预先编写，质量可控，持续扩充
+ * - 真题（exam-questions.json）：真实考卷题目，按年份/地区组织
+ * - 来源不足时不会降级到实时生成，应通过扩充数据文件解决
+ *
  * @param {Object} options - 筛选条件
  * @param {string} options.type - 题型ID，'all' 为全部
  * @param {string} options.difficulty - 难度，'mixed' 为混合
@@ -156,47 +183,55 @@ function generateUnifiedQuestions(options = {}) {
     semester = 'all'
   } = options;
 
-  // 如果来源只选真题，直接从真题库取
+  // 来源：仅真题
   if (source === 'exam') {
     return _sampleFromExam(type, difficulty, semester, count);
   }
 
-  // 如果来源只选自主题，用 GENERATORS 生成
+  // 来源：仅预制题（无需实时生成降级）
   if (source === 'auto') {
-    return _generateAutoQuestions(type, difficulty, count);
+    return _sampleFromAuto(type, difficulty, count);
   }
 
-  // 混合来源：真题 + 自主题
-  const examQs = _sampleFromExam(type, difficulty, semester, count);
+  // 混合来源：真题 + 预制题（混排）
+  // 真题按 semester 筛选，预制题不受学期限制
+  const examQs = _sampleFromExam(type, difficulty, semester, Math.ceil(count / 2));
   const autoCount = count - examQs.length;
-  const autoQs = autoCount > 0 ? _generateAutoQuestions(type, difficulty, autoCount) : [];
+  const autoQs = autoCount > 0 ? _sampleFromAuto(type, difficulty, autoCount) : [];
   return [...examQs, ...autoQs].sort(() => Math.random() - 0.5);
 }
 
 // ==================== 内部实现 ====================
 
-/** 从真题库抽样 */
+/** 从真题库抽样（只取 qsrc === 'exam' 的题） */
 function _sampleFromExam(type, difficulty, semester, count) {
-  let pool = getExamQuestions();
+  let pool = getExamQuestions().filter(q => q.qsrc === 'exam');
   if (type !== 'all') pool = pool.filter(q => q.type === type);
   if (difficulty !== 'mixed') pool = pool.filter(q => q.difficulty === difficulty);
   if (semester !== 'all') pool = pool.filter(q => q.semester === semester || q.semester === 'all');
 
-  // 洗牌抽取
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, shuffled.length));
 }
 
-/** 用 GENERATORS 生成自主题（兼容旧接口） */
-function _generateAutoQuestions(type, difficulty, count) {
-  // 检查该题型是否有自动生成器
-  if (type !== 'all') {
-    const typeInfo = getTypeInfo(type);
-    if (!typeInfo.auto_generate) return [];
-  }
-  // 调用 question-bank.js 的原始生成函数
-  if (typeof generateQuestions !== 'function') return [];
-  return generateQuestions(type, difficulty, count);
+/**
+ * 从预制题库抽样（只使用已入库的预制题，不依赖实时生成）
+ *
+ * 策略：
+ * 1. 从 auto-questions.json 取预制题（qsrc === 'auto'）
+ * 2. 按题型+难度筛选，洗牌后取指定数量
+ * 3. 如果预制题不够，只返回已有的（不再降级到实时生成）
+ *
+ * 注意：2026-06-24 起已放弃"实时生成降级"方案，
+ * 题量不足时应通过 generate-auto-questions.js 扩充预制题来解决。
+ */
+function _sampleFromAuto(type, difficulty, count) {
+  let pool = getAutoQuestions().filter(q => q.status === 'approved');
+  if (type !== 'all') pool = pool.filter(q => q.type === type);
+  if (difficulty !== 'mixed') pool = pool.filter(q => q.difficulty === difficulty);
+
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
 }
 
 // ==================== 向下兼容映射 ====================
@@ -246,8 +281,8 @@ function _getFallbackRegistry() {
     },
     semesters: { all: { name: '全学段', grade: 0, semester: 0 } },
     sources: {
-      exam: { name: '中考真题', icon: '📋' },
-      auto: { name: '自主生成', icon: '🤖' },
+      exam: { name: '真题', icon: '📋' },
+      auto: { name: '预制题', icon: '📋' },
       mock: { name: '模拟题', icon: '📝' }
     }
   };

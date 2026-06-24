@@ -2,8 +2,12 @@
  * practice.js - 刷题练习逻辑
  * 支持模式：按知识点 / 随机抽题 / 模拟测试 / 错题重练 / 真题套卷
  *
+ * 数据来源变更（2026-06-24）：
+ *   只使用预制题（auto-questions.json）和真题（exam-questions.json）
+ *   不再加载 question-bank.js 的实时生成器
+ *
  * 性能优化：
- * - 首屏不加载 question-bank.js / question-registry.js（63KB+），延迟到点击"开始练习"时动态加载
+ * - 首屏不加载 question-registry.js（缓存数据），延迟到点击"开始练习"时动态加载
  * - 配置面板立即渲染，handbook.json 后台加载
  */
 
@@ -72,35 +76,25 @@ function loadQuestionModules() {
   _modulesLoading = true;
 
   _modulesPromise = new Promise((resolve, reject) => {
-    // 先加载 question-bank.js（较重的生成逻辑），再加载 question-registry.js（依赖前者）
-    const bankScript = document.createElement('script');
-    bankScript.src = 'js/question-bank.js?v=20260623e';
-    bankScript.onload = () => {
-      const registryScript = document.createElement('script');
-      registryScript.src = 'js/question-registry.js?v=20260623e';
-      registryScript.onload = () => {
-        // registry 加载完毕，现在调用 loadAllQuestionData
-        loadAllQuestionData()
-          .then(() => {
-            _modulesLoaded = true;
-            _modulesLoading = false;
-            // 自动刷新配置面板（真题套卷的试卷列表等）
-            renderConfig();
-            resolve();
-          })
-          .catch(reject);
-      };
-      registryScript.onerror = () => {
-        _modulesLoading = false;
-        reject(new Error('question-registry.js 加载失败'));
-      };
-      document.head.appendChild(registryScript);
+    // 只加载 question-registry.js（负责加载 auto-questions.json + exam-questions.json）
+    // 不再加载 question-bank.js（实时生成器已弃用，详见该文件头部说明）
+    const registryScript = document.createElement('script');
+    registryScript.src = 'js/question-registry.js?v=20260624b';
+    registryScript.onload = () => {
+      loadAllQuestionData()
+        .then(() => {
+          _modulesLoaded = true;
+          _modulesLoading = false;
+          renderConfig();
+          resolve();
+        })
+        .catch(reject);
     };
-    bankScript.onerror = () => {
+    registryScript.onerror = () => {
       _modulesLoading = false;
-      reject(new Error('question-bank.js 加载失败'));
+      reject(new Error('question-registry.js 加载失败'));
     };
-    document.head.appendChild(bankScript);
+    document.head.appendChild(registryScript);
   });
 
   return _modulesPromise;
@@ -264,7 +258,7 @@ function renderSourceSelector() {
   } else {
     sources = {
       exam: { name: '中考真题', icon: '📋' },
-      auto: { name: '自主生成', icon: '🤖' }
+      auto: { name: '预制题', icon: '📋' }
     };
   }
   let html = `<div class="config-row"><span class="config-label">来源</span><div class="chip-group">`;

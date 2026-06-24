@@ -1,5 +1,21 @@
 /**
- * question-bank.js - 基于手册数据自动生成题库
+ * question-bank.js - 基于手册数据自动生成题库（已弃用）
+ *
+ * ⚠️ 注意：本文件中的 GENERATORS 已在生产环境中弃用。
+ *
+ * 出题策略变更（2026-06-24）：
+ *   从"预制题优先，实时生成为辅"改为"只使用预制题和真题"
+ *   详见 docs/出题规范文档.md
+ *
+ * 保留本文件仅作为以下用途：
+ * 1. 开发参考：编写预制题时可参考 GENERATORS 的出题思路
+ * 2. 数据提取：extractQuestionData() 可供本地调试使用
+ *
+ * 生产环境不再加载此文件：
+ * - 预制题由 scripts/generate-auto-questions.js 生成 → data/auto-questions.json
+ * - 答题时由 js/question-registry.js 直接从 auto-questions.json + exam-questions.json 取题
+ * - 不再调用 generateQuestions() 做运行时实时生成
+ *
  * 7种题型 × 3个难度等级
  * 支持选择题(4选项)、判断题(2选项)、填空题
  *
@@ -691,7 +707,7 @@ const GENERATORS = {
       const showCorrect = Math.random() > 0.5;
       const display = showCorrect ? err.correct : err.wrong;
       return {
-        type: 'pinyin', difficulty: difficulty || 'medium',
+        qsrc: 'auto', type: 'pinyin', difficulty: difficulty || 'medium',
         question: `判断下列读音是否正确：\n\n"${display}"`,
         options: buildTrueFalseOptions(showCorrect),
         answer: showCorrect ? '正确' : '错误',
@@ -705,7 +721,7 @@ const GENERATORS = {
     if (bank.pinyinWords.length > 0) {
       const item = bank.pinyinWords[Math.floor(Math.random() * bank.pinyinWords.length)];
       return {
-        type: 'pinyin', difficulty: difficulty || 'medium',
+        qsrc: 'auto', type: 'pinyin', difficulty: difficulty || 'medium',
         question: `判断下列词语注音是否正确：\n\n"${item.word}  ${item.pinyin}"`,
         options: buildTrueFalseOptions(true),
         answer: '正确',

@@ -1,0 +1,864 @@
+{
+  "version": 1,
+  "generated_date": "2026-06-24",
+  "total": 30,
+  "notes": "预制题库（仅使用预制题和真题，已放弃实时生成），由 AI 基于 handbook 数据编写，质量可控。",
+  "questions": [
+    {
+      "id": "auto_pinyin_001",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列成语中，加点字的注音有误的一项是：\nA. 爱憎(zēng)分明  B. 安土重(zhòng)迁\nC. 按捺(nài)不住  D. 病入膏肓(huāng)",
+      "options": [
+        {
+          "text": "A. 爱憎(zēng)分明",
+          "correct": false
+        },
+        {
+          "text": "B. 安土重(zhòng)迁",
+          "correct": false
+        },
+        {
+          "text": "C. 按捺(nài)不住",
+          "correct": true
+        },
+        {
+          "text": "D. 病入膏肓(huāng)",
+          "correct": false
+        }
+      ],
+      "answer": "C",
+      "explanation": "按捺不住的\"捺\"应读 nà，意为抑制、忍耐。爱憎分明的\"憎\"读 zēng（不读 zèng）；安土重迁的\"重\"读 zhòng（意为\"不轻易\"）；病入膏肓的\"肓\"读 huāng（注意与\"盲\"máng 区别）。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_002",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列成语中，读音完全正确的一项是：\nA. 草菅(shū)人命  暴殄(tiǎn)天物\nB. 并行不悖(bèi)  不胫(jìng)而走\nC. 瞠(chēng)目结舌  相形见绌(chū)\nD. 不落窠(kē)臼  参差(cān chā)不齐",
+      "options": [
+        {
+          "text": "A. 草菅(shū)人命  暴殄(tiǎn)天物",
+          "correct": false
+        },
+        {
+          "text": "B. 并行不悖(bèi)  不胫(jìng)而走",
+          "correct": true
+        },
+        {
+          "text": "C. 瞠(chēng)目结舌  相形见绌(chū)",
+          "correct": false
+        },
+        {
+          "text": "D. 不落窠(kē)臼  参差(cān chā)不齐",
+          "correct": false
+        }
+      ],
+      "answer": "B",
+      "explanation": "A项：草菅人命的\"菅\"应读 jiān（草字头，不是竹字头的\"管\"）。C项：相形见绌的\"绌\"应读 chù（不够、不足）。D项：参差不齐的\"参差\"应读 cēn cī。B项两个成语读音均正确。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_003",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列成语中，加点字注音正确的一项是：\nA. 安然无恙(yàn)  B. 稗(bài)官野史\nC. 按部就班(guī)  D. 黯(àn)然失色",
+      "options": [
+        {
+          "text": "A. 安然无恙(yàn)",
+          "correct": false
+        },
+        {
+          "text": "B. 稗(bài)官野史",
+          "correct": false
+        },
+        {
+          "text": "C. 按部就班(guī)",
+          "correct": false
+        },
+        {
+          "text": "D. 黯(àn)然失色",
+          "correct": true
+        }
+      ],
+      "answer": "D",
+      "explanation": "A项：安然无恙的\"恙\"应读 yàng（指疾病，不读 yàn）。B项：稗(bài)官野史的读音正确，注意\"稗\"指田间杂草，比喻微小。C项：\"部\"读 bù，不是 guī。D项：\"黯\"读 àn，正确。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_004",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列成语中，注音全部正确的一项是：\nA. 沧海一粟(lì)  称(chèng)心如意\nB. 吹毛求疵(cī)  垂涎(xián)三尺\nC. 处(chù)理事务  参差(cī)不齐\nD. 大腹便便(pián)  殚(dān)精竭虑",
+      "options": [
+        {
+          "text": "A. 沧海一粟(lì)  称(chèng)心如意",
+          "correct": false
+        },
+        {
+          "text": "B. 吹毛求疵(cī)  垂涎(xián)三尺",
+          "correct": false
+        },
+        {
+          "text": "C. 处(chù)理事务  参差(cī)不齐",
+          "correct": false
+        },
+        {
+          "text": "D. 大腹便便(pián)  殚(dān)精竭虑",
+          "correct": true
+        }
+      ],
+      "answer": "D",
+      "explanation": "A项：粟应读 sù（谷物，不读 lì），称心应读 chèn（适合，不读 chèng）。B项：疵应读 cī（毛病），注意声母是 c 而非 ch。C项：处理应读 chǔ（动词，不读 chù/名词）。D项均正确。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_005",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下面成语的注音是否正确：\n\"峥嵘(zhēng róng)岁月\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "峥嵘岁月的读音正确。峥读 zhēng（注意不读 zhèng），嵘读 róng，\"峥嵘\"形容山势高峻或气概不凡。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_006",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下面成语的注音是否正确：\n\"相形见绌(xiāng xíng jiàn chū)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"绌\"应读 chù，不是 chū。相形见绌（xiāng xíng jiàn chù），意为互相比较之下，一方显得很不足。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_007",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下面成语的注音是否正确：\n\"一蹴而就(yī cù ér jiù)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"蹴\"读 cù（踢、踏的意思），一蹴而就指一步就成功，形容事情轻而易举。注意\"蹴\"不要误读为 jiù。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_008",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下面成语的注音是否正确：\n\"良莠不齐(liáng xiù bù qí)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"莠\"应读 yǒu（狗尾草，比喻品质坏的），不是 xiù。良莠不齐指好人坏人混在一起。注意\"莠\"与\"秀(xiù)\"形似但读音不同。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_009",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下面成语的注音是否正确：\n\"为虎作伥(wèi hǔ zuò chāng)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "读音正确。伥读 chāng，\"伥\"指被老虎咬死的人变成的鬼，比喻帮助坏人做坏事。注意\"为\"在此处读 wèi（介词）。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_010",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下面成语的注音是否正确：\n\"命运多舛(mìng yùn duō chuǎi)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"舛\"应读 chuǎn（错乱、违背），不是 chuǎi。命运多舛指一生坎坷，运气不好。注意\"舛\"与\"揣(chuǎi)\"形似，注意区分。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_char_001",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列词语中没有错别字的一项是：",
+      "options": [
+        {
+          "text": "黯然失色",
+          "correct": true
+        },
+        {
+          "text": "按步就班",
+          "correct": false
+        },
+        {
+          "text": "心弛神往",
+          "correct": false
+        },
+        {
+          "text": "惨绝人圜",
+          "correct": false
+        }
+      ],
+      "answer": "黯然失色",
+      "explanation": "\"黯然失色\"正确，\"黯\"表示阴暗、伤感的样子。B项应为\"按部就班\"（部：门类、步骤）。C项应为\"心驰神往\"（驰：车马快跑，引申为向往）。D项应为\"惨绝人寰\"（寰：广大的地域，指人世）。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_002",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列各组词语中，书写全部正确的一组是：",
+      "options": [
+        {
+          "text": "部署  按部就班  胜卷在握",
+          "correct": false
+        },
+        {
+          "text": "舞弊  兴利除弊  脍炙人口",
+          "correct": true
+        },
+        {
+          "text": "脉搏  赤膊上阵  渊搏学识",
+          "correct": false
+        },
+        {
+          "text": "松弛  一张一驰  风驰电掣",
+          "correct": false
+        }
+      ],
+      "answer": "舞弊  兴利除弊  脍炙人口",
+      "explanation": "A项\"胜卷在握\"应为\"胜券在握\"（券：票据、凭证，不读 juàn）。C项\"渊搏学识\"应为\"渊博学识\"（博：丰富、通晓；搏：对打、跳动）。D项\"一张一驰\"应为\"一张一弛\"（弛：放松、松懈；驰：快跑）。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_003",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列词语中书写有错别字的一项是：",
+      "options": [
+        {
+          "text": "跋山涉水",
+          "correct": false
+        },
+        {
+          "text": "按兵不动",
+          "correct": false
+        },
+        {
+          "text": "安分守己",
+          "correct": false
+        },
+        {
+          "text": "暗然神伤",
+          "correct": true
+        }
+      ],
+      "answer": "暗然神伤",
+      "explanation": "\"暗然神伤\"应为\"黯然神伤\"。黯（àn）：阴暗、伤感的样子；暗（àn）指光线不足、隐藏。表示情绪低落、伤感的成语应用\"黯然\"，而非\"暗\"。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_004",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中加点词语书写正确的一项是：",
+      "options": [
+        {
+          "text": "他为人谦和，从不骄横跋扈。",
+          "correct": false
+        },
+        {
+          "text": "经过不懈努力，他终于如愿以尝。",
+          "correct": false
+        },
+        {
+          "text": "这篇报道实事求是，内容真象大白。",
+          "correct": false
+        },
+        {
+          "text": "面对困难，我们要自强不息，奋起直追。",
+          "correct": true
+        }
+      ],
+      "answer": "面对困难，我们要自强不息，奋起直追。",
+      "explanation": "A项\"骄横跋扈\"中的\"跋\"正确（意为霸道），但\"扈\"应为\"扈\"（hù），该词无误。B项\"如愿以尝\"应为\"如愿以偿\"（偿：实现、满足）。C项\"真象大白\"应为\"真相大白\"（相：事实、情况）。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_005",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列词语书写是否正确：\n\"甘败下风\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"甘败下风\"应为\"甘拜下风\"。拜：拜服、佩服；下风：风向的下方，比喻劣势地位。意为真心佩服，自认不如。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_006",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列词语书写是否正确：\n\"趋之若骛\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"趋之若骛\"应为\"趋之若鹜\"。鹜（wù）：鸭子；骛（wù）：追求。趋之若鹜指像鸭子一样成群跑过去，比喻很多人争相追逐（含贬义）。注意\"鹜\"是\"鸟\"字底，\"骛\"是\"马\"字底。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_007",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列四组词语中，含有错别字的一组是：",
+      "options": [
+        {
+          "text": "川流不息  焕然一新  铤而走险",
+          "correct": false
+        },
+        {
+          "text": "变本加厉  按部就班  川流不息",
+          "correct": false
+        },
+        {
+          "text": "不径而走  出奇不意  计日成功",
+          "correct": true
+        },
+        {
+          "text": "迫不及待  一如既往  因材施教",
+          "correct": false
+        }
+      ],
+      "answer": "不径而走  出奇不意  计日成功",
+      "explanation": "C项三个词语均有错别字：不胫而走（胫：小腿，指没有腿却能跑，形容传播迅速），出其不意（其：代词，他/对方），计日程功（程：计算，指可以数着日子算进度）。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_008",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列字形完全正确的一组是：",
+      "options": [
+        {
+          "text": "和蔼  暮霭  鸿鹄之志",
+          "correct": true
+        },
+        {
+          "text": "雾蔼  和蔼  鸿皓之志",
+          "correct": false
+        },
+        {
+          "text": "和蔼  雾蔼  鸿鹄之向",
+          "correct": false
+        },
+        {
+          "text": "暮蔼  和蔼  鸿鹄之质",
+          "correct": false
+        }
+      ],
+      "answer": "和蔼  暮霭  鸿鹄之志",
+      "explanation": "注意\"蔼\"与\"霭\"的区别：和蔼（ǎi）指和气、和善，\"蔼\"是草字头，指繁茂；暮霭（ǎi）指傍晚的云雾，\"霭\"是雨字头。鸿鹄之志的\"鹄\"读 hú（天鹅），比喻远大的志向。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_009",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子中是否有错别字：\n\"这篇作文构思新颖，文笔流畅，堪称佳作。\"",
+      "options": [
+        {
+          "text": "有错别字",
+          "correct": false
+        },
+        {
+          "text": "没有错别字",
+          "correct": true
+        }
+      ],
+      "answer": "没有错别字",
+      "explanation": "该句没有错别字。\"新颖\"的\"颖\"正确，\"堪称\"的\"堪\"（可以、能够）正确。注意\"流\"是三点水，\"畅\"是申字旁加𠃊。全句书写规范。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_010",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列句子中是否有错别字：\n\"各部门要各行其事，互不干扰，提高工作效率。\"",
+      "options": [
+        {
+          "text": "有错别字",
+          "correct": true
+        },
+        {
+          "text": "没有错别字",
+          "correct": false
+        }
+      ],
+      "answer": "有错别字",
+      "explanation": "\"各行其事\"应为\"各行其是\"。其是：认为对的，该成语意为各人按照自己认为对的去做，形容思想不统一。也可写作\"各行其是\"。\"事\"和\"是\"音同形异，这是常见的成语误写。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_word_001",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "成语\"安步当车\"的意思是什么？",
+      "options": [
+        {
+          "text": "把车子停稳当再步行",
+          "correct": false
+        },
+        {
+          "text": "用缓慢的步行代替乘车，形容轻松缓慢",
+          "correct": true
+        },
+        {
+          "text": "为了安全而不坐车",
+          "correct": false
+        },
+        {
+          "text": "安置好车辆准备出发",
+          "correct": false
+        }
+      ],
+      "answer": "用缓慢的步行代替乘车，形容轻松缓慢",
+      "explanation": "安步当车出自《战国策》，\"安\"是安详、不慌忙的意思。指以从容的步行代替乘车，形容行走从容不迫，也比喻安于贫贱、不追求奢华的生活。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_002",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中加点成语使用不恰当的一项是：",
+      "options": [
+        {
+          "text": "他在学术上孜孜不倦，终于取得了令人瞩目的成就。",
+          "correct": false
+        },
+        {
+          "text": "大自然鬼斧神工，造就了张家界奇峰异石的壮丽景观。",
+          "correct": false
+        },
+        {
+          "text": "他废寝忘食地工作，真是到了不可救药的地步。",
+          "correct": true
+        },
+        {
+          "text": "这篇文章旁征博引，论证充分，令人信服。",
+          "correct": false
+        }
+      ],
+      "answer": "他废寝忘食地工作，真是到了不可救药的地步。",
+      "explanation": "\"不可救药\"意为病已重到无法用药医治，比喻人或事物坏到无法挽救的地步，是贬义词。用在这里形容努力工作是褒贬失当。应改为\"废寝忘食\"或\"孜孜不倦\"等褒义词。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_003",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列各句中加点的成语使用恰当的一项是：",
+      "options": [
+        {
+          "text": "他在这次比赛中首当其冲，一举夺得了冠军。",
+          "correct": false
+        },
+        {
+          "text": "这篇小说情节跌宕起伏，引人入胜。",
+          "correct": true
+        },
+        {
+          "text": "听到这个好消息，他忍俊不禁地流下了眼泪。",
+          "correct": false
+        },
+        {
+          "text": "这个人平时好高骛远，扎扎实实做好每一件小事。",
+          "correct": false
+        }
+      ],
+      "answer": "这篇小说情节跌宕起伏，引人入胜。",
+      "explanation": "A项\"首当其冲\"比喻最先受到攻击或遭遇灾难，不是\"首先冲在前面\"的意思。C项\"忍俊不禁\"指忍不住笑，不能用于流泪。D项\"好高骛远\"指不切实际地追求过高目标，与\"扎扎实实\"矛盾。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_004",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列各句中加点词语使用正确的一项是：",
+      "options": [
+        {
+          "text": "这件事错综复杂，面对各种质疑，他三言两语就说得清清楚楚，真是妙笔生花。",
+          "correct": false
+        },
+        {
+          "text": "春天的西湖美不胜收，游客们纷纷驻足欣赏，流连忘返。",
+          "correct": true
+        },
+        {
+          "text": "这篇作文条理混乱，语无伦次，确实是个不刊之论。",
+          "correct": false
+        },
+        {
+          "text": "谈起古典文学，他如数家珍，但一提到现代文学就默然不语了。",
+          "correct": false
+        }
+      ],
+      "answer": "春天的西湖美不胜收，游客们纷纷驻足欣赏，流连忘返。",
+      "explanation": "A项\"妙笔生花\"比喻杰出的写作才能，与语境不符（此处应是\"口若悬河\"或对答如流）。C项\"不刊之论\"比喻不能改动或不可磨灭的言论（刊：古代指削除刻错了的字），是褒义词，不能用于形容条理混乱。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_005",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "依次填入下列横线处的成语，最恰当的一组是：\n\n① 他___，终于攻克了这道技术难题。\n② 这篇文章___，展示了作者深厚的文学功底。\n③ 歹徒___，将老人的钱物洗劫一空。",
+      "options": [
+        {
+          "text": "①处心积虑 ②文采斐然 ③明火执仗",
+          "correct": false
+        },
+        {
+          "text": "①殚精竭虑 ②文采斐然 ③明火执仗",
+          "correct": true
+        },
+        {
+          "text": "①殚精竭虑 ②哗众取宠 ③旁门左道",
+          "correct": false
+        },
+        {
+          "text": "①处心积虑 ②哗众取宠 ③旁门左道",
+          "correct": false
+        }
+      ],
+      "answer": "①殚精竭虑 ②文采斐然 ③明火执仗",
+      "explanation": "\"殚精竭虑\"指用尽精力（褒义），适合①。\"文采斐然\"指文章富有文采，适合②。\"明火执仗\"指点着火把拿着武器公开抢劫，适合③。A项\"处心积虑\"是贬义词，不适合①的褒义语境。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_006",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子中成语使用是否正确：\n\"同学们聚在一起，各抒己见，讨论得十分热烈。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"各抒己见\"意为各人充分发表自己的见解，\"抒\"是表达、抒发。这个成语非常适合描述讨论场景，使用正确。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_007",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子中成语使用是否正确：\n\"老师讲得很生动，教室里响起了一声声振聋发聩的掌声。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"振聋发聩\"指发出很大的声响使耳聋的人也能听见，比喻用语言文字唤醒糊涂的人。不能用来形容掌声。形容掌声响亮应用\"震耳欲聋\"或\"经久不息\"。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_008",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列句子中成语使用是否正确：\n\"他在发言中多次提到自己的成就，真是敝帚自珍，让人敬佩。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"敝帚自珍\"指把自己家里的破扫帚当成宝贝，比喻东西虽不好，但自己十分珍惜。这是谦词，用于说自己，但不能用于夸耀成就（含贬义），更不能用来敬佩他人。此处应用\"引以为豪\"之类的词语。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_009",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列成语中哪一组全是褒义词？",
+      "options": [
+        {
+          "text": "呕心沥血  精益求精  废寝忘食",
+          "correct": true
+        },
+        {
+          "text": "处心积虑  费尽心机  挖空心思",
+          "correct": false
+        },
+        {
+          "text": "耀武扬威  得意忘形  趾高气扬",
+          "correct": false
+        },
+        {
+          "text": "高谈阔论  夸夸其谈  自以为是",
+          "correct": false
+        }
+      ],
+      "answer": "呕心沥血  精益求精  废寝忘食",
+      "explanation": "A组全是褒义词。B组全是贬义词（处心积虑：蓄谋已久；费尽心机：用尽心思，含贬义）。C组全是贬义词。D组全是贬义词。注意区分\"呕心沥血\"（褒）与\"处心积虑\"（贬）。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_010",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "成语\"万人空巷\"的正确含义是：",
+      "options": [
+        {
+          "text": "巷子里空无一人，形容非常冷清",
+          "correct": false
+        },
+        {
+          "text": "家家户户的人都走出了巷子，形容庆祝、欢迎等盛况",
+          "correct": true
+        },
+        {
+          "text": "很多人挤在巷子里，形容人口密集",
+          "correct": false
+        },
+        {
+          "text": "一万人都离开了巷子，形容大规模疏散",
+          "correct": false
+        }
+      ],
+      "answer": "家家户户的人都走出了巷子，形容庆祝、欢迎等盛况",
+      "explanation": "\"万人空巷\"常被误用为\"巷子空无一人\"（冷清），但其正确含义是家家户户的人都从巷子里出来了，聚集在一起，形容盛大场面或热烈气氛。如\"喜讯传来，万人空巷，夹道欢迎。\"",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    }
+  ]
+}
