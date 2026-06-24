@@ -24,7 +24,7 @@ let _loadPromise = null;
 async function loadQuestionRegistry() {
   if (_registry) return _registry;
   try {
-    const res = await fetch('data/question-types.json');
+    const res = await fetch('data/question-types.json?v=20260625b');
     _registry = await res.json();
   } catch (e) {
     console.error('加载题型注册表失败:', e);
@@ -36,7 +36,7 @@ async function loadQuestionRegistry() {
 async function loadExamBank() {
   if (_examBank) return _examBank;
   try {
-    const res = await fetch('data/exam-questions.json');
+    const res = await fetch('data/exam-questions.json?v=20260625b');
     _examBank = await res.json();
   } catch (e) {
     console.error('加载真题库失败:', e);
@@ -49,7 +49,7 @@ async function loadExamBank() {
 async function loadAutoBank() {
   if (_autoBank) return _autoBank;
   try {
-    const res = await fetch('data/auto-questions.json');
+    const res = await fetch('data/auto-questions.json?v=20260625b');
     _autoBank = await res.json();
   } catch (e) {
     _autoBank = { version: 1, questions: [] };
