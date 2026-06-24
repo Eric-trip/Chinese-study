@@ -183,22 +183,48 @@ function generateUnifiedQuestions(options = {}) {
     semester = 'all'
   } = options;
 
+  // 诊断：检查数据是否已加载
+  const autoCount = getAutoQuestions().length;
+  const examCount = getExamQuestions().length;
+  if (autoCount === 0 && examCount === 0) {
+    console.warn('[出题] 题库未加载或为空：预制题 0 道，真题 0 道', {
+      loadState: { _autoBank: !!_autoBank, _examBank: !!_examBank, _registry: !!_registry }
+    });
+  }
+
   // 来源：仅真题
   if (source === 'exam') {
-    return _sampleFromExam(type, difficulty, semester, count);
+    const result = _sampleFromExam(type, difficulty, semester, count);
+    if (result.length === 0) {
+      console.warn('[出题] 来源=真题，无匹配题目', { type, difficulty, semester, count, examTotal: examCount });
+    }
+    return result;
   }
 
   // 来源：仅预制题（无需实时生成降级）
   if (source === 'auto') {
-    return _sampleFromAuto(type, difficulty, count);
+    const result = _sampleFromAuto(type, difficulty, count);
+    if (result.length === 0) {
+      console.warn('[出题] 来源=预制题，无匹配题目', { type, difficulty, count, autoTotal: autoCount });
+    }
+    return result;
   }
 
   // 混合来源：真题 + 预制题（混排）
   // 真题按 semester 筛选，预制题不受学期限制
   const examQs = _sampleFromExam(type, difficulty, semester, Math.ceil(count / 2));
-  const autoCount = count - examQs.length;
-  const autoQs = autoCount > 0 ? _sampleFromAuto(type, difficulty, autoCount) : [];
-  return [...examQs, ...autoQs].sort(() => Math.random() - 0.5);
+  const autoRemain = count - examQs.length;
+  const autoQs = autoRemain > 0 ? _sampleFromAuto(type, difficulty, autoRemain) : [];
+  const result = [...examQs, ...autoQs].sort(() => Math.random() - 0.5);
+
+  if (result.length === 0) {
+    console.warn('[出题] 混合来源，无匹配题目', {
+      type, difficulty, count, source, semester,
+      examMatched: examQs.length, autoTotal: autoCount, examTotal: examCount
+    });
+  }
+
+  return result;
 }
 
 // ==================== 内部实现 ====================

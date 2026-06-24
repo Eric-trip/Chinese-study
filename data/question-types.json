@@ -28,7 +28,7 @@
       "knowledge_part": "语音+汉字",
       "forms": ["choice"],
       "auto_generate": false,
-      "active": true
+      "active": false
     },
     "word_usage": {
       "name": "词语运用", "icon": "💭", "category": "basic",
@@ -49,28 +49,28 @@
       "knowledge_part": "标点符号",
       "forms": ["choice"],
       "auto_generate": false,
-      "active": true
+      "active": false
     },
     "rhetoric": {
       "name": "修辞手法", "icon": "🎨", "category": "basic",
       "knowledge_part": "修辞",
       "forms": ["choice", "judge"],
       "auto_generate": false,
-      "active": true
+      "active": false
     },
     "literature": {
       "name": "文学常识", "icon": "📚", "category": "basic",
       "knowledge_part": "文学常识",
       "forms": ["choice", "judge"],
       "auto_generate": false,
-      "active": true
+      "active": false
     },
     "culture": {
       "name": "文化常识", "icon": "🏯", "category": "basic",
       "knowledge_part": "文化常识",
       "forms": ["choice", "judge"],
       "auto_generate": false,
-      "active": true
+      "active": false
     },
     "recitation": {
       "name": "古诗文默写", "icon": "📝", "category": "basic",
@@ -91,7 +91,7 @@
       "knowledge_part": "口语交际及语言运用",
       "forms": ["choice", "judge", "fill"],
       "auto_generate": false,
-      "active": true
+      "active": false
     },
     "reading_poetry": {
       "name": "古诗词鉴赏", "icon": "🌸", "category": "ancient",
