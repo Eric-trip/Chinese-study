@@ -292,13 +292,13 @@ function _getFallbackRegistry() {
     version: 1,
     categories: { basic: { name: '积累与运用', icon: '📝' } },
     types: {
-      pinyin:     { name: '字音', icon: '🔊', category: 'basic', active: true, auto_generate: true },
-      char:       { name: '字形', icon: '✏️', category: 'basic', active: true, auto_generate: true },
-      word_usage: { name: '词语运用', icon: '💭', category: 'basic', active: true, auto_generate: true },
-      sentence:   { name: '病句辨析', icon: '🔧', category: 'basic', active: true, auto_generate: true },
-      rhetoric:   { name: '修辞手法', icon: '🎨', category: 'basic', active: true, auto_generate: true },
-      literature: { name: '文学常识', icon: '📚', category: 'basic', active: true, auto_generate: true },
-      recitation: { name: '古诗文默写', icon: '📝', category: 'basic', active: true, auto_generate: true }
+      pinyin:     { name: '字音', icon: '🔊', category: 'basic', active: true },
+      char:       { name: '字形', icon: '✏️', category: 'basic', active: true },
+      word_usage: { name: '词语运用', icon: '💭', category: 'basic', active: true },
+      sentence:   { name: '病句辨析', icon: '🔧', category: 'basic', active: true },
+      rhetoric:   { name: '修辞手法', icon: '🎨', category: 'basic', active: true },
+      literature: { name: '文学常识', icon: '📚', category: 'basic', active: true },
+      recitation: { name: '古诗文默写', icon: '📝', category: 'basic', active: true }
     },
     difficulties: {
       easy:   { name: '简单', level: 1 },

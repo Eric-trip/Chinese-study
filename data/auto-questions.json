@@ -1,8 +1,8 @@
 {
-  "version": 1,
-  "generated_date": "2026-06-24",
-  "total": 30,
-  "notes": "预制题库（仅使用预制题和真题，已放弃实时生成），由 AI 基于 handbook 数据编写，质量可控。",
+  "version": 2,
+  "generated_date": "2026-06-25",
+  "total": 200,
+  "notes": "预制题库（200题），覆盖12种题型，基于handbook数据编写。",
   "questions": [
     {
       "id": "auto_pinyin_001",
@@ -40,6 +40,134 @@
       "id": "auto_pinyin_002",
       "type": "pinyin",
       "format": "choice",
+      "difficulty": "medium",
+      "question": "下列成语中，注音全部正确的一项是：\nA. 沧海一粟(lì)  称(chèng)心如意\nB. 吹毛求疵(cǐ)  垂涎(xián)三尺\nC. 处(chù)理事务  参差(cī)不齐\nD. 大腹便便(pián)  殚(dān)精竭虑",
+      "options": [
+        {
+          "text": "A. 沧海一粟(lì)  称(chèng)心如意",
+          "correct": false
+        },
+        {
+          "text": "B. 吹毛求疵(cǐ)  垂涎(xián)三尺",
+          "correct": false
+        },
+        {
+          "text": "C. 处(chù)理事务  参差(cī)不齐",
+          "correct": false
+        },
+        {
+          "text": "D. 大腹便便(pián)  殚(dān)精竭虑",
+          "correct": true
+        }
+      ],
+      "answer": "D",
+      "explanation": "A项：粟应读 sù（谷物，不读 lì），称心应读 chèn（适合，不读 chèng）。B项：疵应读 cī（第一声，不读 cǐ）。C项：处理应读 chǔ（动词，不读 chù）。D项均正确，\"大腹便便\"的\"便\"读 pián。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_003",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列加点字的注音，全部正确的一项是：\nA. 刚愎(fù)自用  B. 垂涎(yán)三尺\nC. 同仇敌忾(kài)  D. 一曝(bào)十寒",
+      "options": [
+        {
+          "text": "A. 刚愎(fù)自用",
+          "correct": false
+        },
+        {
+          "text": "B. 垂涎(yán)三尺",
+          "correct": false
+        },
+        {
+          "text": "C. 同仇敌忾(kài)",
+          "correct": true
+        },
+        {
+          "text": "D. 一曝(bào)十寒",
+          "correct": false
+        }
+      ],
+      "answer": "C",
+      "explanation": "A项：刚愎自用的\"愎\"应读 bì（固执、任性），不读 fù。B项：垂涎三尺的\"涎\"应读 xián（口水），不读 yán。C项：同仇敌忾的\"忾\"读 kài（愤怒），正确。D项：一曝十寒的\"曝\"应读 pù（晒），不读 bào。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_004",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列成语中，注音全部正确的一项是：\nA. 风声鹤唳(lì)  并行不悖(bó)\nB. 功亏一篑(guì)  恬(tián)不知耻\nC. 汗流浃(jiā)背  信手拈(nián)来\nD. 海市蜃(shèn)楼  毛骨悚(sǒng)然",
+      "options": [
+        {
+          "text": "A. 风声鹤唳(lì)  并行不悖(bó)",
+          "correct": false
+        },
+        {
+          "text": "B. 功亏一篑(guì)  恬(tián)不知耻",
+          "correct": false
+        },
+        {
+          "text": "C. 汗流浃(jiā)背  信手拈(nián)来",
+          "correct": false
+        },
+        {
+          "text": "D. 海市蜃(shèn)楼  毛骨悚(sǒng)然",
+          "correct": true
+        }
+      ],
+      "answer": "D",
+      "explanation": "A项：并行不悖的\"悖\"应读 bèi。B项：功亏一篑的\"篑\"应读 kuì（盛土的竹筐）。C项：\"拈\"应读 niān（用手指夹取），注为 nián 有误。D项均正确，\"蜃\"读 shèn，\"悚\"读 sǒng。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_005",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列加点字注音全部正确的一项是：\nA. 良莠(xiù)不齐  命运多舛(chuǎn)\nB. 为虎作伥(chāng)  一蹴(cù)而就\nC. 咄咄(duó)逼人  栉(jié)风沐雨\nD. 乳臭(chòu)未干  心宽体胖(pàng)",
+      "options": [
+        {
+          "text": "A. 良莠(xiù)不齐  命运多舛(chuǎn)",
+          "correct": false
+        },
+        {
+          "text": "B. 为虎作伥(chāng)  一蹴(cù)而就",
+          "correct": true
+        },
+        {
+          "text": "C. 咄咄(duó)逼人  栉(jié)风沐雨",
+          "correct": false
+        },
+        {
+          "text": "D. 乳臭(chòu)未干  心宽体胖(pàng)",
+          "correct": false
+        }
+      ],
+      "answer": "B",
+      "explanation": "A项：良莠不齐的\"莠\"应读 yǒu（狗尾草）。C项：咄咄逼人的\"咄\"应读 duō；栉风沐雨的\"栉\"应读 zhì（梳子）。D项：乳臭未干的\"臭\"应读 xiù（气味）；心宽体胖的\"胖\"应读 pán（安泰舒适）。B项均正确。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_006",
+      "type": "pinyin",
+      "format": "choice",
       "difficulty": "hard",
       "question": "下列成语中，读音完全正确的一项是：\nA. 草菅(shū)人命  暴殄(tiǎn)天物\nB. 并行不悖(bèi)  不胫(jìng)而走\nC. 瞠(chēng)目结舌  相形见绌(chū)\nD. 不落窠(kē)臼  参差(cān chā)不齐",
       "options": [
@@ -61,7 +189,7 @@
         }
       ],
       "answer": "B",
-      "explanation": "A项：草菅人命的\"菅\"应读 jiān（草字头，不是竹字头的\"管\"）。C项：相形见绌的\"绌\"应读 chù（不够、不足）。D项：参差不齐的\"参差\"应读 cēn cī。B项两个成语读音均正确。",
+      "explanation": "A项：草菅人命的\"菅\"应读 jiān。C项：相形见绌的\"绌\"应读 chù。D项：参差不齐的\"参差\"应读 cēn cī。B项读音均正确，注意\"胫\"读 jìng（小腿）。",
       "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
       "qsrc": "auto",
       "semester": "all",
@@ -69,18 +197,146 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_003",
+      "id": "auto_pinyin_007",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列各组词语中，加点字的读音完全相同的一组是：\nA. 差遣 / 参差 / 差强人意\nB. 勉强 / 强词夺理 / 牵强附会\nC. 恶心 / 厌恶 / 深恶痛绝\nD. 省悟 / 省略 / 不省人事",
+      "options": [
+        {
+          "text": "A. 差遣 / 参差 / 差强人意",
+          "correct": false
+        },
+        {
+          "text": "B. 勉强 / 强词夺理 / 牵强附会",
+          "correct": true
+        },
+        {
+          "text": "C. 恶心 / 厌恶 / 深恶痛绝",
+          "correct": false
+        },
+        {
+          "text": "D. 省悟 / 省略 / 不省人事",
+          "correct": false
+        }
+      ],
+      "answer": "B",
+      "explanation": "B项三个\"强\"都读 qiǎng（勉力、硬要）。A项：差遣(chāi)、参差(cī)、差强人意(chā)——读音不同。C项：恶心(ě)、厌恶(wù)、深恶痛绝(wù)——读音不同。D项：省悟(xǐng)、省略(shěng)、不省人事(xǐng)——读音不同。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生必须掌握的多音字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_008",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列词语中加点字的读音，与所给注音全部相同的一组是：\n载(zài)：\nA. 记载  刊载  一年半载\nB. 装载  载重  记载\nC. 登载  载入  千载难逢\nD. 负载  载荷  怨声载道",
+      "options": [
+        {
+          "text": "A. 记载  刊载  一年半载",
+          "correct": false
+        },
+        {
+          "text": "B. 装载  载重  记载",
+          "correct": false
+        },
+        {
+          "text": "C. 登载  载入  千载难逢",
+          "correct": false
+        },
+        {
+          "text": "D. 负载  载荷  怨声载道",
+          "correct": true
+        }
+      ],
+      "answer": "D",
+      "explanation": "D项三个都读 zài（承载、充满）。A项都读 zǎi（记录、年）。B项\"装载、载重\"读 zài，\"记载\"读 zǎi，不全读 zài。C项：\"登载、载入\"读 zǎi，\"千载难逢\"的\"载\"读 zǎi（年）。注意区分：表\"年\"\"记录\"读 zǎi，表\"装载\"\"充满\"\"又\"读 zài。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生必须掌握的多音字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_009",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列成语中，有两个字注音错误的一项是：\nA. 面面相觑(xū)  忧心忡忡(chōng)\nB. 越俎代庖(páo)  叱咤(chà)风云\nC. 卷帙(yì)浩繁  鳞次栉(jié)比\nD. 拈(zhān)轻怕重  锲(qiè)而不舍",
+      "options": [
+        {
+          "text": "A. 面面相觑(xū)  忧心忡忡(chōng)",
+          "correct": false
+        },
+        {
+          "text": "B. 越俎代庖(páo)  叱咤(chà)风云",
+          "correct": false
+        },
+        {
+          "text": "C. 卷帙(yì)浩繁  鳞次栉(jié)比",
+          "correct": true
+        },
+        {
+          "text": "D. 拈(zhān)轻怕重  锲(qiè)而不舍",
+          "correct": false
+        }
+      ],
+      "answer": "C",
+      "explanation": "C项两字全错：\"帙\"应读 zhì（书套），\"栉\"应读 zhì（梳子）。A项一个字错：\"觑\"应读 qù（看），忡(chōng)正确。B项一个字错：\"咤\"应读 zhà（发怒声），庖(páo)正确。D项一个字错：\"拈\"应读 niān（用手指取），锲(qiè)正确。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_010",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列各组中，加点字读音全都不相同的一组是：\nA. 和平 / 附和 / 和面 / 和牌\nB. 折腾 / 折断 / 折本 / 折中\nC. 方便 / 便宜 / 大腹便便\nD. 咽喉 / 吞咽 / 哽咽 / 呜咽",
+      "options": [
+        {
+          "text": "A. 和平 / 附和 / 和面 / 和牌",
+          "correct": true
+        },
+        {
+          "text": "B. 折腾 / 折断 / 折本 / 折中",
+          "correct": false
+        },
+        {
+          "text": "C. 方便 / 便宜 / 大腹便便",
+          "correct": false
+        },
+        {
+          "text": "D. 咽喉 / 吞咽 / 哽咽 / 呜咽",
+          "correct": false
+        }
+      ],
+      "answer": "A",
+      "explanation": "A项四个\"和\"读音各不相同：和(hé)平、附和(hè)、和(huó)面、和(hú)牌。B项：折(zhē)腾、折(zhé)断、折(shé)本、折(zhé)中——不全不同。C项：方便(biàn)、便(pián)宜、大腹便便(pián)——两个pián。D项：咽(yān)喉、吞咽(yàn)、哽咽(yè)、呜咽(yè)——两个yè。只有A全不相同。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生必须掌握的多音字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_011",
       "type": "pinyin",
       "format": "choice",
       "difficulty": "easy",
-      "question": "下列成语中，加点字注音正确的一项是：\nA. 安然无恙(yàn)  B. 稗(bài)官野史\nC. 按部就班(guī)  D. 黯(àn)然失色",
+      "question": "下列成语中，加点字注音正确的一项是：\nA. 安然无恙(yàn)  B. 稗(bēi)官野史\nC. 按部就班(guī)  D. 黯(àn)然失色",
       "options": [
         {
           "text": "A. 安然无恙(yàn)",
           "correct": false
         },
         {
-          "text": "B. 稗(bài)官野史",
+          "text": "B. 稗(bēi)官野史",
           "correct": false
         },
         {
@@ -93,7 +349,7 @@
         }
       ],
       "answer": "D",
-      "explanation": "A项：安然无恙的\"恙\"应读 yàng（指疾病，不读 yàn）。B项：稗(bài)官野史的读音正确，注意\"稗\"指田间杂草，比喻微小。C项：\"部\"读 bù，不是 guī。D项：\"黯\"读 àn，正确。",
+      "explanation": "A项：\"恙\"应读 yàng（指疾病，不读 yàn）。B项：\"稗\"应读 bài（田间杂草，不读 bēi）。C项：\"部\"读 bù，不是 guī。D项：\"黯\"读 àn，正确。",
       "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
       "qsrc": "auto",
       "semester": "all",
@@ -101,31 +357,63 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_004",
+      "id": "auto_pinyin_012",
       "type": "pinyin",
       "format": "choice",
-      "difficulty": "medium",
-      "question": "下列成语中，注音全部正确的一项是：\nA. 沧海一粟(lì)  称(chèng)心如意\nB. 吹毛求疵(cī)  垂涎(xián)三尺\nC. 处(chù)理事务  参差(cī)不齐\nD. 大腹便便(pián)  殚(dān)精竭虑",
+      "difficulty": "easy",
+      "question": "下列词语中加点字注音完全正确的一项是：\nA. 哺(pǔ)育  憧(chōng)憬\nB. 炽(zhì)热  玷(diàn)污\nC. 干涸(hé)  倔强(jiàng)\nD. 阔绰(chuò)  镂(lóu)空",
       "options": [
         {
-          "text": "A. 沧海一粟(lì)  称(chèng)心如意",
+          "text": "A. 哺(pǔ)育  憧(chōng)憬",
           "correct": false
         },
         {
-          "text": "B. 吹毛求疵(cī)  垂涎(xián)三尺",
+          "text": "B. 炽(zhì)热  玷(diàn)污",
           "correct": false
         },
         {
-          "text": "C. 处(chù)理事务  参差(cī)不齐",
+          "text": "C. 干涸(hé)  倔强(jiàng)",
+          "correct": true
+        },
+        {
+          "text": "D. 阔绰(chuò)  镂(lóu)空",
+          "correct": false
+        }
+      ],
+      "answer": "C",
+      "explanation": "A项：哺应读 bǔ（不读 pǔ）。B项：炽应读 chì（不读 zhì）。C项均正确：涸读 hé（水干），倔强读 jué jiàng。D项：镂应读 lòu（不读 lóu）。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的词语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_013",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列加点字注音有误的一项是：\nA. 迸(bèng)溅  忏(chàn)悔\nB. 嗟(jiē)来之食  杳(yǎo)无音信\nC. 面面相觑(qù)  坦荡如砥(dǐ)\nD. 鳞次栉(zhì)比  叱咤(chà)风云",
+      "options": [
+        {
+          "text": "A. 迸(bèng)溅  忏(chàn)悔",
           "correct": false
         },
         {
-          "text": "D. 大腹便便(pián)  殚(dān)精竭虑",
+          "text": "B. 嗟(jiē)来之食  杳(yǎo)无音信",
+          "correct": false
+        },
+        {
+          "text": "C. 面面相觑(qù)  坦荡如砥(dǐ)",
+          "correct": false
+        },
+        {
+          "text": "D. 鳞次栉(zhì)比  叱咤(chà)风云",
           "correct": true
         }
       ],
       "answer": "D",
-      "explanation": "A项：粟应读 sù（谷物，不读 lì），称心应读 chèn（适合，不读 chèng）。B项：疵应读 cī（毛病），注意声母是 c 而非 ch。C项：处理应读 chǔ（动词，不读 chù/名词）。D项均正确。",
+      "explanation": "D项：叱咤风云的\"咤\"应读 zhà（发怒声），不读 chà。A项均正确。B项均正确：\"嗟\"读 jiē，\"杳\"读 yǎo。C项均正确：\"觑\"读 qù，\"砥\"读 dǐ。",
       "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
       "qsrc": "auto",
       "semester": "all",
@@ -133,7 +421,71 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_005",
+      "id": "auto_pinyin_014",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列词语中加点字读音全部正确的一项是：\nA. 倔(juè)强  氛(fèn)围\nB. 颈(jǐng)椎  细菌(jūn)\nC. 框(kuāng)架  模(mó)样\nD. 挫(cuō)折  脂(zhǐ)肪",
+      "options": [
+        {
+          "text": "A. 倔(juè)强  氛(fèn)围",
+          "correct": false
+        },
+        {
+          "text": "B. 颈(jǐng)椎  细菌(jūn)",
+          "correct": true
+        },
+        {
+          "text": "C. 框(kuāng)架  模(mó)样",
+          "correct": false
+        },
+        {
+          "text": "D. 挫(cuō)折  脂(zhǐ)肪",
+          "correct": false
+        }
+      ],
+      "answer": "B",
+      "explanation": "A项：倔强读 jué jiàng（不读 juè），氛围读 fēn（不读 fèn）。B项均正确。C项：框架读 kuàng（不读 kuāng），模样读 mú（不读 mó）。D项：挫折读 cuò（不读 cuō），脂肪读 zhī（不读 zhǐ）。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的词语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_015",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列加点字注音全部正确的一项是：\nA. 剽(biāo)悍  殷(yān)红\nB. 蜷(quán)缩  狙(jū)击\nC. 惬(xiá)意  筵(yàn)席\nD. 荣膺(yīng)  狩(shǒu)猎",
+      "options": [
+        {
+          "text": "A. 剽(biāo)悍  殷(yān)红",
+          "correct": false
+        },
+        {
+          "text": "B. 蜷(quán)缩  狙(jū)击",
+          "correct": true
+        },
+        {
+          "text": "C. 惬(xiá)意  筵(yàn)席",
+          "correct": false
+        },
+        {
+          "text": "D. 荣膺(yīng)  狩(shǒu)猎",
+          "correct": false
+        }
+      ],
+      "answer": "B",
+      "explanation": "B项均正确：蜷缩读 quán，狙击读 jū。A项：剽悍应读 piāo。C项：惬意应读 qiè，筵席应读 yán。D项：狩猎应读 shòu。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的词语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_016",
       "type": "pinyin",
       "format": "truefalse",
       "difficulty": "easy",
@@ -157,7 +509,7 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_006",
+      "id": "auto_pinyin_017",
       "type": "pinyin",
       "format": "truefalse",
       "difficulty": "medium",
@@ -181,7 +533,7 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_007",
+      "id": "auto_pinyin_018",
       "type": "pinyin",
       "format": "truefalse",
       "difficulty": "medium",
@@ -205,7 +557,7 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_008",
+      "id": "auto_pinyin_019",
       "type": "pinyin",
       "format": "truefalse",
       "difficulty": "hard",
@@ -221,7 +573,7 @@
         }
       ],
       "answer": "错误",
-      "explanation": "\"莠\"应读 yǒu（狗尾草，比喻品质坏的），不是 xiù。良莠不齐指好人坏人混在一起。注意\"莠\"与\"秀(xiù)\"形似但读音不同。",
+      "explanation": "\"莠\"应读 yǒu（狗尾草，比喻品质坏的），不是 xiù。良莠不齐指好人坏人混在一起。\"莠\"与\"秀(xiù)\"形似但读音不同。",
       "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
       "qsrc": "auto",
       "semester": "all",
@@ -229,7 +581,7 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_009",
+      "id": "auto_pinyin_020",
       "type": "pinyin",
       "format": "truefalse",
       "difficulty": "easy",
@@ -253,7 +605,7 @@
       "knowledgePath": "基础知识 > 语音"
     },
     {
-      "id": "auto_pinyin_010",
+      "id": "auto_pinyin_021",
       "type": "pinyin",
       "format": "truefalse",
       "difficulty": "hard",
@@ -269,7 +621,127 @@
         }
       ],
       "answer": "错误",
-      "explanation": "\"舛\"应读 chuǎn（错乱、违背），不是 chuǎi。命运多舛指一生坎坷，运气不好。注意\"舛\"与\"揣(chuǎi)\"形似，注意区分。",
+      "explanation": "\"舛\"应读 chuǎn（错乱、违背），不是 chuǎi。命运多舛指一生坎坷，运气不好。注意\"舛\"与\"揣(chuǎi)\"形似。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_022",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下面加点字的注音是否正确：\n\"刚愎(bì)自用\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"愎\"读 bì（固执、任性），刚愎自用指倔强固执，自以为是。注意\"愎\"不读 fù。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_023",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下面成语的注音是否正确：\n\"脍炙人口(huì zhì rén kǒu)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"脍\"应读 kuài（切细的肉），不读 huì。脍炙人口本指美味人人都爱吃，比喻好的诗文或事物人们都称赞。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_024",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下面词语的注音是否正确：\n\"干涸(gān hé)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "读音正确。\"涸\"读 hé（水干），不读 gù。干涸指河道、池塘等水干了。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的词语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_025",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下面成语的注音是否正确：\n\"越俎代庖(yuè zǔ dài bāo)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"庖\"应读 páo（厨师），不读 bāo。越俎代庖指主祭的人跨过礼器去代替厨师办席，比喻超出自己的职责去处理别人所管的事。",
+      "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_026",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下面加点字的读音是否正确：\n\"锲而不舍(qì ér bù shě)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"锲\"应读 qiè（雕刻），不读 qì。锲而不舍指不断雕刻，比喻做事有恒心、有毅力。",
       "handbookSource": "语音 > 必考知识梳理 > 初中生容易读错的成语",
       "qsrc": "auto",
       "semester": "all",
@@ -333,7 +805,7 @@
         }
       ],
       "answer": "舞弊  兴利除弊  脍炙人口",
-      "explanation": "A项\"胜卷在握\"应为\"胜券在握\"（券：票据、凭证，不读 juàn）。C项\"渊搏学识\"应为\"渊博学识\"（博：丰富、通晓；搏：对打、跳动）。D项\"一张一驰\"应为\"一张一弛\"（弛：放松、松懈；驰：快跑）。",
+      "explanation": "A项\"胜卷在握\"应为\"胜券在握\"（券：票据、凭证）。C项\"渊搏学识\"应为\"渊博学识\"（博：丰富、通晓）。D项\"一张一驰\"应为\"一张一弛\"（弛：放松、松懈）。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -365,7 +837,7 @@
         }
       ],
       "answer": "暗然神伤",
-      "explanation": "\"暗然神伤\"应为\"黯然神伤\"。黯（àn）：阴暗、伤感的样子；暗（àn）指光线不足、隐藏。表示情绪低落、伤感的成语应用\"黯然\"，而非\"暗\"。",
+      "explanation": "\"暗然神伤\"应为\"黯然神伤\"。黯（àn）：阴暗、伤感的样子；暗（àn）指光线不足、隐藏。表示情绪低落、伤感应使用\"黯然\"。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -397,7 +869,7 @@
         }
       ],
       "answer": "面对困难，我们要自强不息，奋起直追。",
-      "explanation": "A项\"骄横跋扈\"中的\"跋\"正确（意为霸道），但\"扈\"应为\"扈\"（hù），该词无误。B项\"如愿以尝\"应为\"如愿以偿\"（偿：实现、满足）。C项\"真象大白\"应为\"真相大白\"（相：事实、情况）。",
+      "explanation": "B项\"如愿以尝\"应为\"如愿以偿\"（偿：实现、满足）。C项\"真象大白\"应为\"真相大白\"（相：事实、情况）。D项书写无误。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -406,54 +878,6 @@
     },
     {
       "id": "auto_char_005",
-      "type": "char",
-      "format": "truefalse",
-      "difficulty": "easy",
-      "question": "判断下列词语书写是否正确：\n\"甘败下风\"",
-      "options": [
-        {
-          "text": "正确",
-          "correct": false
-        },
-        {
-          "text": "错误",
-          "correct": true
-        }
-      ],
-      "answer": "错误",
-      "explanation": "\"甘败下风\"应为\"甘拜下风\"。拜：拜服、佩服；下风：风向的下方，比喻劣势地位。意为真心佩服，自认不如。",
-      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
-      "qsrc": "auto",
-      "semester": "all",
-      "status": "approved",
-      "knowledgePath": "基础知识 > 汉字"
-    },
-    {
-      "id": "auto_char_006",
-      "type": "char",
-      "format": "truefalse",
-      "difficulty": "medium",
-      "question": "判断下列词语书写是否正确：\n\"趋之若骛\"",
-      "options": [
-        {
-          "text": "正确",
-          "correct": false
-        },
-        {
-          "text": "错误",
-          "correct": true
-        }
-      ],
-      "answer": "错误",
-      "explanation": "\"趋之若骛\"应为\"趋之若鹜\"。鹜（wù）：鸭子；骛（wù）：追求。趋之若鹜指像鸭子一样成群跑过去，比喻很多人争相追逐（含贬义）。注意\"鹜\"是\"鸟\"字底，\"骛\"是\"马\"字底。",
-      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
-      "qsrc": "auto",
-      "semester": "all",
-      "status": "approved",
-      "knowledgePath": "基础知识 > 汉字"
-    },
-    {
-      "id": "auto_char_007",
       "type": "char",
       "format": "choice",
       "difficulty": "hard",
@@ -477,7 +901,7 @@
         }
       ],
       "answer": "不径而走  出奇不意  计日成功",
-      "explanation": "C项三个词语均有错别字：不胫而走（胫：小腿，指没有腿却能跑，形容传播迅速），出其不意（其：代词，他/对方），计日程功（程：计算，指可以数着日子算进度）。",
+      "explanation": "C项三个词语均有错别字：不胫而走（胫：小腿），出其不意（其：代词），计日程功（程：计算）。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -485,7 +909,7 @@
       "knowledgePath": "基础知识 > 汉字"
     },
     {
-      "id": "auto_char_008",
+      "id": "auto_char_006",
       "type": "char",
       "format": "choice",
       "difficulty": "easy",
@@ -509,7 +933,71 @@
         }
       ],
       "answer": "和蔼  暮霭  鸿鹄之志",
-      "explanation": "注意\"蔼\"与\"霭\"的区别：和蔼（ǎi）指和气、和善，\"蔼\"是草字头，指繁茂；暮霭（ǎi）指傍晚的云雾，\"霭\"是雨字头。鸿鹄之志的\"鹄\"读 hú（天鹅），比喻远大的志向。",
+      "explanation": "注意\"蔼\"与\"霭\"的区别：和蔼（ǎi）指和气、和善（草字头）；暮霭（ǎi）指傍晚的云雾（雨字头）。鸿鹄之志的\"鹄\"读 hú（天鹅）。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_007",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列各组成语中没有错别字的一项是：",
+      "options": [
+        {
+          "text": "一愁莫展  涣然冰释  金榜提名",
+          "correct": false
+        },
+        {
+          "text": "甘之如饴  美轮美奂  立杆见影",
+          "correct": false
+        },
+        {
+          "text": "谈笑风生  迫不及待  川流不息",
+          "correct": true
+        },
+        {
+          "text": "言简意骇  融汇贯通  再接再励",
+          "correct": false
+        }
+      ],
+      "answer": "谈笑风生  迫不及待  川流不息",
+      "explanation": "A项：一筹莫展、涣然冰释（对）、金榜题名。B项：甘之如饴（对）、美轮美奂（对）、立竿见影。D项：言简意赅、融会贯通、再接再厉。C项均正确。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_008",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列词语中书写有误的一项是：",
+      "options": [
+        {
+          "text": "瑕疵  闲暇  闻名遐迩",
+          "correct": false
+        },
+        {
+          "text": "急躁  干燥  戒骄戒躁",
+          "correct": false
+        },
+        {
+          "text": "切磋  蹉跎  切搓琢磨",
+          "correct": true
+        },
+        {
+          "text": "范畴  筹备  未雨绸缪",
+          "correct": false
+        }
+      ],
+      "answer": "切磋  蹉跎  切搓琢磨",
+      "explanation": "C项\"切搓琢磨\"应为\"切磋琢磨\"（磋：古代指把象牙加工成器物，比喻互相商量研究）。注意\"磋\"是石字旁，\"搓\"是提手旁（揉搓）。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -518,6 +1006,54 @@
     },
     {
       "id": "auto_char_009",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列词语书写是否正确：\n\"甘败下风\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"甘败下风\"应为\"甘拜下风\"。拜：拜服、佩服；下风：风向的下方，比喻劣势地位。意为真心佩服，自认不如。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_010",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列词语书写是否正确：\n\"趋之若骛\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"趋之若骛\"应为\"趋之若鹜\"。鹜（wù）：鸭子；骛（wù）：追求。趋之若鹜指像鸭子一样成群跑过去，比喻很多人争相追逐（含贬义）。注意\"鹜\"是\"鸟\"字底，\"骛\"是\"马\"字底。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_011",
       "type": "char",
       "format": "truefalse",
       "difficulty": "medium",
@@ -533,7 +1069,7 @@
         }
       ],
       "answer": "没有错别字",
-      "explanation": "该句没有错别字。\"新颖\"的\"颖\"正确，\"堪称\"的\"堪\"（可以、能够）正确。注意\"流\"是三点水，\"畅\"是申字旁加𠃊。全句书写规范。",
+      "explanation": "该句没有错别字。\"新颖\"的\"颖\"正确，\"堪称\"的\"堪\"（可以、能够）正确。全句书写规范。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -541,7 +1077,7 @@
       "knowledgePath": "基础知识 > 汉字"
     },
     {
-      "id": "auto_char_010",
+      "id": "auto_char_012",
       "type": "char",
       "format": "truefalse",
       "difficulty": "hard",
@@ -557,7 +1093,247 @@
         }
       ],
       "answer": "有错别字",
-      "explanation": "\"各行其事\"应为\"各行其是\"。其是：认为对的，该成语意为各人按照自己认为对的去做，形容思想不统一。也可写作\"各行其是\"。\"事\"和\"是\"音同形异，这是常见的成语误写。",
+      "explanation": "\"各行其事\"应为\"各行其是\"。其是：认为对的。该成语意为各人按照自己认为对的去做。注意\"事\"和\"是\"音同形异。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_013",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列词语书写是否正确：\n\"谈笑风声\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"谈笑风声\"应为\"谈笑风生\"。风生：形容谈话时气氛活跃，兴致很高。注意不要与\"风声\"（风的声音）混淆。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_014",
+      "type": "char",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列词语书写是否正确：\n\"美仑美奂\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"美仑美奂\"应为\"美轮美奂\"。轮：高大；奂：众多。形容房屋高大华丽。注意\"轮\"不能写成\"仑\"。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_015",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列词语书写全部正确的一组是：",
+      "options": [
+        {
+          "text": "语无伦次  美轮美奂  满腹经纶",
+          "correct": true
+        },
+        {
+          "text": "语无仑次  美仑美奂  满腹经伦",
+          "correct": false
+        },
+        {
+          "text": "语无伦次  美仑美奂  满腹经纶",
+          "correct": false
+        },
+        {
+          "text": "语无仑次  美轮美奂  满腹经伦",
+          "correct": false
+        }
+      ],
+      "answer": "语无伦次  美轮美奂  满腹经纶",
+      "explanation": "三个词语分别用\"伦\"(条理)、\"轮\"(高大)、\"纶\"(青丝带，引申为才学)。注意三个近音字的区别。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_016",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列词语中没有错别字的一组是：",
+      "options": [
+        {
+          "text": "大拇指  蛛丝蚂迹  一鼓作气",
+          "correct": false
+        },
+        {
+          "text": "大拇指  蛛丝马迹  一鼓作气",
+          "correct": true
+        },
+        {
+          "text": "大姆指  蛛丝马迹  一股作气",
+          "correct": false
+        },
+        {
+          "text": "大拇指  蛛丝马迹  一股作气",
+          "correct": false
+        }
+      ],
+      "answer": "大拇指  蛛丝马迹  一鼓作气",
+      "explanation": "\"大拇指\"的\"拇\"是提手旁（指手），不是\"姆\"（女字旁）；\"蛛丝马迹\"的\"马\"指灶马（一种昆虫），不是\"蚂\"（蚂蚁）；\"一鼓作气\"指第一次击鼓时士气振奋，用\"鼓\"（名词作动词），不是\"股\"。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_017",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列各句中，没有错别字的一项是：",
+      "options": [
+        {
+          "text": "他的演讲旁证博引，赢得了阵阵掌声。",
+          "correct": false
+        },
+        {
+          "text": "这片海域蕴藏着丰富的海洋资源。",
+          "correct": true
+        },
+        {
+          "text": "我们应该尊重每个人的选择，不应枉加评论。",
+          "correct": false
+        },
+        {
+          "text": "这个故事给了我很大的起发。",
+          "correct": false
+        }
+      ],
+      "answer": "这片海域蕴藏着丰富的海洋资源。",
+      "explanation": "A项\"旁证博引\"应为\"旁征博引\"（征：收集、验证）。C项\"枉加评论\"应为\"妄加评论\"（妄：胡乱地）。D项\"起发\"应为\"启发\"。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_018",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列词语中错别字最少的一组是：",
+      "options": [
+        {
+          "text": "鸠占雀巢  声名雀起  欢呼鹊跃",
+          "correct": false
+        },
+        {
+          "text": "鸠占鹊巢  声名鹊起  欢呼雀跃",
+          "correct": true
+        },
+        {
+          "text": "鸠占鹊巢  声名雀起  欢呼雀跃",
+          "correct": false
+        },
+        {
+          "text": "鸠占雀巢  声名鹊起  欢呼鹊跃",
+          "correct": false
+        }
+      ],
+      "answer": "鸠占鹊巢  声名鹊起  欢呼雀跃",
+      "explanation": "正确写法：鸠占鹊巢（斑鸠占了喜鹊的窝）、声名鹊起（名声像喜鹊一样飞起，比喻名声大振）、欢呼雀跃（高兴得像麻雀一样跳跃）。注意\"鹊\"与\"雀\"的区别：鹊指喜鹊（体型较大，善筑巢），雀指麻雀类小鸟。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_019",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中，加点成语使用正确且无错别字的一项是：",
+      "options": [
+        {
+          "text": "这座建筑的设计独出新裁，令人耳目一新。",
+          "correct": false
+        },
+        {
+          "text": "他在学习上总是一丝不苟，绝不敷衍了事。",
+          "correct": true
+        },
+        {
+          "text": "面对困难，他总是不曲不挠，坚持到底。",
+          "correct": false
+        },
+        {
+          "text": "这幅画上的竹子画得栩栩如声。",
+          "correct": false
+        }
+      ],
+      "answer": "他在学习上总是一丝不苟，绝不敷衍了事。",
+      "explanation": "A项\"独出新裁\"应为\"独出心裁\"。C项\"不曲不挠\"应为\"不屈不挠\"（屈：屈服；挠：弯曲）。D项\"栩栩如声\"应为\"栩栩如生\"（生：活的，有生命力的）。",
+      "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 汉字"
+    },
+    {
+      "id": "auto_char_020",
+      "type": "char",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "选出下列句子中没有错别字的一项：",
+      "options": [
+        {
+          "text": "只要坚持不解地努力，终会取得成功。",
+          "correct": false
+        },
+        {
+          "text": "他的研究成果令人刮目相看。",
+          "correct": true
+        },
+        {
+          "text": "这篇文章的逻缉非常严密。",
+          "correct": false
+        },
+        {
+          "text": "他为人处事的原则是问心无魁。",
+          "correct": false
+        }
+      ],
+      "answer": "他的研究成果令人刮目相看。",
+      "explanation": "A项\"坚持不解\"应为\"坚持不懈\"（懈：放松、松懈）。C项\"逻缉\"应为\"逻辑\"（辑：编辑、收集）。D项\"问心无魁\"应为\"问心无愧\"（愧：惭愧、羞愧）。",
       "handbookSource": "汉字 > 必考知识梳理 > 易混字辨析",
       "qsrc": "auto",
       "semester": "all",
@@ -621,7 +1397,7 @@
         }
       ],
       "answer": "他废寝忘食地工作，真是到了不可救药的地步。",
-      "explanation": "\"不可救药\"意为病已重到无法用药医治，比喻人或事物坏到无法挽救的地步，是贬义词。用在这里形容努力工作是褒贬失当。应改为\"废寝忘食\"或\"孜孜不倦\"等褒义词。",
+      "explanation": "\"不可救药\"意为病已重到无法用药医治，比喻人或事物坏到无法挽救的地步，是贬义词。用在这里形容努力工作是褒贬失当。",
       "handbookSource": "词语 > 必考知识梳理",
       "qsrc": "auto",
       "semester": "all",
@@ -653,7 +1429,7 @@
         }
       ],
       "answer": "这篇小说情节跌宕起伏，引人入胜。",
-      "explanation": "A项\"首当其冲\"比喻最先受到攻击或遭遇灾难，不是\"首先冲在前面\"的意思。C项\"忍俊不禁\"指忍不住笑，不能用于流泪。D项\"好高骛远\"指不切实际地追求过高目标，与\"扎扎实实\"矛盾。",
+      "explanation": "A项\"首当其冲\"比喻最先受到攻击或遭遇灾难，不是\"首先冲在前面\"的意思。C项\"忍俊不禁\"指忍不住笑，不能用于流泪。D项\"好高骛远\"与\"扎扎实实\"矛盾。",
       "handbookSource": "词语 > 必考知识梳理",
       "qsrc": "auto",
       "semester": "all",
@@ -680,12 +1456,12 @@
           "correct": false
         },
         {
-          "text": "谈起古典文学，他如数家珍，但一提到现代文学就默然不语了。",
+          "text": "他刚来这座城市两周，就如数家珍地介绍每条街道的历史。",
           "correct": false
         }
       ],
       "answer": "春天的西湖美不胜收，游客们纷纷驻足欣赏，流连忘返。",
-      "explanation": "A项\"妙笔生花\"比喻杰出的写作才能，与语境不符（此处应是\"口若悬河\"或对答如流）。C项\"不刊之论\"比喻不能改动或不可磨灭的言论（刊：古代指削除刻错了的字），是褒义词，不能用于形容条理混乱。",
+      "explanation": "B项\"流连忘返\"使用正确。A项\"妙笔生花\"比喻杰出的写作才能，用于\"口才\"不当。C项\"不刊之论\"指不可磨灭的言论（刊：削除），是褒义词，用于\"语无伦次的作文\"不当。D项\"如数家珍\"形容对事物非常熟悉——刚来两周不可能如此熟悉，自相矛盾。",
       "handbookSource": "词语 > 必考知识梳理",
       "qsrc": "auto",
       "semester": "all",
@@ -717,7 +1493,7 @@
         }
       ],
       "answer": "①殚精竭虑 ②文采斐然 ③明火执仗",
-      "explanation": "\"殚精竭虑\"指用尽精力（褒义），适合①。\"文采斐然\"指文章富有文采，适合②。\"明火执仗\"指点着火把拿着武器公开抢劫，适合③。A项\"处心积虑\"是贬义词，不适合①的褒义语境。",
+      "explanation": "\"殚精竭虑\"指用尽精力（褒义），适合①。\"文采斐然\"指文章富有文采，适合②。\"明火执仗\"指点着火把拿着武器公开抢劫，适合③。A项\"处心积虑\"是贬义词。",
       "handbookSource": "词语 > 必考知识梳理",
       "qsrc": "auto",
       "semester": "all",
@@ -726,78 +1502,6 @@
     },
     {
       "id": "auto_word_006",
-      "type": "word_usage",
-      "format": "truefalse",
-      "difficulty": "easy",
-      "question": "判断下列句子中成语使用是否正确：\n\"同学们聚在一起，各抒己见，讨论得十分热烈。\"",
-      "options": [
-        {
-          "text": "正确",
-          "correct": true
-        },
-        {
-          "text": "错误",
-          "correct": false
-        }
-      ],
-      "answer": "正确",
-      "explanation": "\"各抒己见\"意为各人充分发表自己的见解，\"抒\"是表达、抒发。这个成语非常适合描述讨论场景，使用正确。",
-      "handbookSource": "词语 > 必考知识梳理",
-      "qsrc": "auto",
-      "semester": "all",
-      "status": "approved",
-      "knowledgePath": "基础知识 > 词语"
-    },
-    {
-      "id": "auto_word_007",
-      "type": "word_usage",
-      "format": "truefalse",
-      "difficulty": "medium",
-      "question": "判断下列句子中成语使用是否正确：\n\"老师讲得很生动，教室里响起了一声声振聋发聩的掌声。\"",
-      "options": [
-        {
-          "text": "正确",
-          "correct": false
-        },
-        {
-          "text": "错误",
-          "correct": true
-        }
-      ],
-      "answer": "错误",
-      "explanation": "\"振聋发聩\"指发出很大的声响使耳聋的人也能听见，比喻用语言文字唤醒糊涂的人。不能用来形容掌声。形容掌声响亮应用\"震耳欲聋\"或\"经久不息\"。",
-      "handbookSource": "词语 > 必考知识梳理",
-      "qsrc": "auto",
-      "semester": "all",
-      "status": "approved",
-      "knowledgePath": "基础知识 > 词语"
-    },
-    {
-      "id": "auto_word_008",
-      "type": "word_usage",
-      "format": "truefalse",
-      "difficulty": "hard",
-      "question": "判断下列句子中成语使用是否正确：\n\"他在发言中多次提到自己的成就，真是敝帚自珍，让人敬佩。\"",
-      "options": [
-        {
-          "text": "正确",
-          "correct": false
-        },
-        {
-          "text": "错误",
-          "correct": true
-        }
-      ],
-      "answer": "错误",
-      "explanation": "\"敝帚自珍\"指把自己家里的破扫帚当成宝贝，比喻东西虽不好，但自己十分珍惜。这是谦词，用于说自己，但不能用于夸耀成就（含贬义），更不能用来敬佩他人。此处应用\"引以为豪\"之类的词语。",
-      "handbookSource": "词语 > 必考知识梳理",
-      "qsrc": "auto",
-      "semester": "all",
-      "status": "approved",
-      "knowledgePath": "基础知识 > 词语"
-    },
-    {
-      "id": "auto_word_009",
       "type": "word_usage",
       "format": "choice",
       "difficulty": "medium",
@@ -821,7 +1525,7 @@
         }
       ],
       "answer": "呕心沥血  精益求精  废寝忘食",
-      "explanation": "A组全是褒义词。B组全是贬义词（处心积虑：蓄谋已久；费尽心机：用尽心思，含贬义）。C组全是贬义词。D组全是贬义词。注意区分\"呕心沥血\"（褒）与\"处心积虑\"（贬）。",
+      "explanation": "A组全是褒义词。B组全是贬义词。C组全是贬义词。D组全是贬义词。注意区分\"呕心沥血\"（褒）与\"处心积虑\"（贬）。",
       "handbookSource": "词语 > 必考知识梳理",
       "qsrc": "auto",
       "semester": "all",
@@ -829,7 +1533,7 @@
       "knowledgePath": "基础知识 > 词语"
     },
     {
-      "id": "auto_word_010",
+      "id": "auto_word_007",
       "type": "word_usage",
       "format": "choice",
       "difficulty": "easy",
@@ -853,12 +1557,3689 @@
         }
       ],
       "answer": "家家户户的人都走出了巷子，形容庆祝、欢迎等盛况",
-      "explanation": "\"万人空巷\"常被误用为\"巷子空无一人\"（冷清），但其正确含义是家家户户的人都从巷子里出来了，聚集在一起，形容盛大场面或热烈气氛。如\"喜讯传来，万人空巷，夹道欢迎。\"",
+      "explanation": "\"万人空巷\"常被误用为\"巷子空无一人\"（冷清），但其正确含义是家家户户的人都从巷子里出来了，聚集在一起，形容盛大场面或热烈气氛。",
       "handbookSource": "词语 > 必考知识梳理",
       "qsrc": "auto",
       "semester": "all",
       "status": "approved",
       "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_008",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子中成语使用是否正确：\n\"同学们聚在一起，各抒己见，讨论得十分热烈。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"各抒己见\"意为各人充分发表自己的见解，\"抒\"是表达、抒发。这个成语非常适合描述讨论场景，使用正确。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_009",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子中成语使用是否正确：\n\"老师讲得很生动，教室里响起了一声声振聋发聩的掌声。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"振聋发聩\"指发出很大的声响使耳聋的人也能听见，比喻用语言文字唤醒糊涂的人。不能用来形容掌声。应改为\"震耳欲聋\"或\"经久不息\"。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_010",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列句子中成语使用是否正确：\n\"他在发言中多次提到自己的成就，真是敝帚自珍，让人敬佩。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"敝帚自珍\"指把自己家里的破扫帚当成宝贝，比喻东西虽不好，但自己十分珍惜。这是谦词，用于说自己。此处用于夸耀成就且让人敬佩，褒贬和对象均失当。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_011",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子中成语使用是否正确：\n\"这篇文章写得差强人意，勉强可以接受。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"差强人意\"意为大体上还能使人满意。\"差\"读 chā，是\"稍微、大致\"的意思，不是\"差劲\"。此处使用正确。常被误用为\"令人不满意\"，需注意。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_012",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子中成语使用是否正确：\n\"听到这个好消息，大家首当其冲地欢呼起来。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"首当其冲\"比喻最先受到攻击或遭遇灾难（冲：要冲、交通要道），不是\"首先\"的意思。此处应用\"不约而同\"或\"纷纷\"。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_013",
+      "type": "word_usage",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子中成语使用是否正确：\n\"他画的竹子栩栩如生，简直像真的一样。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"栩栩如生\"指艺术形象非常逼真，如同活的一样。\"栩栩\"形容生动活泼的样子。用于形容绘画、雕塑等艺术作品非常贴切。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_014",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列各句中，加点成语使用不恰当的一项是：",
+      "options": [
+        {
+          "text": "这部小说情节曲折，引人入胜，让人手不释卷。",
+          "correct": false
+        },
+        {
+          "text": "在城市中修建人工湖，无异于画蛇添足，多此一举。",
+          "correct": false
+        },
+        {
+          "text": "他平时学习刻苦，这次考试一定能鹤立鸡群。",
+          "correct": false
+        },
+        {
+          "text": "老张在会议上夸夸其谈，提出了很多有建设性的建议。",
+          "correct": true
+        }
+      ],
+      "answer": "老张在会议上夸夸其谈，提出了很多有建设性的建议。",
+      "explanation": "\"夸夸其谈\"指说话浮夸、不切实际，是贬义词。用于形容\"有建设性的建议\"是褒贬失当。应改为\"侃侃而谈\"。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_015",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列句子中，加点成语使用全部正确的一组是：\n①他的书法作品笔走龙蛇，堪称一绝。\n②这个方案漏洞百出，无异于抱薪救火。\n③老艺术家妙手回春，修复了这幅残破的古画。\n④他总是不耻下问，经常向学弟学妹请教问题。",
+      "options": [
+        {
+          "text": "①②③",
+          "correct": false
+        },
+        {
+          "text": "①③",
+          "correct": false
+        },
+        {
+          "text": "①②",
+          "correct": false
+        },
+        {
+          "text": "①④",
+          "correct": true
+        }
+      ],
+      "answer": "①④",
+      "explanation": "①\"笔走龙蛇\"形容书法生动洒脱，正确。②\"抱薪救火\"比喻方法不对反而使祸害扩大，\"漏洞百出的方案\"用\"于事无补\"或\"抱残守缺\"更恰当。③\"妙手回春\"专指医术高明，用于修复古画是对象误用。④\"不耻下问\"指向学问不如自己的人请教，符合语境（向学弟学妹请教）。①④正确。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_016",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列哪个成语可以用来形容\"读书勤奋\"？",
+      "options": [
+        {
+          "text": "囫囵吞枣",
+          "correct": false
+        },
+        {
+          "text": "手不释卷",
+          "correct": true
+        },
+        {
+          "text": "一知半解",
+          "correct": false
+        },
+        {
+          "text": "望文生义",
+          "correct": false
+        }
+      ],
+      "answer": "手不释卷",
+      "explanation": "\"手不释卷\"指手中的书不肯放下，形容读书勤奋或看书入迷。A项\"囫囵吞枣\"比喻读书不加分析地笼统接受。C项\"一知半解\"指知道得不全面。D项\"望文生义\"指不懂某词句的正确意义，只从字面去理解。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_017",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中，加点成语使用恰当的一项是：",
+      "options": [
+        {
+          "text": "这家餐厅的招牌菜果然名不虚传，让人大快朵颐。",
+          "correct": true
+        },
+        {
+          "text": "这次比赛他一败涂地，真是让人叹为观止。",
+          "correct": false
+        },
+        {
+          "text": "他做事总是半途而废，坚持到底就是胜利。",
+          "correct": false
+        },
+        {
+          "text": "面对老师的批评，他无动于衷，虚心接受。",
+          "correct": false
+        }
+      ],
+      "answer": "这家餐厅的招牌菜果然名不虚传，让人大快朵颐。",
+      "explanation": "A项\"大快朵颐\"指痛快地大吃一顿，使用正确。B项\"叹为观止\"是赞叹所见到的事物好到了极点，不能用于失败。C项\"半途而废\"与\"坚持到底\"矛盾。D项\"无动于衷\"与\"虚心接受\"矛盾。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_018",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "填入下面横线处最恰当的成语是：\n科学探索之路从来不是___的，每一步突破都需要长期积累和艰苦努力。",
+      "options": [
+        {
+          "text": "一蹴而就",
+          "correct": true
+        },
+        {
+          "text": "一帆风顺",
+          "correct": false
+        },
+        {
+          "text": "一挥而就",
+          "correct": false
+        },
+        {
+          "text": "一举两得",
+          "correct": false
+        }
+      ],
+      "answer": "一蹴而就",
+      "explanation": "\"一蹴而就\"指踏一步就成功，形容事情轻而易举，最贴合\"需要长期积累\"的对比语境。B项\"一帆风顺\"虽也通顺，但不如\"一蹴而就\"精确对应\"长期积累→短期突破\"的对比。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_word_019",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列加点的词语，使用有误的一项是：\nA. 日薄西山之时，他才意识到时光的珍贵。\nB. 他对此事漠不关心，总是袖手旁观。\nC. 经过反复实验，他终于不负众望，攻克了难关。\nD. 他的演讲听了让人不知所云，真是太精彩了。",
+      "options": [
+        {
+          "text": "A. 日薄西山",
+          "correct": false
+        },
+        {
+          "text": "B. 袖手旁观",
+          "correct": false
+        },
+        {
+          "text": "C. 不负众望",
+          "correct": false
+        },
+        {
+          "text": "D. 不知所云",
+          "correct": true
+        }
+      ],
+      "answer": "D. 不知所云",
+      "explanation": "\"不知所云\"指不知道说的是什么，形容说话内容混乱、无法理解，是贬义词。此处用来形容\"太精彩\"是褒贬失当。A项\"日薄西山\"比喻人衰老或事物衰败（可用）。B项\"袖手旁观\"比喻置身事外（正确）。C项\"不负众望\"指不辜负大家的期望（正确）。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_sentence_001",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "通过这次活动，使我增长了见识。",
+          "correct": false
+        },
+        {
+          "text": "春天的北京是一年中最美丽的季节。",
+          "correct": false
+        },
+        {
+          "text": "我们必须认真克服并善于发现工作中的缺点。",
+          "correct": false
+        },
+        {
+          "text": "阅读优秀的文学作品，能丰富我们的精神世界。",
+          "correct": true
+        }
+      ],
+      "answer": "阅读优秀的文学作品，能丰富我们的精神世界。",
+      "explanation": "A项：滥用\"使\"字导致主语残缺，删去\"通过\"或\"使\"。B项：主宾搭配不当，\"北京\"不能是\"季节\"，应改为\"北京的春天\"。C项：语序不当，应先\"发现\"再\"克服\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_002",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中有语病的一项是：",
+      "options": [
+        {
+          "text": "随着科技的发展，智能手机已经成为人们生活中不可或缺的一部分。",
+          "correct": false
+        },
+        {
+          "text": "据科学家研究，雏鸟的消化能力比成鸟更强烈。",
+          "correct": true
+        },
+        {
+          "text": "诚信不仅体现了公民的基本道德素质，而且关系到国家的整体形象。",
+          "correct": false
+        },
+        {
+          "text": "我们要养成爱读书，特别是读经典名著的良好习惯。",
+          "correct": false
+        }
+      ],
+      "answer": "据科学家研究，雏鸟的消化能力比成鸟更强烈。",
+      "explanation": "B项：搭配不当，\"能力\"不能用\"强烈\"来形容，应改为\"更强\"。A项无语病。C项无语病（递进关系正确）。D项无语病。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_003",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "他的写作水平有了明显的提高和增强。",
+          "correct": false
+        },
+        {
+          "text": "为了防止此类事故不再发生，学校加强了安全教育。",
+          "correct": false
+        },
+        {
+          "text": "在老师的帮助下，我端正了学习态度和方法。",
+          "correct": false
+        },
+        {
+          "text": "我国成功发射的北斗系统卫星，标志着航天事业又迈出了重要一步。",
+          "correct": true
+        }
+      ],
+      "answer": "我国成功发射的北斗系统卫星，标志着航天事业又迈出了重要一步。",
+      "explanation": "A项：谓语赘余，\"提高\"和\"增强\"语义重复。B项：否定不当，\"防止\"和\"不再\"双重否定导致语义相反，应删去\"不\"。C项：搭配不当，\"端正\"可以与\"态度\"搭配，但不能\"端正方法\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_004",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "秋天的香山是红叶最美丽的季节。",
+          "correct": false
+        },
+        {
+          "text": "听了校长的报告，使我深受鼓舞。",
+          "correct": false
+        },
+        {
+          "text": "他不但学习好，而且品德也好。",
+          "correct": true
+        },
+        {
+          "text": "只要认真复习，就能取得好成绩，这是毫无疑问的。",
+          "correct": false
+        }
+      ],
+      "answer": "他不但学习好，而且品德也好。",
+      "explanation": "A项主宾搭配不当（\"香山\"不是\"季节\"）。B项缺主语，删去\"使\"。C项无语病。D项\"只要...就\"与\"毫无疑问\"语义重复。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_005",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "选出下列有语病的一项：",
+      "options": [
+        {
+          "text": "为了防止疫情扩散，各地采取了严格的防控措施。",
+          "correct": false
+        },
+        {
+          "text": "共享单车的出现，极大地便利了市民的出行。",
+          "correct": false
+        },
+        {
+          "text": "我们既要脚踏实地，又要好高骛远，才能取得成功。",
+          "correct": true
+        },
+        {
+          "text": "良好的家风是一个家庭最宝贵的精神财富。",
+          "correct": false
+        }
+      ],
+      "answer": "我们既要脚踏实地，又要好高骛远，才能取得成功。",
+      "explanation": "C项：\"好高骛远\"指不切实际地追求过高目标，是贬义词，与\"脚踏实地\"构成矛盾，此处用词不当。应改为\"志存高远\"或\"仰望星空\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_006",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "能否保持一颗平常心，是考试正常发挥的关键。",
+          "correct": false
+        },
+        {
+          "text": "我国人口占世界总人口的约五分之一左右。",
+          "correct": false
+        },
+        {
+          "text": "长征五号B运载火箭的首飞成功，拉开了我国空间站建造的序幕。",
+          "correct": true
+        },
+        {
+          "text": "每一个学生都应该具有独立思考和合作探究。",
+          "correct": false
+        }
+      ],
+      "answer": "长征五号B运载火箭的首飞成功，拉开了我国空间站建造的序幕。",
+      "explanation": "A项：两面对一面，\"能否\"与\"是\"不搭配。B项：成分赘余，\"约\"与\"左右\"重复。D项：宾语残缺，\"具有\"后面缺少宾语中心语，应加\"的能力\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_007",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "在阅读名著的过程中，使我明白了许多做人的道理。",
+          "correct": false
+        },
+        {
+          "text": "会不会用心观察，是提高写作水平的基础。",
+          "correct": false
+        },
+        {
+          "text": "我国在酒泉卫星发射中心成功发射了神舟十六号载人飞船。",
+          "correct": true
+        },
+        {
+          "text": "这种网络社交工具的广泛使用，加快了信息流通的速度和质量。",
+          "correct": false
+        }
+      ],
+      "answer": "我国在酒泉卫星发射中心成功发射了神舟十六号载人飞船。",
+      "explanation": "A项：缺主语，删去\"使\"。B项：两面对一面，删去\"会不会\"。D项：搭配不当，\"加快\"可以与\"速度\"搭配，但不能\"加快质量\"（应改为\"提高质量\"）。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_008",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "随着返回舱成功着陆，意味着神舟十三号载人飞行任务取得圆满成功。",
+          "correct": false
+        },
+        {
+          "text": "低温尽管会使海面结冰，而且会影响船舶主机的正常运行。",
+          "correct": false
+        },
+        {
+          "text": "我们要大力倡导绿色低碳的生活方式，共同保护地球家园。",
+          "correct": true
+        },
+        {
+          "text": "他的学习成绩不仅在全校名列前茅，而且在班里也是数一数二的。",
+          "correct": false
+        }
+      ],
+      "answer": "我们要大力倡导绿色低碳的生活方式，共同保护地球家园。",
+      "explanation": "A项：缺主语，删去\"随着\"或\"意味着\"。B项：关联词搭配不当，\"尽管\"应与\"但/却\"搭配，不能与\"而且\"搭配。D项：语序不当，应从小到大递进，改为\"不仅在班里数一数二，而且在全校也名列前茅\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_009",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子没有语病的一项是：",
+      "options": [
+        {
+          "text": "通过这次活动，使同学们增长了见识。",
+          "correct": false
+        },
+        {
+          "text": "为了避免今后不再发生类似的事故，我们必须严格遵守操作规范。",
+          "correct": false
+        },
+        {
+          "text": "书籍是人类进步的阶梯，读书能开阔视野、增长知识。",
+          "correct": true
+        },
+        {
+          "text": "他大约用了两个小时左右才完成作业。",
+          "correct": false
+        }
+      ],
+      "answer": "书籍是人类进步的阶梯，读书能开阔视野、增长知识。",
+      "explanation": "A项主语残缺，\"通过...使...\"连用导致句子缺少主语，应删去\"通过\"或\"使\"。B项否定不当，\"避免\"和\"不再\"双重否定。D项\"大约\"与\"左右\"重复。C项无语病，表达简洁有力。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_010",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子是否有语病：\n\"通过这次社会实践活动，使同学们增长了见识。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "该句滥用\"使\"字导致主语残缺。删除\"通过\"或删除\"使\"，让\"同学们\"做主语。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_011",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子是否有语病：\n\"为了防止安全事故不再发生，学校加强了校园巡逻。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "否定不当。\"防止\"本身含有否定意味，\"防止...不再发生\"等于说\"让事故发生\"，与原意相反。应删去\"不\"字。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_012",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子是否有语病：\n\"秋天的校园是美丽的季节。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "主宾搭配不当。\"校园\"不能是\"季节\"。应改为\"校园的秋天是美丽的季节\"或\"秋天的校园十分美丽\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_013",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子是否有语病：\n\"我们大约用了三个小时左右才到达目的地。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "\"大约\"与\"左右\"语义重复，都是表约数的词语。删去其中一个即可。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_014",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列句子是否有语病：\n\"他那崇高的品质，经常浮现在我的脑海中。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "搭配不当。\"品质\"是抽象事物，不能\"浮现\"（视觉形象）。应改为\"他那高大的形象\"或\"他的崇高品质让我难以忘怀\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_015",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子是否有语病：\n\"各地纷纷采取追踪病源、隔离观察等措施，防止疫情不再扩散。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "否定不当。\"防止\"和\"不再\"连用导致语义相反。\"防止疫情不再扩散\"意为\"让疫情扩散\"。应删去\"不\"字。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_rhetoric_001",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子中使用的修辞手法，判断正确的一项是：\n\"太阳像一个大火球，炙烤着大地。\"",
+      "options": [
+        {
+          "text": "拟人",
+          "correct": false
+        },
+        {
+          "text": "比喻",
+          "correct": true
+        },
+        {
+          "text": "夸张",
+          "correct": false
+        },
+        {
+          "text": "排比",
+          "correct": false
+        }
+      ],
+      "answer": "比喻",
+      "explanation": "该句把\"太阳\"比作\"大火球\"，使用了比喻修辞手法，有本体（太阳）、喻体（大火球）和比喻词（像）。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_002",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中修辞手法判断有误的一项是：",
+      "options": [
+        {
+          "text": "小溪唱着欢快的歌向前奔去。——拟人",
+          "correct": false
+        },
+        {
+          "text": "飞流直下三千尺，疑是银河落九天。——夸张",
+          "correct": false
+        },
+        {
+          "text": "他种的瓜很甜，几十里外就闻到瓜香了。——比喻",
+          "correct": true
+        },
+        {
+          "text": "他们的品质是那样的纯洁和高尚，他们的意志是那样的坚韧和刚强。——排比",
+          "correct": false
+        }
+      ],
+      "answer": "他种的瓜很甜，几十里外就闻到瓜香了。——比喻",
+      "explanation": "C项使用的是夸张（夸大），而非比喻。比喻需要有本体和喻体，\"几十里外闻到瓜香\"是故意夸大了事实来强调瓜的香甜。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_003",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列诗句中使用了对偶修辞手法的是：",
+      "options": [
+        {
+          "text": "床前明月光，疑是地上霜。",
+          "correct": false
+        },
+        {
+          "text": "两个黄鹂鸣翠柳，一行白鹭上青天。",
+          "correct": true
+        },
+        {
+          "text": "桃花潭水深千尺，不及汪伦送我情。",
+          "correct": false
+        },
+        {
+          "text": "谁知盘中餐，粒粒皆辛苦。",
+          "correct": false
+        }
+      ],
+      "answer": "两个黄鹂鸣翠柳，一行白鹭上青天。",
+      "explanation": "B项\"两个\"对\"一行\"（数量词），\"黄鹂\"对\"白鹭\"（名词+颜色），\"鸣\"对\"上\"（动词），\"翠柳\"对\"青天\"（名词+颜色），是典型的对偶句。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_004",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "\"桃树、杏树、梨树，你不让我，我不让你，都开满了花赶趟儿。\"这句话使用的修辞手法是：",
+      "options": [
+        {
+          "text": "比喻  拟人",
+          "correct": false
+        },
+        {
+          "text": "拟人  排比",
+          "correct": true
+        },
+        {
+          "text": "排比  夸张",
+          "correct": false
+        },
+        {
+          "text": "拟人  对偶",
+          "correct": false
+        }
+      ],
+      "answer": "拟人  排比",
+      "explanation": "\"你不让我，我不让你\"赋予桃树、杏树、梨树以人的行为（拟人）。\"桃树、杏树、梨树\"三个并列结构构成排比。综合运用了拟人和排比两种修辞手法。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_005",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子所使用的修辞手法与其他三项不同的是：",
+      "options": [
+        {
+          "text": "春天像刚落地的娃娃，从头到脚都是新的。",
+          "correct": false
+        },
+        {
+          "text": "书籍是人类进步的阶梯。",
+          "correct": false
+        },
+        {
+          "text": "他长得像他爸爸一样高大。",
+          "correct": true
+        },
+        {
+          "text": "时间就像海绵里的水，只要愿挤，总还是有的。",
+          "correct": false
+        }
+      ],
+      "answer": "他长得像他爸爸一样高大。",
+      "explanation": "C项是\"同类比较\"（人和人比），而非比喻。A、B、D三项都是比喻，分别把春天比作娃娃、书籍比作阶梯、时间比作海绵里的水。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_006",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列诗句中，修辞手法判断全部正确的一项是：\n①感时花溅泪，恨别鸟惊心。\n②忽如一夜春风来，千树万树梨花开。\n③问君能有几多愁，恰似一江春水向东流。",
+      "options": [
+        {
+          "text": "①拟人 ②比喻 ③比喻",
+          "correct": true
+        },
+        {
+          "text": "①比喻 ②拟人 ③拟人",
+          "correct": false
+        },
+        {
+          "text": "①拟人 ②拟人 ③比喻",
+          "correct": false
+        },
+        {
+          "text": "①比喻 ②比喻 ③拟人",
+          "correct": false
+        }
+      ],
+      "answer": "①拟人 ②比喻 ③比喻",
+      "explanation": "①\"花溅泪\"\"鸟惊心\"赋予花、鸟人的情感（拟人）。②把雪花比作梨花，比喻中含有夸张（比喻）。③把愁绪比作春水，化抽象为具体（比喻）。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_007",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子使用的修辞手法标注是否正确：\n\"月亮不好意思地躲进了云层里。\" —— 拟人",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "该句赋予月亮人的情感\"不好意思\"和动作\"躲\"，是典型的拟人修辞手法。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_008",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列修辞手法标注是否正确：\n\"白发三千丈，缘愁似个长。\" —— 夸张",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"白发三千丈\"故意夸大白发的长度，极言愁苦之深，是典型的夸张修辞手法。在夸张中蕴含比喻（以白发之长喻愁苦之深）。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_009",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断题干中修辞手法的判断是否正确：\n\"山朗润起来了，水涨起来了，太阳的脸红起来了。\" 使用了排比的修辞手法。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "三个结构相似的句子并列，构成排比。同时\"太阳的脸红起来了\"还使用了拟人。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_010",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断修辞手法判断是否正确：\n\"问渠那得清如许？为有源头活水来。\" —— 反问",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "该句自问自答，是设问（先提出问题，再自己回答），而非反问（反问是用疑问的形式表达确定的意思，不需要回答）。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_011",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断修辞手法判断是否正确：\n\"圆规一面愤愤的回转身，一面絮絮的说。\" —— 借代",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"圆规\"在此处借代杨二嫂（因其体形像圆规），是用特征代指人物，属于借代修辞手法。注意：借代与借喻的区别在于借代是用相关性代替，借喻是用相似性比喻。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_012",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子是否使用了比喻的修辞手法：\n\"看到试卷上的分数，他的心像掉进了冰窖一样。\"",
+      "options": [
+        {
+          "text": "是比喻",
+          "correct": true
+        },
+        {
+          "text": "不是比喻",
+          "correct": false
+        }
+      ],
+      "answer": "是比喻",
+      "explanation": "该句把\"失望、寒冷的心情\"比作\"掉进冰窖\"，用\"像...一样\"连接，是比喻中的明喻，生动形象地写出了极度失望的心理感受。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_013",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断修辞手法标注是否正确：\n\"让我们行动起来，从节约一滴水、一度电、一张纸做起！\" —— 排比",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"节约一滴水、一度电、一张纸\"三个结构相同的短语并列，构成排比，增强语势。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_014",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断题干中使用的修辞手法：\n\"他种的瓜很甜，二三十里外就闻到瓜香了。\"这句话使用了夸张手法。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"二三十里外就闻到瓜香\"是典型的夸张（夸大），故意把闻到瓜香的距离夸大，以突出瓜的香甜程度。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_015",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断修辞手法：\n\"有的人活着，他已经死了；有的人死了，他还活着。\" —— 对比",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "该句将两种人进行鲜明对比：肉体活着但精神已死的人，和肉体虽死但精神永存的人。通过强烈对比突出主题，表达作者的价值判断。同时也含有对偶的成分。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_literature_001",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列作家与作品搭配正确的一项是：",
+      "options": [
+        {
+          "text": "鲁迅 ——《骆驼祥子》",
+          "correct": false
+        },
+        {
+          "text": "老舍 ——《藤野先生》",
+          "correct": false
+        },
+        {
+          "text": "朱自清 ——《春》",
+          "correct": true
+        },
+        {
+          "text": "冰心 ——《社戏》",
+          "correct": false
+        }
+      ],
+      "answer": "朱自清 ——《春》",
+      "explanation": "《春》是朱自清的散文名篇。A项《骆驼祥子》是老舍的作品。B项《藤野先生》是鲁迅的作品。D项《社戏》是鲁迅的作品。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_002",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列文学常识表述正确的一项是：",
+      "options": [
+        {
+          "text": "《诗经》是我国第一部诗歌总集，共305篇，也称\"诗三百\"。",
+          "correct": true
+        },
+        {
+          "text": "李白是唐代著名的边塞诗人。",
+          "correct": false
+        },
+        {
+          "text": "《红楼梦》的作者是吴承恩。",
+          "correct": false
+        },
+        {
+          "text": "宋词只有豪放派一种风格。",
+          "correct": false
+        }
+      ],
+      "answer": "《诗经》是我国第一部诗歌总集，共305篇，也称\"诗三百\"。",
+      "explanation": "B项：李白是浪漫主义诗人，非边塞诗人。C项：《红楼梦》作者是曹雪芹。D项：宋词分为豪放派和婉约派两大流派。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_003",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列有关文学常识的表述，不正确的一项是：",
+      "options": [
+        {
+          "text": "《论语》是记录孔子及其弟子言行的一部书，是儒家经典著作之一。",
+          "correct": false
+        },
+        {
+          "text": "《史记》是我国第一部纪传体通史，作者是西汉史学家司马迁。",
+          "correct": false
+        },
+        {
+          "text": "陶渊明是唐代著名的山水田园诗人。",
+          "correct": true
+        },
+        {
+          "text": "《水浒传》是我国第一部歌颂农民起义的长篇章回体小说。",
+          "correct": false
+        }
+      ],
+      "answer": "陶渊明是唐代著名的山水田园诗人。",
+      "explanation": "陶渊明是东晋诗人，不是唐代。唐代山水田园诗人的代表是王维和孟浩然。A、B、D三项表述均正确。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_004",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列关于唐诗的表述，有误的一项是：",
+      "options": [
+        {
+          "text": "杜甫被称为\"诗圣\"，他的诗被称为\"诗史\"。",
+          "correct": false
+        },
+        {
+          "text": "王维的诗以边塞风光著称，被称为\"诗佛\"。",
+          "correct": true
+        },
+        {
+          "text": "白居易倡导新乐府运动，主张\"文章合为时而著，歌诗合为事而作\"。",
+          "correct": false
+        },
+        {
+          "text": "李白的诗风豪放飘逸，被称为\"诗仙\"。",
+          "correct": false
+        }
+      ],
+      "answer": "王维的诗以边塞风光著称，被称为\"诗佛\"。",
+      "explanation": "王维以山水田园诗著称，被称为\"诗佛\"，而非边塞诗。唐代边塞诗人的代表是高适、岑参、王昌龄等。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_005",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列有关文学体裁的表述，正确的一项是：",
+      "options": [
+        {
+          "text": "律诗每首八句，绝句每首四句。",
+          "correct": true
+        },
+        {
+          "text": "小说三要素是人物、时间、地点。",
+          "correct": false
+        },
+        {
+          "text": "散文的主要特点是\"形散神也散\"。",
+          "correct": false
+        },
+        {
+          "text": "议论文的三要素是论点、说明、结论。",
+          "correct": false
+        }
+      ],
+      "answer": "律诗每首八句，绝句每首四句。",
+      "explanation": "B项：小说三要素是人物、情节、环境。C项：散文特点是\"形散神不散\"（形散神聚）。D项：议论文三要素是论点、论据、论证。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_006",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列文学常识表述不正确的一项是：",
+      "options": [
+        {
+          "text": "《左传》是我国第一部叙事详细的编年体史书。",
+          "correct": false
+        },
+        {
+          "text": "《史记》是我国第一部纪传体通史，包括本纪、世家、列传、书、表五种体例。",
+          "correct": false
+        },
+        {
+          "text": "\"乐府双璧\"指的是《木兰诗》和《孔雀东南飞》。",
+          "correct": false
+        },
+        {
+          "text": "\"唐宋八大家\"中唐代只有韩愈一人。",
+          "correct": true
+        }
+      ],
+      "answer": "\"唐宋八大家\"中唐代只有韩愈一人。",
+      "explanation": "唐宋八大家中唐代有两位：韩愈和柳宗元。宋代六位：欧阳修、苏洵、苏轼、苏辙、王安石、曾巩。D项漏掉了柳宗元。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_007",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "\"海内存知己，天涯若比邻\"出自哪位诗人之手？",
+      "options": [
+        {
+          "text": "李白",
+          "correct": false
+        },
+        {
+          "text": "杜甫",
+          "correct": false
+        },
+        {
+          "text": "王勃",
+          "correct": true
+        },
+        {
+          "text": "王之涣",
+          "correct": false
+        }
+      ],
+      "answer": "王勃",
+      "explanation": "此千古名句出自王勃的《送杜少府之任蜀州》。王勃是\"初唐四杰\"之一（王勃、杨炯、卢照邻、骆宾王）。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_008",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列说法是否正确：\n\"李杜\"指的是唐代诗人李白和杜牧。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"李杜\"一般指李白和杜甫（\"大李杜\"）。晚唐还有\"小李杜\"：李商隐和杜牧。题中混淆了\"李杜\"中的杜甫和\"小李杜\"中的杜牧。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_009",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列说法是否正确：\n\"四书\"指的是《大学》《中庸》《论语》《孟子》。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"四书\"是儒家经典，包括《大学》《中庸》《论语》《孟子》。\"五经\"则是《诗》《书》《礼》《易》《春秋》。",
+      "handbookSource": "文学常识 > 文学文化常识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_010",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列文学常识表述是否正确：\n古体诗格律自由，不严格要求对仗和平仄；近体诗在句数、字数、平仄、押韵等方面都有严格规定。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "古体诗（古风）与近体诗（格律诗）的主要区别在于格律限制。古体诗相对自由，近体诗（包括律诗和绝句）有严格的格律要求。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_011",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列说法是否正确：\n豪放派和婉约派是唐代诗歌的两大流派。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "豪放派和婉约派是宋代词坛的两大流派，而非唐代诗歌。豪放派代表词人：苏轼、辛弃疾；婉约派代表词人：柳永、李清照。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_012",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列说法是否正确：\n《天净沙·秋思》中\"天净沙\"是词牌名，\"秋思\"是题目。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"天净沙\"是曲牌名，不是词牌名。《天净沙·秋思》是元曲（散曲），作者是马致远。词和曲是不同的文学体裁，各有不同的曲牌/词牌。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_013",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列文学常识表述是否正确：\n《史记》是编年体史书，《资治通鉴》是纪传体史书。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "恰好说反了。《史记》是纪传体通史（以人物为中心记载历史），《资治通鉴》是编年体通史（按时间顺序记载历史）。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_014",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列说法是否正确：\n《诗经》的内容分为\"风\"\"雅\"\"颂\"三部分。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "《诗经》按音乐性质分为风（地方民歌）、雅（朝廷正乐）、颂（宗庙祭祀乐歌）三部分。其表现手法是赋、比、兴。",
+      "handbookSource": "文学常识 > 文学文化常识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_015",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列文学常识表述是否正确：\n\"初唐四杰\"是指王勃、杨炯、卢照邻、骆宾王。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"初唐四杰\"确实指王勃、杨炯、卢照邻、骆宾王四人。他们是初唐文坛上新旧过渡时期的杰出人物，对唐代文学的发展有重要贡献。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_recitation_001",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n海内存知己，______。\n（王勃《送杜少府之任蜀州》）",
+      "options": [],
+      "answer": "天涯若比邻",
+      "explanation": "此句出自王勃《送杜少府之任蜀州》。全句意为：四海之内有知心朋友，即使远在天边也好像近在眼前。表达了诗人对友情的珍视和豁达的胸怀。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_002",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n______，蜡炬成灰泪始干。\n（李商隐《无题》）",
+      "options": [],
+      "answer": "春蚕到死丝方尽",
+      "explanation": "此句以春蚕吐丝、蜡烛燃烧比喻对爱情的至死不渝，后来也常用来赞美奉献精神。\"丝\"与\"思\"谐音，一语双关。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_003",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n忽如一夜春风来，______。\n（岑参《白雪歌送武判官归京》）",
+      "options": [],
+      "answer": "千树万树梨花开",
+      "explanation": "以梨花比喻雪花，用春天的景象写冬景，想象奇特。描绘了边塞大雪纷飞的壮丽景象。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_004",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n但愿人长久，______。\n（苏轼《水调歌头》）",
+      "options": [],
+      "answer": "千里共婵娟",
+      "explanation": "\"婵娟\"指月亮。全句表达了对亲人的美好祝愿：希望彼此都能健康长寿，即使相隔千里，也能共享这美好的月光。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_005",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "理解性默写：\n\n杜甫《望岳》中表达诗人不怕困难、敢于攀登绝顶、俯视一切的雄心和气概的诗句是：\n______，______。",
+      "options": [],
+      "answer": "会当凌绝顶，一览众山小",
+      "explanation": "这是《望岳》的尾联，也是全诗最有名的句子。\"会当\"意为\"一定要\"，表达了诗人勇攀高峰的壮志，成为千古名句。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_006",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "理解性默写：\n\n文天祥《过零丁洋》中以死明志，表达舍生取义决心的千古名句是：\n______？______。",
+      "options": [],
+      "answer": "人生自古谁无死？留取丹心照汗青",
+      "explanation": "这两句以反问加强语气，表达诗人视死如归的英雄气概。\"汗青\"指史册，意为留下一颗赤诚的心光照史册。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_007",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "理解性默写：\n\n王安石《登飞来峰》中与\"欲穷千里目，更上一层楼\"有异曲同工之妙的诗句是：\n______，______。",
+      "options": [],
+      "answer": "不畏浮云遮望眼，自缘身在最高层",
+      "explanation": "两句都表达了站得高看得远的哲理。\"不畏浮云遮望眼\"还暗含不怕小人谗言的深层含义。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_008",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n______，柳暗花明又一村。\n（陆游《游山西村》）",
+      "options": [],
+      "answer": "山重水复疑无路",
+      "explanation": "此联写山间水畔的景色，蕴含深刻哲理：在困境中坚持前行，往往能发现新的天地。后世常用以比喻绝处逢生。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_009",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n落红不是无情物，______。\n（龚自珍《己亥杂诗》）",
+      "options": [],
+      "answer": "化作春泥更护花",
+      "explanation": "诗人以落花自喻，表达虽然辞官但仍关心国家命运的情怀。\"落红\"指落花，化为春泥后继续滋养新花，寓意奉献精神。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_010",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "理解性默写：\n\n范仲淹《岳阳楼记》中表现作者远大政治抱负的句子是：\n______，______。",
+      "options": [],
+      "answer": "先天下之忧而忧，后天下之乐而乐",
+      "explanation": "这是《岳阳楼记》的主旨句，表达了作者以天下为己任的政治抱负和先人后己的高尚情操，成为千古传诵的名句。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_011",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "理解性默写：\n\n王湾《次北固山下》中蕴含\"新事物必将取代旧事物\"哲理的诗句是：\n______，______。",
+      "options": [],
+      "answer": "海日生残夜，江春入旧年",
+      "explanation": "残夜未尽，红日已从海上升起；旧年未过，江上已露春意。蕴含了新事物在旧事物中孕育、必将取代旧事物的深刻哲理。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_012",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "理解性默写：\n\n刘禹锡《酬乐天扬州初逢席上见赠》中蕴含\"新事物必将取代旧事物\"哲理的诗句是：\n______，______。",
+      "options": [],
+      "answer": "沉舟侧畔千帆过，病树前头万木春",
+      "explanation": "沉船旁边千帆竞发，枯树前面万木争春。诗人以沉舟、病树自喻，表达豁达胸襟：个人的沉滞算不了什么，新生力量依然蓬勃向前。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_013",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n大漠孤烟直，______。\n（王维《使至塞上》）",
+      "options": [],
+      "answer": "长河落日圆",
+      "explanation": "此联以简练的线条勾勒出雄浑壮阔的边塞风光。\"直\"字表现孤烟的劲拔，\"圆\"字表现落日的温暖，被誉为\"诗中有画\"的典范。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_014",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n______，自缘身在最高层。\n（王安石《登飞来峰》）",
+      "options": [],
+      "answer": "不畏浮云遮望眼",
+      "explanation": "全句表达诗人高瞻远瞩、不畏艰险的胸怀。\"浮云\"比喻奸邪小人或困难障碍。与苏轼\"不识庐山真面目，只缘身在此山中\"形成呼应。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_015",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n采菊东篱下，______。\n（陶渊明《饮酒》）",
+      "options": [],
+      "answer": "悠然见南山",
+      "explanation": "此句写诗人在东篱下采菊，不经意间抬头望见南山，表现了田园生活的闲适恬淡和诗人超然物外的心境。\"见\"字之妙在于无意中的偶遇。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_016",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n感时花溅泪，______。\n（杜甫《春望》）",
+      "options": [],
+      "answer": "恨别鸟惊心",
+      "explanation": "诗人将主观情感投射到客观景物上：因感伤时局，看到花开反而流泪；因怨恨离别，听到鸟鸣反而心惊。这是移情于景的典型写法。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_017",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n黑云压城城欲摧，______。\n（李贺《雁门太守行》）",
+      "options": [],
+      "answer": "甲光向日金鳞开",
+      "explanation": "\"黑云压城\"渲染敌军兵临城下的紧张气氛，\"甲光向日\"展现守城将士的威武阵容。对比鲜明，气势磅礴。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_018",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "理解性默写：\n\n《木兰诗》中描写战争旷日持久、战斗激烈悲壮的句子是：\n______，______。",
+      "options": [],
+      "answer": "将军百战死，壮士十年归",
+      "explanation": "这两句用了互文的修辞手法：将军和壮士有的身经百战后牺牲了，有的十年之后得胜归来。概括了战争的残酷与漫长。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_019",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "理解性默写：\n\n李白《行路难》中表现诗人坚信理想终会实现的诗句是：\n______，______。",
+      "options": [],
+      "answer": "长风破浪会有时，直挂云帆济沧海",
+      "explanation": "诗人虽感叹\"行路难\"，但结尾仍以豪迈的笔调表达对未来的坚定信念。\"长风破浪\"化用典故，表达不畏艰险、勇往直前的精神。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_020",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n______，断肠人在天涯。\n（马致远《天净沙·秋思》）",
+      "options": [],
+      "answer": "夕阳西下",
+      "explanation": "《天净沙·秋思》被誉为\"秋思之祖\"。前三句用九个意象铺排渲染秋景，最后以\"断肠人在天涯\"点睛，抒发了游子思乡的悲苦之情。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_021",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n______，随君直到夜郎西。\n（李白《闻王昌龄左迁龙标遥有此寄》）",
+      "options": [],
+      "answer": "我寄愁心与明月",
+      "explanation": "诗人将\"愁心\"寄予明月，让明月陪伴友人直到贬谪之地。想象奇特，表达了深切的关切和思念之情。注意部编版教材作\"随君\"（陪伴您），非\"随风\"。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_022",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "理解性默写：\n\n周敦颐《爱莲说》中描写莲花高洁品质，常用来比喻君子不与世俗同流合污的句子是：\n______，______。",
+      "options": [],
+      "answer": "出淤泥而不染，濯清涟而不妖",
+      "explanation": "莲花从污泥中生长却不被污染，在清水中洗涤却不显得妖媚。比喻君子身处不良环境仍能保持高洁品格。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_023",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "理解性默写：\n\n孔子在《论语》中论述学习与思考辩证关系的句子是：\n______，______。",
+      "options": [],
+      "answer": "学而不思则罔，思而不学则殆",
+      "explanation": "只学习不思考就会迷惑而无所得，只思考不学习就会精神疲倦而无所得。论述了学习与思考不可偏废的辩证关系。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_024",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "补写出下列名句的上句或下句：\n\n______，润物细无声。\n（杜甫《春夜喜雨》）",
+      "options": [],
+      "answer": "随风潜入夜",
+      "explanation": "此联写春雨在夜间随风悄悄飘落，无声地滋润万物。\"潜\"字用得极为精妙，写出了春雨细密轻柔的特点。后世常用来比喻潜移默化的教育方式。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_recitation_025",
+      "type": "recitation",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "补写出下列名句的上句或下句：\n\n枯藤老树昏鸦，______，古道西风瘦马。\n（马致远《天净沙·秋思》）",
+      "options": [],
+      "answer": "小桥流水人家",
+      "explanation": "这一句在两组萧瑟意象之间插入温暖的家园意象，形成强烈反差，更加衬托出游子的孤独与思乡之情。是全曲情感转折的关键句。",
+      "handbookSource": "名句名段",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 名句名段"
+    },
+    {
+      "id": "auto_punctuation_001",
+      "type": "punctuation",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子中标点符号使用正确的一项是：",
+      "options": [
+        {
+          "text": "他问我：\"你明天去吗\"？",
+          "correct": false
+        },
+        {
+          "text": "老师说：\"明天我们进行期末考试。\"",
+          "correct": true
+        },
+        {
+          "text": "\"你吃饭了吗，\"妈妈问？",
+          "correct": false
+        },
+        {
+          "text": "这篇文章的题目是，我的理想。",
+          "correct": false
+        }
+      ],
+      "answer": "老师说：\"明天我们进行期末考试。\"",
+      "explanation": "A项：问号应在引号内，因为问号属于引语的一部分。C项：问号应在引号内，句末应为句号。D项：逗号多余，应删去。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_002",
+      "type": "punctuation",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中，标点符号使用正确的一项是：",
+      "options": [
+        {
+          "text": "他喜欢读书、写字、和画画。",
+          "correct": false
+        },
+        {
+          "text": "今天下午，我们班召开了\"创建文明班级\"的主题班会。",
+          "correct": true
+        },
+        {
+          "text": "我不知道他为什么不来？",
+          "correct": false
+        },
+        {
+          "text": "\"快走！\"他喊道：\"要迟到了！\"",
+          "correct": false
+        }
+      ],
+      "answer": "今天下午，我们班召开了\"创建文明班级\"的主题班会。",
+      "explanation": "A项：顿号和\"和\"不能同时使用，应删去\"和\"前的顿号。C项：陈述句不能用问号，应用句号。D项：当\"某某说\"插入引语中间时，后面应用逗号而非冒号。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_003",
+      "type": "punctuation",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中标点符号使用有误的一项是：",
+      "options": [
+        {
+          "text": "\"你到哪里去了？\"爸爸问，\"我找了你好久。\"",
+          "correct": false
+        },
+        {
+          "text": "我喜欢的水果有：苹果、香蕉、橘子等。",
+          "correct": false
+        },
+        {
+          "text": "他缓缓地说：\"我……我……对不起大家。\"",
+          "correct": false
+        },
+        {
+          "text": "我们要牢记\"三人行必有我师。\"这句话。",
+          "correct": true
+        }
+      ],
+      "answer": "我们要牢记\"三人行必有我师。\"这句话。",
+      "explanation": "D项：引用的内容不是完整独立的句子，句号应放在引号外面。正确应为：我们要牢记\"三人行必有我师\"这句话。或者去掉\"这句话\"让引语独立成句。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_004",
+      "type": "punctuation",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列句子中，标点符号使用全部正确的一项是：",
+      "options": [
+        {
+          "text": "读了《钢铁是怎样炼成的》，我感受到：一个人只有当他把自己和集体事业融合在一起的时候，才最有力量。",
+          "correct": true
+        },
+        {
+          "text": "你是坐汽车来呢？还是坐火车来呢？或者索性坐飞机来呢？",
+          "correct": false
+        },
+        {
+          "text": "小李说，\"今天晚上我不去打球了，\"他顿了顿：\"我要在家完成一篇关于‘保护环境’的演讲稿。",
+          "correct": false
+        },
+        {
+          "text": "那浩浩荡荡的无边无际的波澜壮阔的大海啊！",
+          "correct": false
+        }
+      ],
+      "answer": "读了《钢铁是怎样炼成的》，我感受到：一个人只有当他把自己和集体事业融合在一起的时候，才最有力量。",
+      "explanation": "B项：选择问句中间应用逗号，只在最后用问号。C项：多处标点不规范，直接引语中嵌套引语时外层用双引号，内层用单引号。D项：三个并列定语之间应加顿号。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_005",
+      "type": "punctuation",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列标点符号使用正确的一项是：",
+      "options": [
+        {
+          "text": "这里的山啊、水啊、树啊、草啊，都是我从小就熟悉的。",
+          "correct": false
+        },
+        {
+          "text": "明天的活动你参加吗？小明。",
+          "correct": false
+        },
+        {
+          "text": "古人说：\"读书破万卷，下笔如有神。\"",
+          "correct": true
+        },
+        {
+          "text": "母亲一边走一边说：\"别忘了带伞\"。",
+          "correct": false
+        }
+      ],
+      "answer": "古人说：\"读书破万卷，下笔如有神。\"",
+      "explanation": "A项：带语气词的并列词语之间不能用顿号，应用逗号。B项：倒装问句，问号应放在句末，中间用逗号。D项：完整引语，句号应在引号内。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_006",
+      "type": "punctuation",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子标点符号使用是否正确：\n\"你明天去北京吗？\"他问。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "标点使用正确。引号内的问号属于引语，问号在引号内。提示语\"他问\"在引号后，用句号结尾。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_007",
+      "type": "punctuation",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子标点符号使用是否正确：\n我不知道这条路谁能走通？但我一定要坚持不懈地走下去。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "\"我不知道这条路谁能走通\"虽然有疑问词\"谁\"，但整个句子是陈述语气，不是疑问句，应用逗号而非问号。正确标点为\"我不知道这条路谁能走通，但我一定要坚持不懈地走下去。\"",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_008",
+      "type": "punctuation",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子标点符号使用是否正确：\n他买了苹果、香蕉、橘子等等。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"等等\"前不需要任何标点符号，直接接在最后一个列举项后即可。此句\"苹果、香蕉、橘子等等\"标点使用正确。\"等等\"与省略号不可同时使用，但此处无省略号，无问题。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_009",
+      "type": "punctuation",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断题中标点符号使用是否正确：\n\"你先回去吧，\"他说：\"我还有点事要处理。\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "当\"某某说\"插入在一句话中间时，后面应用逗号而非冒号。正确写法为：\"你先回去吧，\"他说，\"我还有点事要处理。\"只有当\"某某说\"在引语之前时才用冒号。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_punctuation_010",
+      "type": "punctuation",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断标点使用是否正确：\n《红楼梦》是清代作家曹雪芹创作的长篇小说。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "书名使用书名号《》是正确的。报纸、杂志、书籍、电影、电视剧等名称都应使用书名号。",
+      "handbookSource": "标点符号",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 标点符号"
+    },
+    {
+      "id": "auto_culture_001",
+      "type": "culture",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列有关古代称谓的表述，正确的一项是：",
+      "options": [
+        {
+          "text": "\"令尊\"是对对方父亲的敬称。",
+          "correct": true
+        },
+        {
+          "text": "\"家父\"是对对方父亲的敬称。",
+          "correct": false
+        },
+        {
+          "text": "\"舍弟\"是对对方弟弟的敬称。",
+          "correct": false
+        },
+        {
+          "text": "\"令郎\"是对自己儿子的谦称。",
+          "correct": false
+        }
+      ],
+      "answer": "\"令尊\"是对对方父亲的敬称。",
+      "explanation": "B项：\"家父\"是对自己父亲的谦称，非敬称。C项：\"舍弟\"是对自己弟弟的谦称。D项：\"令郎\"是对对方儿子的敬称。\"令\"字开头的多属敬称，\"家\"\"舍\"开头的多属谦称。",
+      "handbookSource": "文化常识 > 称谓",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_002",
+      "type": "culture",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "\"爆竹声中一岁除，春风送暖入屠苏\"描写的是哪个传统节日？",
+      "options": [
+        {
+          "text": "元宵节",
+          "correct": false
+        },
+        {
+          "text": "中秋节",
+          "correct": false
+        },
+        {
+          "text": "春节",
+          "correct": true
+        },
+        {
+          "text": "端午节",
+          "correct": false
+        }
+      ],
+      "answer": "春节",
+      "explanation": "此句出自王安石《元日》，描写春节（农历正月初一）的景象。\"屠苏\"是古代春节时喝的酒，\"爆竹\"是春节的传统习俗。",
+      "handbookSource": "文化常识 > 传统节日",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_003",
+      "type": "culture",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列有关古代科举制度的表述，不正确的一项是：",
+      "options": [
+        {
+          "text": "科举考试中，乡试的第一名称为\"解元\"。",
+          "correct": false
+        },
+        {
+          "text": "科举考试中，殿试的第一名称为\"状元\"。",
+          "correct": false
+        },
+        {
+          "text": "科举考试中，会试的第一名称为\"会元\"。",
+          "correct": false
+        },
+        {
+          "text": "科举考试中，院试的第一名称为\"榜眼\"。",
+          "correct": true
+        }
+      ],
+      "answer": "科举考试中，院试的第一名称为\"榜眼\"。",
+      "explanation": "\"榜眼\"是殿试的第二名，不是院试第一名。院试的第一名称\"案首\"。\"连中三元\"指的是接连在乡试、会试、殿试中都考中第一名（解元、会元、状元）。",
+      "handbookSource": "文化常识 > 科举",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_004",
+      "type": "culture",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列关于古代\"年龄称谓\"的表述，正确的一项是：",
+      "options": [
+        {
+          "text": "\"及笄\"指女子十五岁。",
+          "correct": true
+        },
+        {
+          "text": "\"弱冠\"指男子十五岁。",
+          "correct": false
+        },
+        {
+          "text": "\"花甲\"指五十岁。",
+          "correct": false
+        },
+        {
+          "text": "\"古稀\"指六十岁。",
+          "correct": false
+        }
+      ],
+      "answer": "\"及笄\"指女子十五岁。",
+      "explanation": "B项：\"弱冠\"指男子二十岁行冠礼。C项：\"花甲\"指六十岁（天干地支一轮回）。D项：\"古稀\"指七十岁（\"人生七十古来稀\"）。",
+      "handbookSource": "文化常识 > 年龄称谓",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_005",
+      "type": "culture",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列有关古代官职的表述，不正确的一项是：",
+      "options": [
+        {
+          "text": "\"太守\"是战国至秦汉时期对郡守的尊称。",
+          "correct": false
+        },
+        {
+          "text": "\"尚书\"一职从秦朝开始设置。",
+          "correct": false
+        },
+        {
+          "text": "\"太守\"是明清时期地方行政长官的称呼。",
+          "correct": true
+        },
+        {
+          "text": "\"刺史\"是汉代至唐代的地方监察官。",
+          "correct": false
+        }
+      ],
+      "answer": "\"太守\"是明清时期地方行政长官的称呼。",
+      "explanation": "明清时期的地方行政长官称\"知府\"\"知州\"\"知县\"等，不称\"太守\"。\"太守\"是秦汉时的称呼（郡的最高行政长官）。后世虽偶有沿称，但明清正式称谓已变。",
+      "handbookSource": "文化常识 > 官职",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_006",
+      "type": "culture",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列说法是否正确：\n古代\"子时\"指的是夜里23点至凌晨1点。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "古代将一昼夜分为十二时辰，子时是第一个时辰，对应现代时间的23:00—1:00。十二时辰为：子、丑、寅、卯、辰、巳、午、未、申、酉、戌、亥。",
+      "handbookSource": "文化常识 > 计时",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_007",
+      "type": "culture",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列古代称谓解释是否正确：\n\"陛下\"是对皇帝的敬称，\"殿下\"是对皇太子、诸侯王的敬称。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"陛下\"本意为宫殿的台阶之下，臣子不敢直接对皇帝说话，由台阶下的人转达，后演变为对皇帝的敬称。\"殿下\"同理演变。两者使用对象不同。",
+      "handbookSource": "文化常识 > 称谓",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_008",
+      "type": "culture",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列说法是否正确：\n\"清明时节雨纷纷，路上行人欲断魂\"描写的节日是寒食节。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": false
+        },
+        {
+          "text": "错误",
+          "correct": true
+        }
+      ],
+      "answer": "错误",
+      "explanation": "此句出自杜牧《清明》，描写的是清明节。寒食节是清明节前一两天，习俗是禁火吃冷食。清明节习俗是扫墓、踏青。",
+      "handbookSource": "文化常识 > 传统节日",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_009",
+      "type": "culture",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列说法是否正确：\n古代\"六艺\"指的是礼、乐、射、御、书、数。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"六艺\"是古代教育学生的六种科目：礼（礼仪）、乐（音乐）、射（射箭）、御（驾车）、书（识字/书法）、数（算术）。也有说\"六艺\"指《诗》《书》《礼》《易》《乐》《春秋》六部儒家经典。",
+      "handbookSource": "文化常识 > 教育",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_culture_010",
+      "type": "culture",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列传统节日与习俗的搭配是否正确：\n中秋节——赏月、吃月饼、饮桂花酒。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "中秋节的习俗包括赏月、吃月饼、饮桂花酒等。中秋节在农历八月十五日，是团圆的节日，又名\"团圆节\"。",
+      "handbookSource": "文化常识 > 传统节日",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文化常识"
+    },
+    {
+      "id": "auto_classics_001",
+      "type": "classics_reading",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列有关《西游记》的表述，正确的一项是：",
+      "options": [
+        {
+          "text": "孙悟空的武器是方天画戟。",
+          "correct": false
+        },
+        {
+          "text": "猪八戒原是天蓬元帅，因调戏嫦娥被贬下凡。",
+          "correct": true
+        },
+        {
+          "text": "沙僧的法号是\"行者\"。",
+          "correct": false
+        },
+        {
+          "text": "唐僧的大徒弟是猪八戒。",
+          "correct": false
+        }
+      ],
+      "answer": "猪八戒原是天蓬元帅，因调戏嫦娥被贬下凡。",
+      "explanation": "A项：孙悟空的武器是如意金箍棒。C项：沙僧的法号是\"悟净\"。\"行者\"是孙悟空的外号。D项：唐僧的大徒弟是孙悟空。",
+      "handbookSource": "名著导读 > 《西游记》",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_002",
+      "type": "classics_reading",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列有关《水浒传》的表述，不正确的一项是：",
+      "options": [
+        {
+          "text": "《水浒传》描写了北宋末年以宋江为首的一百零八位好汉聚义的故事。",
+          "correct": false
+        },
+        {
+          "text": "林冲是被逼上梁山的典型代表，他的绰号是\"豹子头\"。",
+          "correct": false
+        },
+        {
+          "text": "鲁智深的绰号是\"黑旋风\"，他性格粗犷豪放。",
+          "correct": true
+        },
+        {
+          "text": "武松在景阳冈打虎，成为家喻户晓的英雄。",
+          "correct": false
+        }
+      ],
+      "answer": "鲁智深的绰号是\"黑旋风\"，他性格粗犷豪放。",
+      "explanation": "\"黑旋风\"是李逵的绰号。鲁智深的绰号是\"花和尚\"（他本是和尚，但喝酒吃肉、打抱不平）。鲁智深倒拔垂杨柳的故事也广为人知。",
+      "handbookSource": "名著导读 > 《水浒传》",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_003",
+      "type": "classics_reading",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列关于《朝花夕拾》的表述，正确的一项是：",
+      "options": [
+        {
+          "text": "《朝花夕拾》是鲁迅的小说集。",
+          "correct": false
+        },
+        {
+          "text": "《从百草园到三味书屋》选自《朝花夕拾》。",
+          "correct": true
+        },
+        {
+          "text": "《朝花夕拾》是鲁迅的杂文集。",
+          "correct": false
+        },
+        {
+          "text": "《社戏》选自《朝花夕拾》。",
+          "correct": false
+        }
+      ],
+      "answer": "《从百草园到三味书屋》选自《朝花夕拾》。",
+      "explanation": "《朝花夕拾》是鲁迅的散文集，共10篇，原名《旧事重提》，是\"回忆的记事\"。除《从百草园到三味书屋》外，还有《藤野先生》《阿长与〈山海经〉》等名篇。《社戏》选自小说集《呐喊》。",
+      "handbookSource": "名著导读 > 《朝花夕拾》",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_004",
+      "type": "classics_reading",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列有关《骆驼祥子》的表述，不正确的一项是：",
+      "options": [
+        {
+          "text": "祥子是老舍笔下一个被剥削、被压迫的底层劳动者的典型形象。",
+          "correct": false
+        },
+        {
+          "text": "祥子经历了三起三落，最终走向了堕落。",
+          "correct": false
+        },
+        {
+          "text": "虎妞是车厂主刘四爷的女儿，她最终与祥子幸福地生活在一起。",
+          "correct": true
+        },
+        {
+          "text": "小说通过祥子的悲剧，深刻揭露了旧社会的黑暗。",
+          "correct": false
+        }
+      ],
+      "answer": "虎妞是车厂主刘四爷的女儿，她最终与祥子幸福地生活在一起。",
+      "explanation": "虎妞最终难产而死，并没有与祥子幸福地生活在一起。虎妞之死是祥子命运转折的关键事件之一。祥子的一生是彻底的悲剧。",
+      "handbookSource": "名著导读 > 《骆驼祥子》",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_005",
+      "type": "classics_reading",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列名著与作者的搭配，正确的一项是：",
+      "options": [
+        {
+          "text": "《繁星·春水》——郭沫若",
+          "correct": false
+        },
+        {
+          "text": "《骆驼祥子》——巴金",
+          "correct": false
+        },
+        {
+          "text": "《海底两万里》——儒勒·凡尔纳",
+          "correct": true
+        },
+        {
+          "text": "《昆虫记》——安徒生",
+          "correct": false
+        }
+      ],
+      "answer": "《海底两万里》——儒勒·凡尔纳",
+      "explanation": "A项：《繁星·春水》是冰心的作品。B项：《骆驼祥子》是老舍的作品。D项：《昆虫记》是法国昆虫学家法布尔的作品。",
+      "handbookSource": "名著导读",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_006",
+      "type": "classics_reading",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列表述是否正确：\n《钢铁是怎样炼成的》主人公是保尔·柯察金。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "保尔·柯察金是苏联作家奥斯特洛夫斯基所著《钢铁是怎样炼成的》中的主人公。他身残志坚、不屈不挠的精神激励了一代又一代读者。",
+      "handbookSource": "名著导读",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_007",
+      "type": "classics_reading",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列表述是否正确：\n\"桃园三结义\"中结拜的三兄弟是刘备、关羽和张飞。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "桃园三结义是《三国演义》中的经典情节，刘备、关羽、张飞在桃园中结为异姓兄弟，立誓\"不求同年同月同日生，但求同年同月同日死\"。",
+      "handbookSource": "名著导读 > 《三国演义》",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_008",
+      "type": "classics_reading",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列表述是否正确：\n《红楼梦》中\"金陵十二钗\"包括林黛玉、薛宝钗、王熙凤等人。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "金陵十二钗正册包括：林黛玉、薛宝钗、贾元春、贾探春、史湘云、妙玉、贾迎春、贾惜春、王熙凤、巧姐、李纨、秦可卿。",
+      "handbookSource": "名著导读 > 《红楼梦》",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_009",
+      "type": "classics_reading",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列表述是否正确：\n凡尔纳的\"海洋三部曲\"是《格兰特船长的儿女》《海底两万里》和《神秘岛》。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "儒勒·凡尔纳被誉为\"科幻小说之父\"，其\"海洋三部曲\"确实由这三部作品组成。三部作品在情节上有着若隐若现的联系。",
+      "handbookSource": "名著导读",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_classics_010",
+      "type": "classics_reading",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列表述是否正确：\n《格列佛游记》的作者是英国作家乔纳森·斯威夫特。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "《格列佛游记》是斯威夫特的代表作，以主人公格列佛在小人国、大人国、飞岛国和慧骃国的奇遇，讽刺了当时英国社会的种种弊端。",
+      "handbookSource": "名著导读",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "名著阅读 > 名著导读"
+    },
+    {
+      "id": "auto_pinyin_char_001",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "根据拼音写汉字：\n\n他做事非常严jǐn（ ），从不马虎。",
+      "options": [],
+      "answer": "谨",
+      "explanation": "严谨（yán jǐn）：严密谨慎。\"谨\"是言字旁加\"堇\"，注意与\"瑾\"（美玉）区分。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_002",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "根据拼音写汉字：\n\n这件艺术品的造xíng（ ）非常独特。",
+      "options": [],
+      "answer": "型",
+      "explanation": "造型（zào xíng）：创造出来的物体形象。\"型\"从刑从土（左刑右土，形声字），注意与\"形\"的区别：\"造型\"强调立体形态，\"形状\"强调平面轮廓。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_003",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "给加点字注音（用数字表示声调，如 zhong1）：\n\n\"深恶（ ）痛疾\"中的\"恶\"字。",
+      "options": [],
+      "answer": "wu4",
+      "explanation": "\"深恶痛疾\"中\"恶\"读 wù（四声），意为厌恶、憎恨。区别于\"恶人\"的 è（凶恶）和\"恶心\"的 ě（想呕吐）。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_004",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "根据拼音写汉字：\n\n春天来了，万物复sū（ ），大地一片生机。",
+      "options": [],
+      "answer": "苏",
+      "explanation": "复苏（fù sū）：苏醒、恢复生机。\"苏\"是草字头加\"办\"，本意指植物苏醒生长。注意与\"酥\"（松脆、油腻）的区别。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_005",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "给加点字注音（用数字表示声调，如 zhong1）：\n\n\"风雪载（ ）途\"中的\"载\"字。",
+      "options": [],
+      "answer": "zai4",
+      "explanation": "\"风雪载途\"中\"载\"读 zài（四声），意为充满。与\"记载\"的 zǎi（记录）不同。\"载歌载舞\"中的\"载\"也读 zài（又、且）。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_006",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "根据拼音写汉字：\n\n他在学术上zī zī（ ）（ ）不倦，取得了丰硕的成果。",
+      "options": [],
+      "answer": "孜孜",
+      "explanation": "孜孜不倦（zī zī bù juàn）：勤奋努力、不知疲倦。\"孜\"是子字旁加\"攵\"，注意与\"仔\"（幼小的）区分。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_007",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "给加点字注音（用数字表示声调，如 zhong1）：\n\n\"大腹便（ ）便\"中的\"便\"字。",
+      "options": [],
+      "answer": "pian2",
+      "explanation": "\"大腹便便\"中\"便\"读 pián（二声），形容肥胖的样子。区别于\"方便\"的 biàn。注意\"便便\"连用读 pián pián。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_008",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "medium",
+      "question": "根据拼音写汉字：\n\n我们要学会dì（ ）听他人的意见。",
+      "options": [],
+      "answer": "谛",
+      "explanation": "谛听（dì tīng）：仔细地听。\"谛\"是言字旁加\"帝\"，意为仔细、认真。注意与\"啼\"（啼哭）区分。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_009",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "easy",
+      "question": "给加点字注音（用数字表示声调，如 zhong1）：\n\n\"惟妙惟肖（ ）\"中的\"肖\"字。",
+      "options": [],
+      "answer": "xiao4",
+      "explanation": "\"惟妙惟肖\"中\"肖\"读 xiào（四声），意为相似、像。注意不读 xiāo。\"肖\"作姓氏时读 Xiāo。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_pinyin_char_010",
+      "type": "pinyin_char",
+      "format": "fill",
+      "difficulty": "hard",
+      "question": "根据拼音写汉字：\n\n面对诱惑，我们要学会抗jù（ ），坚守底线。",
+      "options": [],
+      "answer": "拒",
+      "explanation": "抗拒（kàng jù）：抵抗和拒绝。\"拒\"是提手旁加\"巨\"，注意与\"距\"（距离）、\"矩\"（规矩）的区分。",
+      "handbookSource": "语音+汉字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音+汉字"
+    },
+    {
+      "id": "auto_lang_001",
+      "type": "language_practice",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列对联中，上下联对应最恰当的一项是：\n上联：春风送暖花千树",
+      "options": [
+        {
+          "text": "夏日炎炎蝉百鸣",
+          "correct": false
+        },
+        {
+          "text": "瑞雪迎春梅万枝",
+          "correct": true
+        },
+        {
+          "text": "秋雨连绵叶满地",
+          "correct": false
+        },
+        {
+          "text": "明月当空星万点",
+          "correct": false
+        }
+      ],
+      "answer": "瑞雪迎春梅万枝",
+      "explanation": "上联写春风、花，下联用瑞雪、梅与之相对，季节衔接自然（冬末春初），\"千树\"对\"万枝\"对仗工整。A项夏季与春季不对，C项秋景不对，D项夜晚与白天不对。",
+      "handbookSource": "口语交际及语言运用",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "综合性学习 > 语言运用"
+    },
+    {
+      "id": "auto_lang_002",
+      "type": "language_practice",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子表达最得体的一项是：",
+      "options": [
+        {
+          "text": "喂，老头，去火车站怎么走？",
+          "correct": false
+        },
+        {
+          "text": "您好，请问去火车站应该怎么走？",
+          "correct": true
+        },
+        {
+          "text": "你知道去火车站的路吗，快告诉我！",
+          "correct": false
+        },
+        {
+          "text": "麻烦你，我要去火车站，带我去。",
+          "correct": false
+        }
+      ],
+      "answer": "您好，请问去火车站应该怎么走？",
+      "explanation": "B项使用了礼貌用语\"您好\"\"请问\"，语气委婉得体。A项不尊重人，C项语气生硬，D项带有命令口吻。语言交际中要注意礼貌和语气。",
+      "handbookSource": "口语交际及语言运用",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "综合性学习 > 语言运用"
+    },
+    {
+      "id": "auto_lang_003",
+      "type": "language_practice",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下面是一则通知，画线部分表达最恰当的一项是：\n\n各位同学：\n我校将于明天上午8点在操场举行升旗仪式，请___。\n\n校团委\n2024年6月1日",
+      "options": [
+        {
+          "text": "大家一定要来，不来的要扣分",
+          "correct": false
+        },
+        {
+          "text": "同学们务必准时参加，不得无故缺席",
+          "correct": true
+        },
+        {
+          "text": "随便来不来都行",
+          "correct": false
+        },
+        {
+          "text": "你们必须都来，一个都不能少",
+          "correct": false
+        }
+      ],
+      "answer": "同学们务必准时参加，不得无故缺席",
+      "explanation": "B项通知语气正式但不过于生硬，\"务必\"表示强调，\"不得无故\"留有余地（有原因可以请假）。A项用\"扣分\"威胁不当，C项太随意，D项语气过于强硬。",
+      "handbookSource": "口语交际及语言运用",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "综合性学习 > 语言运用"
+    },
+    {
+      "id": "auto_lang_004",
+      "type": "language_practice",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列语境中，表达最恰当的一项是：\n\n你的同学小明考试没考好，非常沮丧。作为好朋友，你会怎么安慰他？",
+      "options": [
+        {
+          "text": "别难过了，下次努力就好了，胜败乃兵家常事。",
+          "correct": true
+        },
+        {
+          "text": "你看你平时不好好学习，现在知道后悔了吧。",
+          "correct": false
+        },
+        {
+          "text": "没事的，反正这次考试也不重要。",
+          "correct": false
+        },
+        {
+          "text": "我这次也考得不好，咱们一起难过吧。",
+          "correct": false
+        }
+      ],
+      "answer": "别难过了，下次努力就好了，胜败乃兵家常事。",
+      "explanation": "A项先安抚情绪（\"别难过了\"），再给予希望（\"下次努力\"），最后用俗语淡化失败（\"胜败乃兵家常事\"），语气温和有理。B项是责备，C项否定考试的重要性，D项共同沮丧无助于解决问题。",
+      "handbookSource": "口语交际及语言运用",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "综合性学习 > 语言运用"
+    },
+    {
+      "id": "auto_lang_005",
+      "type": "language_practice",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下面情境中，转述最准确的一项是：\n\n王老师对李华说：\"请你告诉张明，明天下午三点到我办公室来一趟。\"李华应该怎么转述？",
+      "options": [
+        {
+          "text": "张明，王老师说让你明天下午三点去办公室。",
+          "correct": false
+        },
+        {
+          "text": "张明，王老师让我告诉你，明天下午三点到他办公室去一趟。",
+          "correct": true
+        },
+        {
+          "text": "张明，明天下午三点王老师办公室见。",
+          "correct": false
+        },
+        {
+          "text": "张明，王老师说明天下午三点你最好去一下他办公室。",
+          "correct": false
+        }
+      ],
+      "answer": "张明，王老师让我告诉你，明天下午三点到他办公室去一趟。",
+      "explanation": "B项完整保留了原话的所有信息（谁说的、转述人、时间、地点、做什么），且人称转换正确（\"我\"→\"他\"）。A项漏掉了转述人\"我\"，C项过于简略，D项改变了原话的语气。",
+      "handbookSource": "口语交际及语言运用",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "综合性学习 > 语言运用"
+    },
+    {
+      "id": "auto_pinyin_027",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列加点字注音全部正确的一项是：\nA. 憧(chōng)憬  挫(cuò)折\nB. 氛(fèn)围  模(mú)样\nC. 框(kuāng)架  脂(zhī)肪\nD. 颈(jǐng)椎  细菌(jùn)",
+      "options": [
+        {
+          "text": "A. 憧(chōng)憬  挫(cuò)折",
+          "correct": true
+        },
+        {
+          "text": "B. 氛(fèn)围  模(mú)样",
+          "correct": false
+        },
+        {
+          "text": "C. 框(kuāng)架  脂(zhī)肪",
+          "correct": false
+        },
+        {
+          "text": "D. 颈(jǐng)椎  细菌(jùn)",
+          "correct": false
+        }
+      ],
+      "answer": "A",
+      "explanation": "A项均正确：憧(chōng)、挫(cuò)。B项：氛围应读 fēn（第一声，不读 fèn）。C项：框架的\"框\"应读 kuàng（第四声，不读 kuāng）。D项：细菌的\"菌\"应读 jūn（第一声，不读 jùn）。",
+      "handbookSource": "语音 > 必考知识梳理 > 易错词语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_028",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下面词语中加点字的注音是否正确：\n\"解剖(pōu)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "解剖的\"剖\"读pōu（一声），正确。很多人误读为pāo。解剖学、剖析等词中的\"剖\"都读pōu。",
+      "handbookSource": "语音 > 必考知识梳理 > 易错词语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_029",
+      "type": "pinyin",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下面成语的注音是否正确：\n\"叱咤风云(chì zhà fēng yún)\"",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "读音正确。\"咤\"读zhà（发怒声），不读chà。叱咤风云形容声势威力极大。",
+      "handbookSource": "语音 > 必考知识梳理 > 易错成语",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_pinyin_030",
+      "type": "pinyin",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列加点字的注音，与所给注音全部相同的一组是：\n处(chǔ)：",
+      "options": [
+        {
+          "text": "处所  处长  总务处",
+          "correct": false
+        },
+        {
+          "text": "处理  处罚  设身处地",
+          "correct": true
+        },
+        {
+          "text": "处方  处处  恰到好处",
+          "correct": false
+        },
+        {
+          "text": "处分  长处  一无是处",
+          "correct": false
+        }
+      ],
+      "answer": "处理  处罚  设身处地",
+      "explanation": "当\"处\"表示动作义（处理、处置、相处）时读chǔ；表示名物义（处所、地方、部门）时读chù。B组全部是动作义，都读chǔ。",
+      "handbookSource": "语音 > 必考知识梳理 > 多音字",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 语音"
+    },
+    {
+      "id": "auto_word_usage_001",
+      "type": "word_usage",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中，加点成语使用恰当的一项是：",
+      "options": [
+        {
+          "text": "他在会上夸夸其谈，提出了很多切实可行的方案。",
+          "correct": false
+        },
+        {
+          "text": "这篇小说的情节引人入胜，让人爱不释手。",
+          "correct": true
+        },
+        {
+          "text": "他这个人好为人师，总是虚心向别人请教。",
+          "correct": false
+        },
+        {
+          "text": "听到这个坏消息，大家面面相觑，忍俊不禁地笑了。",
+          "correct": false
+        }
+      ],
+      "answer": "这篇小说的情节引人入胜，让人爱不释手。",
+      "explanation": "B项\"引人入胜\"使用正确。A项\"夸夸其谈\"是贬义词，与\"切实可行\"矛盾。C项\"好为人师\"指不谦虚、喜欢以教导者自居，与\"虚心向别人请教\"矛盾。D项\"忍俊不禁\"指忍不住笑，与\"坏消息\"语境不符。",
+      "handbookSource": "词语 > 必考知识梳理",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 词语"
+    },
+    {
+      "id": "auto_sentence_016",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "easy",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "经过老师耐心的教育，使我认识到了自己的错误。",
+          "correct": false
+        },
+        {
+          "text": "我国有世界上没有的万里长城。",
+          "correct": false
+        },
+        {
+          "text": "同学们以敬佩的目光注视着和倾听着这位老科学家的报告。",
+          "correct": false
+        },
+        {
+          "text": "阅读是获取知识、增长智慧的重要方式。",
+          "correct": true
+        }
+      ],
+      "answer": "阅读是获取知识、增长智慧的重要方式。",
+      "explanation": "A项缺主语；B项前后矛盾；C项搭配不当（\"注视\"不能与\"报告\"搭配）；D项无语病。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_017",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子没有语病的一项是：",
+      "options": [
+        {
+          "text": "我们一定要发扬和继承中华民族的优良传统。",
+          "correct": false
+        },
+        {
+          "text": "他的写作能力有了明显的提高。",
+          "correct": true
+        },
+        {
+          "text": "在科技馆参观时，使我学到了很多科学知识。",
+          "correct": false
+        },
+        {
+          "text": "这次班会提高了大家的认识，取得了预期的目的。",
+          "correct": false
+        }
+      ],
+      "answer": "他的写作能力有了明显的提高。",
+      "explanation": "A项语序不当，\"发扬和继承\"应为\"继承和发扬\"（先继承后发扬）。C项缺主语，\"在...时\"与\"使\"连用导致主语残缺。D项搭配不当，\"取得了...目的\"应为\"达到了...目的\"或\"取得了...效果\"。B项无语病。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_018",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子是否有语病：\n\"在这次比赛中，他取得了优异的成就。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "\"成就\"词义过重，用于个人比赛成绩不当。应改为词义较轻的\"成绩\"。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_019",
+      "type": "sentence",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列句子是否有语病：\n\"我们必须认真克服并善于发现工作中的缺点。\"",
+      "options": [
+        {
+          "text": "有语病",
+          "correct": true
+        },
+        {
+          "text": "没有语病",
+          "correct": false
+        }
+      ],
+      "answer": "有语病",
+      "explanation": "语序不当。按逻辑应先\"发现\"缺点，再\"克服\"缺点。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_sentence_020",
+      "type": "sentence",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列句子中没有语病的一项是：",
+      "options": [
+        {
+          "text": "这家工厂虽然规模不大，但曾两次荣获省科学大会奖，三次被授予省优质产品称号，产品远销全国各地和东南亚地区。",
+          "correct": false
+        },
+        {
+          "text": "只有当劳动与兴趣、爱好乃至理想有机结合在一起的时候，潜藏在每个人身上的想象力和创造力，才能够最大限度地发挥出来。",
+          "correct": true
+        },
+        {
+          "text": "针对国际原油价格步步攀升，美国、印度等国家纷纷建立或增加了石油储备，我国也必须尽快建立国家的石油战略储备体系。",
+          "correct": false
+        },
+        {
+          "text": "这一歌唱组合独立创作的高品质词曲以及演唱中表现出的音乐天分和文化素养，很难让人相信这是平均年龄仅19岁的作品。",
+          "correct": false
+        }
+      ],
+      "answer": "只有当劳动与兴趣、爱好乃至理想有机结合在一起的时候，潜藏在每个人身上的想象力和创造力，才能够最大限度地发挥出来。",
+      "explanation": "A项\"工厂被授予省优质产品称号\"搭配不当；C项\"针对\"缺少宾语中心语；D项\"平均年龄仅19岁\"修饰\"作品\"不当。B项无语病。",
+      "handbookSource": "句子 > 病句分类库",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 句子"
+    },
+    {
+      "id": "auto_rhetoric_016",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列句子中，修辞手法与其他三项不同的是：",
+      "options": [
+        {
+          "text": "春天像小姑娘，花枝招展的，笑着，走着。",
+          "correct": false
+        },
+        {
+          "text": "理想是石，敲出星星之火。",
+          "correct": false
+        },
+        {
+          "text": "他像他父亲一样高大魁梧。",
+          "correct": true
+        },
+        {
+          "text": "书籍是开启智慧之门的钥匙。",
+          "correct": false
+        }
+      ],
+      "answer": "他像他父亲一样高大魁梧。",
+      "explanation": "C项是同类比较，不是比喻。A、B、D三项都是比喻。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_017",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列句子是否使用了比喻的修辞手法：\n\"她的歌声像百灵鸟一样动听。\"",
+      "options": [
+        {
+          "text": "是比喻",
+          "correct": true
+        },
+        {
+          "text": "不是比喻",
+          "correct": false
+        }
+      ],
+      "answer": "是比喻",
+      "explanation": "该句把\"歌声\"比作\"百灵鸟的叫声\"，用\"像...一样\"连接，是比喻中的明喻。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_018",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断修辞手法标注是否正确：\n\"石油工人一声吼，地球也要抖三抖。\" —— 夸张",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "该句故意夸大了声音的效果，极言石油工人的豪迈气概，是典型的夸张修辞手法。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_019",
+      "type": "rhetoric",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断修辞手法标注是否正确：\n\"花儿在风中笑弯了腰。\" —— 拟人",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "该句赋予花人的动作\"笑\"和状态\"弯了腰\"，是典型的拟人修辞手法。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_rhetoric_020",
+      "type": "rhetoric",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "对下列句子修辞手法的判断，正确的一项是：\n①千里冰封，万里雪飘。\n②朱门酒肉臭，路有冻死骨。\n③东边日出西边雨，道是无晴却有晴。",
+      "options": [
+        {
+          "text": "①对偶 ②对比 ③双关",
+          "correct": true
+        },
+        {
+          "text": "①排比 ②比喻 ③拟人",
+          "correct": false
+        },
+        {
+          "text": "①比喻 ②拟人 ③夸张",
+          "correct": false
+        },
+        {
+          "text": "①对偶 ②拟人 ③比喻",
+          "correct": false
+        }
+      ],
+      "answer": "①对偶 ②对比 ③双关",
+      "explanation": "①\"千里\"对\"万里\"，\"冰封\"对\"雪飘\"，结构对称（对偶）。②富贵与贫困鲜明对比。③\"晴\"与\"情\"谐音双关。",
+      "handbookSource": "修辞 > 修辞类型表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 修辞"
+    },
+    {
+      "id": "auto_literature_016",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "medium",
+      "question": "下列作品、作者及朝代的对应，正确的一项是：",
+      "options": [
+        {
+          "text": "《醉翁亭记》——欧阳修——唐代",
+          "correct": false
+        },
+        {
+          "text": "《范进中举》——吴敬梓——清代",
+          "correct": true
+        },
+        {
+          "text": "《最后一课》——莫泊桑——法国",
+          "correct": false
+        },
+        {
+          "text": "《小石潭记》——王安石——宋代",
+          "correct": false
+        }
+      ],
+      "answer": "《范进中举》——吴敬梓——清代",
+      "explanation": "A项欧阳修是北宋人；C项《最后一课》作者是都德（非莫泊桑）；D项《小石潭记》作者是柳宗元（唐代）。B项正确。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_017",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "easy",
+      "question": "判断下列文学常识表述是否正确：\n\"铭\"是古代刻在器物上用来警戒自己或者称述功德的文字，后来成为一种文体。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "铭文是一种古代文体，刘禹锡的《陋室铭》即属此类。铭文一般用韵，多用排比句和对偶句。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_018",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "medium",
+      "question": "判断下列表述是否正确：\n鲁迅的小说集有《呐喊》《彷徨》和《故事新编》。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "鲁迅的三部小说集确实是《呐喊》《彷徨》和《故事新编》。此外还有散文集《朝花夕拾》和大量杂文。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_019",
+      "type": "literature",
+      "format": "truefalse",
+      "difficulty": "hard",
+      "question": "判断下列文学常识表述是否正确：\n\"说\"是古代的一种文体，内容大多一事一议，表达作者对某个问题的深刻见解，如《爱莲说》《马说》。",
+      "options": [
+        {
+          "text": "正确",
+          "correct": true
+        },
+        {
+          "text": "错误",
+          "correct": false
+        }
+      ],
+      "answer": "正确",
+      "explanation": "\"说\"是古代以记叙、议论或说明等方式来阐述事理的文体，与现在的杂文相似。其特点是一事一议，颇具文采。",
+      "handbookSource": "文学常识 > 文体知识",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
+    },
+    {
+      "id": "auto_literature_020",
+      "type": "literature",
+      "format": "choice",
+      "difficulty": "hard",
+      "question": "下列有关文学常识的表述，不正确的一项是：",
+      "options": [
+        {
+          "text": "婉约派词人的代表有柳永、李清照等。",
+          "correct": false
+        },
+        {
+          "text": "豪放派词人的代表有苏轼、辛弃疾等。",
+          "correct": false
+        },
+        {
+          "text": "唐宋八大家中宋代的六人是欧阳修、苏洵、苏轼、苏辙、王安石、柳宗元。",
+          "correct": true
+        },
+        {
+          "text": "初唐四杰是王勃、杨炯、卢照邻、骆宾王。",
+          "correct": false
+        }
+      ],
+      "answer": "唐宋八大家中宋代的六人是欧阳修、苏洵、苏轼、苏辙、王安石、柳宗元。",
+      "explanation": "C项错误：柳宗元是唐代的（与韩愈并称\"韩柳\"），不是宋代的。宋代六位应为欧阳修、苏洵、苏轼、苏辙、王安石、曾巩。",
+      "handbookSource": "文学常识 > 作家作品表",
+      "qsrc": "auto",
+      "semester": "all",
+      "status": "approved",
+      "knowledgePath": "基础知识 > 文学常识"
     }
   ]
 }
